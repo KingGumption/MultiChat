@@ -1,0 +1,8 @@
+backup/
+backup 2 -20260522/
+backup-20260522/
+index-scroll.html
+
+.DS_Store
+Thumbs.db
+*.log

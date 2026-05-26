@@ -1,0 +1,2547 @@
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Bangers&family=Bebas+Neue&family=Black+Ops+One&family=Caveat:wght@400;700&family=Chakra+Petch:wght@400;600;700&family=Cinzel:wght@400;700;900&family=DM+Sans:wght@400;700;900&family=Exo+2:wght@400;700;900&family=Fredoka:wght@400;600;700&family=Inter:wght@400;600;700;800;900&family=Montserrat:wght@400;600;700;800;900&family=Orbitron:wght@400;700;900&family=Oswald:wght@400;600;700&family=Permanent+Marker&family=Playfair+Display:wght@400;700;900&family=Poppins:wght@400;600;700;800;900&family=Righteous&family=Roboto:wght@400;500;700;900&family=Rubik:wght@400;700;900&family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;700&family=Teko:wght@400;600;700&family=Ubuntu:wght@400;700&family=Work+Sans:wght@400;700;900&display=swap');
+
+:root {
+  --chat-width: min(820px, calc(100vw - 64px));
+  --chat-left: 28px;
+  --chat-bottom: 28px;
+  --chat-row-gap: 11px;
+  --grouped-message-gap: 0px;
+
+  --font-family: 'Sora', Arial, sans-serif;
+  --accent-font-family: 'Sora', Arial, sans-serif;
+  --message-font-family: 'Sora', Arial, sans-serif;
+
+  --avatar-size: 52px;
+  --avatar-size-gigantified: 64px;
+  --chat-column-gap: 10px;
+  --chat-content-width: calc(
+    var(--chat-width) -
+    var(--avatar-size) -
+    var(--chat-column-gap)
+  );
+
+  --max-message-width: min(680px, calc(var(--chat-width) - 80px));
+  --message-bubble-width: fit-content;
+  --name-bubble-width: auto;
+  --name-icon-section-width: 58px;
+  --name-bubble-layer-overlap: 16px;
+  --name-bubble-seam-curve: 19px;
+  --bubble-stack-width: auto;
+  --alert-bubble-width: auto;
+  --alert-bubble-max-width: 340px;
+  --alert-bubble-min-width: 280px;
+  --tiktok-gift-card-width: fit-content;
+
+  --message-font-size: 18px;
+  --title-font-size: 14px;
+  --alert-title-font-size: var(--title-font-size);
+  --alert-message-font-size: calc(var(--message-font-size) * 0.9);
+  --compact-alert-title-font-size: calc(var(--title-font-size) * 0.92);
+  --compact-alert-message-font-size: calc(var(--message-font-size) * 0.8);
+  --gift-user-font-size: calc(var(--message-font-size) * 0.8);
+  --gift-label-font-size: calc(var(--message-font-size) * 0.7);
+  --gift-count-font-size: calc(var(--message-font-size) * 1.2);
+  --emote-only-font-size: 26px;
+  --gigantified-font-size: 40px;
+
+  --bubble-radius: 22px;
+  --name-bubble-radius: 22px;
+  --message-text-color: #ffffff;
+  --title-text-color: #ffffff;
+  --custom-accent-color: #9146ff;
+  --twitch-name-text-color: #ffe45f;
+  --youtube-name-text-color: #ffd6dc;
+  --tiktok-name-text-color: #061114;
+  --muted-text-color: #d6d6e0;
+  --dark-text-color: #061114;
+  --stealth-text-color: #ffffff;
+  --page-background-color: transparent;
+  --bubble-base-color: #050510;
+  --bubble-highlight-color: #ffffff;
+  --media-background-color: #000000;
+  --link-preview-text-color: #ffffff;
+  --link-preview-meta-color: #d6d6e0;
+  --badge-background-color: #000000;
+  --avatar-border-color: #ffffff;
+  --avatar-border-width: 3px;
+  --avatar-fill-color: #ffffff;
+  --avatar-glow-color: var(--platform-color);
+  --avatar-glow-opacity: 0.72;
+  --title-glow-color: var(--platform-glow);
+  --title-border-color: var(--platform-color);
+  --title-border-width: 2px;
+  --title-bg-color: var(--platform-color);
+  --title-bg-color-2: var(--platform-color);
+  --title-icon-bg-color: var(--platform-color);
+  --title-icon-bg-color-2: var(--platform-color);
+  --title-bg-gradient: linear-gradient(135deg, var(--title-bg-color) 0%, var(--title-bg-color-2) 100%);
+  --title-icon-bg-gradient: linear-gradient(180deg, var(--title-icon-bg-color) 0%, var(--title-icon-bg-color-2) 100%);
+  --message-glow-color: var(--platform-glow);
+  --message-border-color: var(--platform-color);
+  --message-border-width: 2px;
+  --message-border-gradient: linear-gradient(135deg, var(--message-border-color) 0%, var(--message-border-color) 100%);
+  --message-bg-color: var(--platform-color);
+  --message-bg-gradient: radial-gradient(circle at top left, var(--message-bg-color) 0%, rgba(16,16,30,0.98) 36%, rgba(6,6,12,1) 78%, rgba(8,8,15,1) 100%);
+  --message-fill-gradient: var(--message-bg-gradient) padding-box;
+  --alert-glow-color: var(--platform-glow);
+  --alert-border-color: var(--platform-color);
+  --alert-border-width: 2px;
+  --alert-border-gradient: linear-gradient(135deg, var(--alert-border-color) 0%, var(--alert-border-color) 100%);
+  --alert-fill-gradient: var(--alert-bg-gradient) padding-box;
+  --alert-bg-color: var(--platform-color);
+  --alert-bg-gradient: linear-gradient(135deg, var(--alert-bg-color) 0%, #050510 100%);
+  --gift-glow-color: var(--platform-glow);
+  --gift-border-color: var(--platform-color);
+  --gift-border-width: 2px;
+  --gift-border-gradient: linear-gradient(135deg, var(--gift-border-color) 0%, var(--gift-border-color) 100%);
+  --gift-fill-gradient: var(--gift-bg-gradient) padding-box;
+  --gift-bg-color: var(--platform-color);
+  --gift-bg-gradient: linear-gradient(135deg, var(--gift-bg-color) 0%, rgba(16,18,30,0.98) 35%, rgba(6,6,12,1) 78%);
+  --shadow-color: #000000;
+  --emote-sparkle-color: #ffffff;
+  --gigantified-sparkle-color: #ffd65a;
+  --highlight-glow-color: #ff00c8;
+  --highlight-warm-glow-color: #ffb400;
+  --tiktok-red-color: #fe2c55;
+  --tiktok-blue-color: #25f4ee;
+  --rainbow-color-1: #ff004c;
+  --rainbow-color-2: #ff8a00;
+  --rainbow-color-3: #fff700;
+  --rainbow-color-4: #00ff85;
+  --rainbow-color-5: #00c8ff;
+  --rainbow-color-6: #7a5cff;
+  --rainbow-color-7: #ff00d4;
+  --bubble-slant: 12px;
+  --bubble-notch: 12px;
+
+  --pop-duration: 0.25s;
+  --glow-strength: 1;
+  --emote-bounce-duration: 1.1s;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  overflow: hidden;
+  font-family: var(--font-family);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#chat {
+  position: fixed;
+  left: var(--chat-left);
+  bottom: var(--chat-bottom);
+  width: var(--chat-width);
+  max-width: calc(100vw - 64px);
+  container-type: inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: var(--chat-row-gap);
+}
+
+.msg {
+  --platform-color: #8b5cff;
+  --platform-glow: rgba(139, 92, 255, 0.52);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #8b5cff;
+
+  display: flex;
+  align-items: flex-start;
+  gap: var(--chat-column-gap);
+  color: white;
+  animation: popIn var(--pop-duration) ease-out;
+  transform: translateZ(0);
+  will-change: transform;
+  width: 100%;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.platform-twitch {
+  --platform-color: #b86cff;
+  --platform-glow: rgba(184, 108, 255, 0.58);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #9146ff;
+}
+
+.platform-youtube {
+  --platform-color: #ff4058;
+  --platform-glow: rgba(255, 64, 88, 0.56);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #ff0033;
+}
+
+.platform-tiktok {
+  --platform-color: #25f4ee;
+  --platform-glow: rgba(37, 244, 238, 0.54);
+  --platform-layer-a: #fe2c55;
+  --platform-layer-b: #25f4ee;
+}
+
+body.custom-accent .msg {
+  --platform-color: var(--custom-accent-color);
+  --platform-glow: color-mix(in srgb, var(--custom-accent-color) 56%, transparent);
+  --platform-layer-b: var(--custom-accent-color);
+}
+
+
+
+/* WS Connection Toast */
+
+.connection-toast {
+  position: fixed;
+
+  left: calc(var(--chat-left) + 12px);
+
+  bottom: calc(
+    var(--chat-bottom) +
+    12px +
+    (var(--toast-index, 0) * 64px)
+  );
+
+  box-sizing: border-box;
+
+  width: calc(var(--chat-width) - 24px);
+  max-width: calc(100vw - var(--chat-left) - 24px);
+
+  padding: 12px 14px;
+
+  font-size: clamp(11px, 2.5vw, 15px);
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20,20,32,0.96) 0%,
+      rgba(8,8,14,0.98) 100%
+    );
+
+  border: 2px solid var(--toast-color);
+
+  color: white;
+
+  font-family: var(--font-family);
+  font-size: clamp(12px, 2vw, 15px);
+  font-weight: 800;
+
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--toast-color) 55%, transparent),
+    0 10px 30px rgba(0,0,0,0.42);
+
+  backdrop-filter: blur(14px);
+
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+
+  pointer-events: none;
+  z-index: 999999;
+}
+
+.connection-toast.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Avatar */
+.avatar-wrap {
+  position: relative;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  flex: 0 0 var(--avatar-size);
+  margin-top: 0;
+  border-radius: 50%;
+  isolation: isolate;
+}
+
+.avatar-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  background: var(--avatar-glow-color);
+  opacity: 1;
+  filter: blur(8px);
+  z-index: 0;
+}
+
+.avatar-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -11px;
+  border-radius: 50%;
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 56deg,
+      var(--platform-layer-a) 88deg,
+      var(--avatar-glow-color) 124deg,
+      transparent 154deg,
+      transparent 360deg
+    );
+  opacity: 1;
+  filter: blur(5px) saturate(1.3);
+  animation: avatarRingSpin 4.5s linear infinite;
+  z-index: -1;
+}
+
+.avatar {
+  position: relative;
+  z-index: 2;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: 50%;
+  object-fit: cover;
+  border: var(--avatar-border-width) solid var(--avatar-border-color);
+  background: color-mix(in srgb, var(--avatar-fill-color) 12%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--shadow-color) 30%, transparent),
+    0 8px 16px color-mix(in srgb, var(--shadow-color) 32%, transparent);
+}
+
+body.hide-avatars {
+  --avatar-size: 0px;
+  --chat-column-gap: 0px;
+}
+
+body.hide-avatars .avatar-wrap {
+  display: none;
+}
+
+body.hide-alerts .alert {
+  display: none;
+}
+
+body.hide-chat-twitch .msg.platform-twitch:not(.alert),
+body.hide-chat-youtube .msg.platform-youtube:not(.alert),
+body.hide-chat-tiktok .msg.platform-tiktok:not(.alert):not(.tiktok-gift) {
+  display: none;
+}
+
+body.hide-badges .badges {
+  display: none;
+}
+
+body.hide-platform-icons .name-bubble {
+  padding-right: 16px;
+}
+
+body.hide-platform-icons .name-bubble::before {
+  right: 0;
+  border-radius: var(--name-bubble-radius);
+}
+
+body.hide-platform-icons .name-bubble::after,
+body.hide-platform-icons .platform-icon {
+  display: none;
+}
+
+body.name-icon-left.hide-platform-icons .name-bubble {
+  padding-left: 16px;
+  padding-right: 13px;
+}
+
+body.name-icon-left.hide-platform-icons .name-bubble::before {
+  left: 0;
+  right: 0;
+  border-radius: var(--name-bubble-radius);
+}
+
+body.hide-border-glow .name-bubble,
+body.hide-border-glow .message-bubble,
+body.hide-border-glow .alert .bubble-stack,
+body.hide-border-glow .tiktok-gift-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.10),
+    inset 0 -1px 0 rgba(0,0,0,0.24),
+    0 10px 20px rgba(0,0,0,0.34);
+}
+
+body.no-animations *,
+body.no-animations *::before,
+body.no-animations *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+body.anim-subtle {
+  --pop-duration: 0.16s;
+  --emote-bounce-duration: 1.7s;
+}
+
+body.anim-fast {
+  --pop-duration: 0.16s;
+  --emote-bounce-duration: 0.72s;
+}
+
+body.anim-slow {
+  --pop-duration: 0.42s;
+  --emote-bounce-duration: 1.8s;
+}
+
+body.no-emote-bounce .emote,
+body.no-emote-bounce .msg.gigantified .emote {
+  animation: none;
+}
+
+body.stealth-mode {
+  --chat-row-gap: 16px;
+  --grouped-message-gap: 5px;
+  --chat-column-gap: 14px;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .name-bubble,
+body.stealth-mode:not(.stealth-message-backgrounds) .message-bubble,
+body.stealth-mode:not(.stealth-alert-backgrounds) .alert .bubble-stack,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card {
+  overflow: visible;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .name-bubble,
+body.stealth-mode:not(.stealth-message-backgrounds) .message-bubble {
+  isolation: auto;
+  transform: none;
+  backface-visibility: visible;
+  -webkit-backface-visibility: visible;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .name-bubble {
+  gap: 6px;
+  padding-right: 0;
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .message-bubble {
+  display: block;
+  max-width: var(--chat-content-width);
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .platform-icon {
+  position: static;
+  transform: none;
+  width: 16px;
+  height: 16px;
+  filter:
+    drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+}
+
+body.stealth-mode.hide-platform-icons .platform-icon {
+  display: none;
+}
+
+body.stealth-mode .name-bubble + .message-bubble,
+body.stealth-mode .message-bubble + .message-bubble {
+  margin-top: 5px;
+}
+
+body.stealth-mode.stealth-name-backgrounds.stealth-message-backgrounds .name-bubble + .message-bubble {
+  margin-top: 2px;
+}
+
+body.stealth-mode.stealth-message-backgrounds .message-bubble + .message-bubble {
+  margin-top: 6px;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .name {
+  max-width: var(--chat-content-width);
+  color: rgba(255,255,255,0.78);
+  font-size: 14px;
+  line-height: 1.28;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.76),
+    0 0 6px rgba(0,0,0,0.55);
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .text,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-text,
+body.stealth-mode:not(.stealth-alert-backgrounds) .alert .text {
+  display: block;
+  max-width: var(--chat-content-width);
+  line-height: 1.34;
+  color: #ffffff;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.84),
+    0 0 8px rgba(0,0,0,0.62);
+}
+
+body.stealth-mode:not(.stealth-alert-backgrounds) .alert .bubble-stack,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card {
+  padding: 0;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .alert.compact-alert .name-bubble {
+  display: inline-flex;
+}
+
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card::before,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card::after {
+  display: none;
+}
+
+body.stealth-mode .embed,
+body.stealth-mode .link-preview {
+  margin-top: 6px;
+}
+
+body.stealth-mode:not(.stealth-media-backgrounds) .link-preview {
+  padding: 0;
+  background: var(--page-background-color);
+}
+
+body.stealth-mode:not(.stealth-emote-glow) .emote,
+body.stealth-mode:not(.stealth-emote-glow) .msg.gigantified .emote,
+body.stealth-mode:not(.stealth-media-backgrounds) .embed,
+body.stealth-mode:not(.stealth-media-backgrounds) .media-embed-tenor,
+body.stealth-mode:not(.stealth-media-backgrounds) .link-preview {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+body.stealth-mode:not(.stealth-colored-text) .special-highlight .text,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-streamlabs .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-streamelements .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-kofi .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-ko-fi .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-tipeeestream .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-tipeee-stream .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-fourthwall .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-patreon .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-donordrive .name {
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  animation: none;
+}
+
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-count {
+  color: #ffffff;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.84),
+    0 0 8px rgba(0,0,0,0.62);
+}
+
+body.stealth-mode .avatar-wrap::before,
+body.stealth-mode .avatar-wrap::after {
+  display: none;
+}
+
+body.stealth-mode .avatar {
+  border: 2px solid rgba(255,255,255,0.88);
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.34);
+}
+
+body.stealth-mode .msg.gigantified .message-bubble {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+body.stealth-mode .msg.gigantified .message-bubble::before,
+body.stealth-mode .msg.gigantified .message-bubble::after {
+  display: none;
+}
+
+body.stealth-mode.stealth-hide-badges .badges,
+body.stealth-mode.stealth-hide-platform-icons .platform-icon {
+  display: none;
+}
+
+body.stealth-mode.stealth-avatar-glow .avatar-wrap::before,
+body.stealth-mode.stealth-avatar-glow .avatar-wrap::after {
+  display: block;
+}
+
+body.stealth-mode.stealth-emote-glow .emote,
+body.stealth-mode.stealth-emote-glow .msg.gigantified .emote {
+  filter:
+    drop-shadow(0 0 10px var(--platform-glow))
+    drop-shadow(0 0 18px rgba(255,255,255,0.18)) !important;
+}
+
+/* Stack */
+.bubble-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--grouped-message-gap);
+  width: var(--bubble-stack-width);
+  min-width: 0;
+  max-width: var(--chat-content-width);
+  box-sizing: border-box;
+}
+
+/* no gap between name and first message */
+.name-bubble + .message-bubble {
+  margin-top: 2px;
+}
+
+/* spacing between additional grouped messages */
+.message-bubble + .message-bubble {
+  margin-top: 6px;
+}
+
+/* Shared */
+.name-bubble,
+.message-bubble {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-style: solid;
+  border-width: 2px;
+}
+
+body.bubble-shape-slant .name-bubble,
+body.bubble-shape-slant .message-bubble,
+body.bubble-shape-slant .alert .bubble-stack,
+body.bubble-shape-slant .tiktok-gift-card,
+body.bubble-shape-slant .link-preview,
+body.bubble-shape-slant .embed,
+body.bubble-shape-slant .media-embed-tenor {
+  border-radius: max(4px, calc(var(--bubble-radius) * 0.35));
+  clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%);
+}
+
+body.bubble-shape-notch .name-bubble,
+body.bubble-shape-notch .message-bubble,
+body.bubble-shape-notch .alert .bubble-stack,
+body.bubble-shape-notch .tiktok-gift-card,
+body.bubble-shape-notch .link-preview,
+body.bubble-shape-notch .embed,
+body.bubble-shape-notch .media-embed-tenor {
+  border-radius: max(4px, calc(var(--bubble-radius) * 0.45));
+  clip-path: polygon(0 0, calc(100% - var(--bubble-notch)) 0, 100% var(--bubble-notch), 100% 100%, var(--bubble-notch) 100%, 0 calc(100% - var(--bubble-notch)));
+}
+
+body.bubble-shape-square .name-bubble,
+body.bubble-shape-square .message-bubble,
+body.bubble-shape-square .alert .bubble-stack,
+body.bubble-shape-square .tiktok-gift-card,
+body.bubble-shape-square .link-preview,
+body.bubble-shape-square .embed,
+body.bubble-shape-square .media-embed-tenor {
+  border-radius: 4px;
+}
+
+.name-bubble > *,
+.message-bubble > *,
+.tiktok-gift-card > * {
+  position: relative;
+  z-index: 4;
+}
+
+/* Name/header bubble */
+.name-bubble {
+  position: relative;
+
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, auto) 23px;
+  align-items: center;
+
+  column-gap: 7px;
+
+  width: var(--name-bubble-width);
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+
+  min-height: 20px;
+  height: auto;
+
+  padding: 7px 13px 7px 16px;
+
+  border-radius: var(--name-bubble-radius);
+  border: var(--title-border-width) solid var(--title-border-color);
+
+  overflow: visible;
+  background: var(--title-icon-bg-gradient);
+
+  box-shadow:
+    0 0 18px var(--title-glow-color),
+    0 8px 18px rgba(0,0,0,0.34);
+}
+
+/* FRONT coloured name pill */
+.name-bubble::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: calc(var(--name-icon-section-width) - var(--name-bubble-layer-overlap));
+
+  border-radius:
+    var(--name-bubble-radius)
+    var(--name-bubble-seam-curve)
+    var(--name-bubble-seam-curve)
+    var(--name-bubble-radius);
+
+  background: var(--title-bg-gradient);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.48),
+    inset 0 -1px 0 rgba(0,0,0,0.24);
+
+  pointer-events: none;
+  z-index: 1;
+}
+
+.name-bubble .name {
+  padding-right: 16px;
+}
+
+.name-bubble .badges:not(:empty) + .name {
+  padding-right: 16px;
+}
+
+/* Icon section uses the parent capsule background, avoiding stacked opacity. */
+.name-bubble::after {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  right: 0;
+  bottom: 0;
+
+  width: var(--name-icon-section-width);
+
+  border-radius:
+    0
+    var(--name-bubble-radius)
+    var(--name-bubble-radius)
+    0;
+
+  background: transparent;
+
+  box-shadow: none;
+
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Platform icon */
+.platform-icon {
+  position: relative;
+
+  width: 23px;
+  height: 23px;
+
+  object-fit: contain;
+  justify-self: end;
+
+  z-index: 5;
+
+  filter:
+    drop-shadow(0 2px 3px rgba(0,0,0,0.7))
+    drop-shadow(0 0 7px rgba(255,255,255,0.18));
+}
+
+body.name-icon-left .name-bubble {
+  grid-template-columns: 23px auto minmax(0, auto);
+  padding: 7px 16px 7px 13px;
+}
+
+body.name-icon-left .name-bubble::before {
+  left: calc(var(--name-icon-section-width) - var(--name-bubble-layer-overlap));
+  right: 0;
+  border-radius:
+    var(--name-bubble-seam-curve)
+    var(--name-bubble-radius)
+    var(--name-bubble-radius)
+    var(--name-bubble-seam-curve);
+}
+
+body.name-icon-left .name-bubble::after {
+  left: 0;
+  right: auto;
+  border-radius:
+    var(--name-bubble-radius)
+    0
+    0
+    var(--name-bubble-radius);
+}
+
+body.name-icon-left .platform-icon {
+  grid-column: 1;
+  grid-row: 1;
+  justify-self: start;
+}
+
+body.name-icon-left .badges {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+body.name-icon-left .badges:not(:empty) {
+  padding-left: 16px;
+}
+
+body.name-icon-left .name {
+  grid-column: 3;
+  grid-row: 1;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+body.name-icon-left .name-bubble .badges:not(:empty) + .name {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+body.name-icon-left .name-bubble .badges:empty + .name {
+  grid-column: 2 / 4;
+  padding-left: 16px;
+}
+
+/* Message bubble */
+.message-bubble {
+  display: inline-block;
+  width: var(--message-bubble-width);
+  max-width: min(var(--max-message-width), var(--chat-content-width));
+  overflow-wrap: anywhere;
+  min-height: 30px;
+  box-sizing: border-box;
+
+  padding: 15px 22px;
+
+  border-radius: var(--bubble-radius);
+  border-width: 0;
+  border-color: transparent;
+
+  --message-fill-gradient: var(--message-bg-gradient) padding-box;
+  background: var(--message-fill-gradient);
+
+  box-shadow:
+    0 0 22px var(--message-glow-color),
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.28),
+    0 12px 28px rgba(0,0,0,0.42);
+
+  animation: bubbleIn var(--pop-duration) ease-out;
+}
+
+.message-bubble::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+  padding: var(--message-border-width);
+  background: var(--message-border-gradient);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.message-bubble::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.14) 0%,
+      rgba(255,255,255,0.035) 20%,
+      rgba(0,0,0,0.06) 54%,
+      rgba(0,0,0,0.25) 100%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Text */
+.name,
+.tiktok-gift-user,
+.tiktok-gift-count,
+.alert .name {
+  font-family: var(--accent-font-family);
+}
+
+.text,
+.tiktok-gift-text,
+.alert .text {
+  font-family: var(--message-font-family);
+}
+
+.name {
+  font-family: var(--accent-font-family);
+  font-size: var(--title-font-size);
+  font-weight: 900;
+  color: var(--title-text-color);
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.56),
+    0 0 8px rgba(255,255,255,0.14);
+
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  line-height: 1.05;
+
+  max-width: calc(
+    var(--chat-width) -
+    var(--avatar-size) -
+    140px
+  );
+}
+
+.platform-twitch .name {
+  color: var(--twitch-name-text-color);
+  text-shadow:
+    0 2px 4px color-mix(in srgb, var(--shadow-color) 62%, transparent),
+    0 0 9px color-mix(in srgb, var(--twitch-name-text-color) 22%, transparent);
+}
+
+.platform-youtube .name {
+  color: var(--youtube-name-text-color);
+  text-shadow:
+    0 2px 4px color-mix(in srgb, var(--shadow-color) 62%, transparent),
+    0 0 9px color-mix(in srgb, var(--youtube-name-text-color) 22%, transparent);
+}
+
+.platform-tiktok .name {
+  color: var(--tiktok-name-text-color);
+  text-shadow:
+    0 1px 2px color-mix(in srgb, var(--bubble-highlight-color) 10%, transparent),
+    0 1px 3px color-mix(in srgb, var(--shadow-color) 22%, transparent);
+}
+
+.text {
+  font-family: var(--message-font-family);
+  font-size: var(--message-font-size);
+  line-height: 1.28;
+  font-weight: 600;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  color: var(--message-text-color);
+  text-shadow:
+    0 2px 4px color-mix(in srgb, var(--shadow-color) 72%, transparent);
+}
+
+/* Badges */
+.badges {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  min-width: 0;
+}
+
+.badge {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.badge-text {
+  display: inline-flex;
+  align-items: center;
+  min-height: 16px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--badge-background-color) 36%, transparent);
+  color: var(--message-text-color);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+}
+
+/* Emotes */
+.emote {
+  height: 1.7em;
+  max-width: 3.4em;
+
+  vertical-align: middle;
+  object-fit: contain;
+
+  margin: 0 2px;
+
+  transform: translateY(0.08em);
+}
+
+.msg.emote-only:not(.gigantified) .text {
+  font-size: var(--emote-only-font-size);
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+/* Gigantified */
+.msg.gigantified .message-bubble {
+  padding: 17px 23px;
+  box-shadow:
+    0 0 24px var(--platform-glow),
+    0 0 36px color-mix(in srgb, var(--gigantified-sparkle-color) 22%, transparent),
+    0 12px 30px color-mix(in srgb, var(--shadow-color) 48%, transparent);
+}
+
+.msg.gigantified .text {
+  font-size: var(--gigantified-font-size);
+  line-height: 1.05;
+  font-weight: 900;
+}
+
+.msg.gigantified .emote {
+  height: 3em;
+  max-width: 4.8em;
+  filter:
+    drop-shadow(0 0 10px var(--platform-glow))
+    drop-shadow(0 0 18px color-mix(in srgb, var(--emote-sparkle-color) 18%, transparent));
+  animation: emoteBounce var(--emote-bounce-duration) ease-in-out infinite;
+}
+
+.embed {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
+  max-height: min(420px, 60vh);
+  margin-top: 10px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: calc(var(--bubble-radius) - 8px);
+  object-fit: contain;
+}
+
+.media-embed-image,
+.media-embed-video {
+  width: auto;
+  max-width: 100%;
+}
+
+.media-embed-video {
+  background: var(--media-background-color);
+}
+
+.media-embed-tenor {
+  width: min(100%, 498px);
+  aspect-ratio: 1 / 1;
+  min-height: 260px;
+  border: 0;
+  background: var(--media-background-color);
+}
+
+.link-preview {
+  display: grid;
+  grid-template-columns: minmax(92px, 128px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  max-width: 430px;
+  margin-top: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: calc(var(--bubble-radius) - 8px);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--bubble-highlight-color) 8%, transparent) 0%,
+      color-mix(in srgb, var(--bubble-highlight-color) 3%, transparent) 100%
+    ),
+    color-mix(in srgb, var(--shadow-color) 30%, transparent);
+  color: var(--link-preview-text-color);
+  text-decoration: none;
+}
+
+.link-preview-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--media-background-color);
+}
+
+.link-preview-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.link-preview-title,
+.link-preview-author {
+  overflow-wrap: anywhere;
+}
+
+.link-preview-title {
+  color: var(--link-preview-text-color);
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.22;
+}
+
+.link-preview-author {
+  color: var(--link-preview-meta-color);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Highlight messages */
+.special-highlight {
+  --platform-layer-a: var(--bubble-highlight-color);
+  --platform-layer-b: var(--rainbow-color-7);
+}
+
+.special-highlight .text {
+  font-weight: 900;
+  background: linear-gradient(
+    90deg,
+    var(--rainbow-color-1),
+    var(--rainbow-color-2),
+    var(--rainbow-color-3),
+    var(--rainbow-color-4),
+    var(--rainbow-color-5),
+    var(--rainbow-color-6),
+    var(--rainbow-color-7),
+    var(--rainbow-color-1)
+  );
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: rainbowText 1.8s linear infinite;
+}
+
+/* Alert cards */
+.alert {
+  gap: var(--chat-column-gap);
+  align-items: flex-start;
+}
+
+.alert .bubble-stack {
+  width: var(--alert-bubble-width);
+  max-width: min(var(--alert-bubble-max-width), var(--chat-content-width));
+  min-width: var(--alert-bubble-min-width);
+  min-height: 72px;
+  gap: 7px;
+  padding: 14px 18px;
+  box-sizing: border-box;
+  border-radius: var(--bubble-radius);
+  border: var(--alert-border-width) solid transparent;
+  --alert-fill-gradient: var(--alert-bg-gradient) padding-box;
+  background:
+    var(--alert-fill-gradient),
+    var(--alert-border-gradient) border-box;
+  box-shadow:
+    0 0 22px var(--alert-glow-color),
+    0 10px 24px rgba(0,0,0,0.34);
+}
+
+.alert .name-bubble,
+.alert .message-bubble {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+  overflow: visible;
+}
+
+.alert .name-bubble::before,
+.alert .name-bubble::after,
+.alert .message-bubble::before,
+.alert .message-bubble::after {
+  display: none;
+}
+
+.alert .name-bubble {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.alert .platform-icon {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+}
+
+body.name-icon-left .alert .platform-icon {
+  order: -1;
+}
+
+body.name-icon-left .alert .name {
+  padding-left: 0;
+}
+
+.alert .message-bubble {
+  display: block;
+  max-width: 100%;
+}
+
+.alert .name {
+  color: #ffffff;
+  font-size: var(--alert-title-font-size);
+  line-height: 1.16;
+}
+
+.alert .text {
+  color: #ffffff;
+  font-size: var(--alert-message-font-size);
+  line-height: 1.28;
+}
+
+.compact-alert .bubble-stack {
+  min-height: 0;
+  gap: 3px;
+  padding: 9px 14px;
+}
+
+.compact-alert .name {
+  font-size: var(--compact-alert-title-font-size);
+}
+
+.compact-alert .text {
+  font-size: var(--compact-alert-message-font-size);
+  line-height: 1.24;
+}
+
+/* TikTok gift card */
+.tiktok-gift-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-width: 0;
+  max-width: var(--chat-content-width);
+  width: var(--tiktok-gift-card-width);
+  box-sizing: border-box;
+  padding: 13px 20px;
+
+  border-radius: var(--bubble-radius);
+  border: var(--gift-border-width) solid transparent;
+
+  --gift-fill-gradient: var(--gift-bg-gradient) padding-box;
+  background:
+    var(--gift-fill-gradient),
+    var(--gift-border-gradient) border-box;
+
+  box-shadow:
+    0 0 24px var(--gift-glow-color),
+     inset 0 1px 0 rgba(255,255,255,0.12),
+     0 12px 28px rgba(0,0,0,0.42);
+
+  position: relative;
+  overflow: hidden;
+}
+
+body.use-twitch-name-colors .platform-twitch.has-twitch-name-color .name {
+  color: var(--twitch-chat-name-color);
+  text-shadow:
+    0 2px 4px color-mix(in srgb, var(--shadow-color) 62%, transparent),
+    0 0 9px color-mix(in srgb, var(--twitch-chat-name-color) 24%, transparent);
+}
+
+body.fit-to-screen .msg > .bubble-stack,
+body.fit-to-screen .msg > .tiktok-gift-card {
+  flex: 1 1 0;
+  align-self: stretch;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+}
+
+body.fit-to-screen .bubble-stack > .name-bubble,
+body.fit-to-screen .bubble-stack > .message-bubble,
+body.fit-to-screen .alert > .bubble-stack,
+body.fit-to-screen .tiktok-gift-card {
+  width: 100%;
+  max-width: none;
+}
+
+body.fit-to-screen .alert > .bubble-stack {
+  min-width: 0;
+}
+
+body.fit-to-screen .message-bubble {
+  max-width: none;
+}
+
+.tiktok-gift-info {
+  min-width: 0;
+}
+
+.tiktok-gift-text,
+.tiktok-gift-user {
+  overflow-wrap: anywhere;
+}
+
+.tiktok-gift-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(255,255,255,0.16) 40%,
+      transparent 60%
+    );
+  transform: translateX(-120%);
+  animation: tiktokGiftShine 3.5s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.tiktok-gift-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255,255,255,0.10) 0%,
+      rgba(255,255,255,0.025) 18%,
+      rgba(0,0,0,0.08) 52%,
+      rgba(0,0,0,0.28) 100%
+    );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.tiktok-gift {
+  align-items: flex-start;
+  gap: var(--chat-column-gap);
+}
+
+.tiktok-gift .avatar-wrap {
+  display: block;
+  margin-top: 0;
+}
+
+body.hide-avatars .tiktok-gift .avatar-wrap {
+  display: none;
+}
+
+.tiktok-gift .tiktok-gift-card {
+  margin-top: 0;
+}
+
+.tiktok-gift-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  position: relative;
+  z-index: 4;
+}
+
+.tiktok-gift-user {
+  color: var(--message-text-color);
+  font-weight: 900;
+  font-size: var(--gift-user-font-size);
+  line-height: 1.08;
+}
+
+.tiktok-gift-text {
+  color: rgba(255,255,255,0.86);
+  font-size: var(--gift-label-font-size);
+  line-height: 1.18;
+}
+
+.tiktok-gift-image {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  position: relative;
+  z-index: 4;
+}
+
+.tiktok-gift-count {
+  color: white;
+  font-size: var(--gift-count-font-size);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow:
+    0 0 10px rgba(37,244,238,0.62),
+    0 0 18px rgba(255,255,255,0.14);
+  position: relative;
+  z-index: 4;
+}
+
+.special-highlight .name-bubble::before {
+  animation: rainbowFill 2.2s linear infinite;
+  background-size: 300% 100%;
+}
+
+.special-highlight .name {
+  color: #ffffff;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.70),
+    0 0 8px rgba(255,255,255,0.20);
+}
+
+@keyframes rainbowFill {
+  from {
+    background-position: 0% 50%;
+  }
+
+  to {
+    background-position: 300% 50%;
+  }
+}
+
+/* Animations */
+@keyframes avatarRingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes bubbleIn {
+  from {
+    opacity: 0;
+    transform: translateX(-8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes highlightPulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.012);
+    filter: brightness(1.13);
+  }
+}
+
+@keyframes rainbowText {
+  from { background-position: 0% 50%; }
+  to { background-position: 300% 50%; }
+}
+
+@keyframes rainbowBorder {
+  0% { border-color: var(--rainbow-color-1); }
+  16% { border-color: var(--rainbow-color-2); }
+  32% { border-color: var(--rainbow-color-3); }
+  48% { border-color: var(--rainbow-color-4); }
+  64% { border-color: var(--rainbow-color-5); }
+  80% { border-color: var(--rainbow-color-6); }
+  100% { border-color: var(--rainbow-color-7); }
+}
+
+@keyframes emoteBounce {
+  0%, 100% {
+    transform: translateY(0) rotate(-2deg) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) rotate(2deg) scale(1.07);
+  }
+}
+
+@keyframes tiktokGiftShine {
+  to {
+    transform: translateX(120%);
+  }
+}
+
+.msg,
+.alert,
+.tiktok-gift {
+  align-items: flex-start;
+}
+
+.gift-tier-1 .tiktok-gift-card {
+  animation:
+    giftPop 0.25s ease-out;
+}
+
+/* SUPER GG level */
+.gift-tier-2 .tiktok-gift-card {
+  animation:
+    giftBigPop 0.45s cubic-bezier(.17,.89,.32,1.28),
+    giftGlowPulse 1.2s ease-in-out 3,
+    giftFloat 2s ease-in-out infinite;
+}
+
+/* BIG gifts */
+.gift-tier-3 .tiktok-gift-card {
+  animation:
+    giftMegaPop 0.75s cubic-bezier(.17,.89,.32,1.4),
+    giftGlowPulseStrong 1s ease-in-out 5,
+    giftShakeHard 0.55s ease-in-out,
+    giftFloat 1.8s ease-in-out infinite;
+}
+
+/* HUGE gifts */
+.gift-tier-4 .tiktok-gift-card {
+  animation:
+    giftUltraPop 1s cubic-bezier(.17,.89,.22,1.55),
+    giftGlowInsane 0.9s ease-in-out infinite,
+    giftShakeHard 0.7s ease-in-out 2,
+    giftFloat 1.4s ease-in-out infinite;
+}
+
+.gift-tier-3 .tiktok-gift-image,
+.gift-tier-4 .tiktok-gift-image {
+  animation:
+    giftImageExplode 0.9s cubic-bezier(.17,.89,.32,1.3),
+    giftImagePulse 1.2s ease-in-out infinite;
+}
+
+/* MASSIVE aura */
+.gift-tier-4 .tiktok-gift-card::before {
+  animation:
+    tiktokGiftShine 1.8s linear infinite,
+    megaFlash 1.2s ease-in-out infinite;
+}
+
+/* TIER 4 BACKGROUND BURST */
+.gift-tier-4 {
+  position: relative;
+}
+
+.gift-tier-4 .tiktok-gift-card::before {
+  content: "";
+
+  position: absolute;
+  inset: -10px;
+
+  border-radius: inherit;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(37,244,238,0.30) 0%,
+      rgba(254,44,85,0.22) 45%,
+      transparent 75%
+    );
+
+  filter: blur(12px);
+
+  animation:
+    tiktokGiftShine 1.8s linear infinite,
+    tier4AuraPulse 1.4s ease-in-out infinite;
+
+  z-index: 0;
+}
+
+@keyframes giftPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes giftBigPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) rotate(-2deg);
+  }
+
+  62% {
+    opacity: 1;
+    transform: scale(1.06) rotate(1deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@keyframes giftMegaPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) rotate(-5deg);
+    filter: brightness(1.8) saturate(1.4);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.12) rotate(3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes giftGlowPulse {
+  0%, 100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.16);
+  }
+}
+
+@keyframes giftGlowPulseStrong {
+  0%, 100% {
+    filter: brightness(1) saturate(1);
+  }
+
+  50% {
+    filter: brightness(1.28) saturate(1.35);
+  }
+}
+
+@keyframes giftUltraPop {
+  0% {
+    transform:
+      scale(0.4)
+      rotate(-10deg);
+
+    filter:
+      brightness(2.4)
+      saturate(2);
+  }
+
+  45% {
+    transform:
+      scale(1.24)
+      rotate(6deg);
+
+    filter:
+      brightness(1.7)
+      saturate(1.8);
+  }
+
+  70% {
+    transform:
+      scale(0.96)
+      rotate(-2deg);
+  }
+
+  100% {
+    transform:
+      scale(1)
+      rotate(0deg);
+
+    filter:
+      brightness(1)
+      saturate(1);
+  }
+}
+
+@keyframes giftGlowInsane {
+  0%, 100% {
+    box-shadow:
+      -8px 0 34px rgba(37,244,238,0.8),
+       8px 0 34px rgba(254,44,85,0.8),
+       0 0 28px rgba(255,255,255,0.25),
+       0 12px 30px rgba(0,0,0,0.45);
+  }
+
+  50% {
+    box-shadow:
+      -16px 0 64px rgba(37,244,238,1),
+       16px 0 64px rgba(254,44,85,1),
+       0 0 52px rgba(255,255,255,0.7),
+       0 0 120px rgba(255,255,255,0.3),
+       0 18px 44px rgba(0,0,0,0.58);
+  }
+}
+
+@keyframes giftShakeHard {
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  15% {
+    transform: translateX(-5px) rotate(-2deg);
+  }
+
+  30% {
+    transform: translateX(5px) rotate(2deg);
+  }
+
+  45% {
+    transform: translateX(-4px) rotate(-1deg);
+  }
+
+  60% {
+    transform: translateX(4px) rotate(1deg);
+  }
+}
+
+@keyframes giftFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes giftImageExplode {
+  0% {
+    transform:
+      scale(0.2)
+      rotate(-20deg);
+
+    opacity: 0;
+  }
+
+  45% {
+    transform:
+      scale(1.6)
+      rotate(8deg);
+
+    opacity: 1;
+  }
+
+  100% {
+    transform:
+      scale(1)
+      rotate(0deg);
+
+    opacity: 1;
+  }
+}
+
+@keyframes giftImagePulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.12);
+  }
+}
+
+@keyframes megaFlash {
+  0%, 100% {
+    opacity: 0.15;
+  }
+
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes tier4AuraPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+/* Third-party donation/service platform themes */
+
+.platform-streamlabs {
+  --platform-color: #80f5d2;
+  --platform-glow: rgba(128,245,210,0.56);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #31c48d;
+}
+
+.platform-streamelements {
+  --platform-color: #00d1ff;
+  --platform-glow: rgba(0,209,255,0.52);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #6f4cff;
+}
+
+.platform-kofi,
+.platform-ko-fi {
+  --platform-color: #ff6433;
+  --platform-glow: rgba(255,100,51,0.58);
+  --platform-layer-a: #72a5f2;
+  --platform-layer-b: #ff6433;
+}
+
+.platform-tipeeestream,
+.platform-tipeee-stream {
+  --platform-color: #ff8a00;
+  --platform-glow: rgba(255,138,0,0.54);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #ff4d4d;
+}
+
+.platform-fourthwall {
+  --platform-color: #111827;
+  --platform-glow: rgba(255,255,255,0.28);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #111827;
+}
+
+.platform-patreon {
+  --platform-color: #ff424d;
+  --platform-glow: rgba(255,66,77,0.56);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #ff424d;
+}
+
+.platform-donordrive {
+  --platform-color: #1f7cff;
+  --platform-glow: rgba(31,124,255,0.55);
+  --platform-layer-a: #ffffff;
+  --platform-layer-b: #00c2ff;
+}
+
+/* Distinct entrance for non-chat alert cards */
+.alert.platform-streamlabs,
+.alert.platform-streamelements,
+.alert.platform-kofi,
+.alert.platform-ko-fi,
+.alert.platform-tipeeestream,
+.alert.platform-tipeee-stream,
+.alert.platform-fourthwall,
+.alert.platform-patreon,
+.alert.platform-donordrive {
+  animation:
+    donationAlertSlam 0.55s cubic-bezier(.17,.89,.28,1.35),
+    donationAlertGlow 1.4s ease-in-out 3;
+}
+
+/* Donation alert card background inherits brand variables */
+.alert.platform-streamlabs .bubble-stack,
+.alert.platform-streamelements .bubble-stack,
+.alert.platform-kofi .bubble-stack,
+.alert.platform-ko-fi .bubble-stack,
+.alert.platform-tipeeestream .bubble-stack,
+.alert.platform-tipeee-stream .bubble-stack,
+.alert.platform-fourthwall .bubble-stack,
+.alert.platform-patreon .bubble-stack,
+.alert.platform-donordrive .bubble-stack {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Extra shimmer line across donation cards */
+.alert.platform-streamlabs .bubble-stack::before,
+.alert.platform-streamelements .bubble-stack::before,
+.alert.platform-kofi .bubble-stack::before,
+.alert.platform-ko-fi .bubble-stack::before,
+.alert.platform-tipeeestream .bubble-stack::before,
+.alert.platform-tipeee-stream .bubble-stack::before,
+.alert.platform-fourthwall .bubble-stack::before,
+.alert.platform-patreon .bubble-stack::before,
+.alert.platform-donordrive .bubble-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--bubble-radius);
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 32%,
+      rgba(255,255,255,0.28) 46%,
+      transparent 62%,
+      transparent 100%
+    );
+  transform: translateX(-130%);
+  animation: donationShine 2.4s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Make sure content sits above shine */
+.alert .bubble-stack {
+  position: relative;
+  overflow: hidden;
+}
+
+.alert .name-bubble,
+.alert .message-bubble {
+  position: relative;
+  z-index: 3;
+}
+
+body.stealth-mode .alert.platform-streamlabs .bubble-stack,
+body.stealth-mode .alert.platform-streamelements .bubble-stack,
+body.stealth-mode .alert.platform-kofi .bubble-stack,
+body.stealth-mode .alert.platform-ko-fi .bubble-stack,
+body.stealth-mode .alert.platform-tipeeestream .bubble-stack,
+body.stealth-mode .alert.platform-tipeee-stream .bubble-stack,
+body.stealth-mode .alert.platform-fourthwall .bubble-stack,
+body.stealth-mode .alert.platform-patreon .bubble-stack,
+body.stealth-mode .alert.platform-donordrive .bubble-stack,
+body.stealth-mode .alert .bubble-stack {
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.stealth-mode .alert.platform-streamlabs .bubble-stack::before,
+body.stealth-mode .alert.platform-streamelements .bubble-stack::before,
+body.stealth-mode .alert.platform-kofi .bubble-stack::before,
+body.stealth-mode .alert.platform-ko-fi .bubble-stack::before,
+body.stealth-mode .alert.platform-tipeeestream .bubble-stack::before,
+body.stealth-mode .alert.platform-tipeee-stream .bubble-stack::before,
+body.stealth-mode .alert.platform-fourthwall .bubble-stack::before,
+body.stealth-mode .alert.platform-patreon .bubble-stack::before,
+body.stealth-mode .alert.platform-donordrive .bubble-stack::before {
+  display: none;
+}
+
+@keyframes donationAlertSlam {
+  0% {
+    opacity: 0;
+    transform: translateX(-34px) scale(0.86) rotate(-3deg);
+    filter: brightness(1.8) saturate(1.5);
+  }
+
+  58% {
+    opacity: 1;
+    transform: translateX(7px) scale(1.06) rotate(1.5deg);
+  }
+
+  100% {
+    transform: translateX(0) scale(1) rotate(0deg);
+    filter: brightness(1) saturate(1);
+  }
+}
+
+@keyframes donationAlertGlow {
+  0%, 100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.18);
+  }
+}
+
+@keyframes donationShine {
+  0% {
+    transform: translateX(-130%);
+  }
+
+  45%, 100% {
+    transform: translateX(130%);
+  }
+}
+
+/* Donation alert typography */
+
+/* Donation-specific typography */
+
+.alert.platform-streamlabs .name,
+.alert.platform-streamelements .name,
+.alert.platform-kofi .name,
+.alert.platform-ko-fi .name,
+.alert.platform-tipeeestream .name,
+.alert.platform-tipeee-stream .name,
+.alert.platform-fourthwall .name,
+.alert.platform-patreon .name,
+.alert.platform-donordrive .name {
+  font-size: 1.22em;
+  font-weight: 900;
+  line-height: 1.05;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    color-mix(in srgb, var(--platform-color) 72%, white 28%) 100%
+  );
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--platform-color) 24%, transparent);
+
+  letter-spacing: -0.03em;
+}
+
+.alert.platform-streamlabs .text,
+.alert.platform-streamelements .text,
+.alert.platform-kofi .text,
+.alert.platform-ko-fi .text,
+.alert.platform-tipeeestream .text,
+.alert.platform-tipeee-stream .text,
+.alert.platform-fourthwall .text,
+.alert.platform-patreon .text,
+.alert.platform-donordrive .text {
+  font-size: 0.88em;
+  line-height: 1.2;
+  opacity: 0.92;
+
+  margin-top: 2px;
+}
+
+body.stealth-mode .alert.platform-streamlabs .name,
+body.stealth-mode .alert.platform-streamelements .name,
+body.stealth-mode .alert.platform-kofi .name,
+body.stealth-mode .alert.platform-ko-fi .name,
+body.stealth-mode .alert.platform-tipeeestream .name,
+body.stealth-mode .alert.platform-tipeee-stream .name,
+body.stealth-mode .alert.platform-fourthwall .name,
+body.stealth-mode .alert.platform-patreon .name,
+body.stealth-mode .alert.platform-donordrive .name {
+  line-height: 1.28;
+  letter-spacing: 0;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.76),
+    0 0 6px rgba(0,0,0,0.55);
+}
+
+body.stealth-mode .alert.platform-streamlabs .text,
+body.stealth-mode .alert.platform-streamelements .text,
+body.stealth-mode .alert.platform-kofi .text,
+body.stealth-mode .alert.platform-ko-fi .text,
+body.stealth-mode .alert.platform-tipeeestream .text,
+body.stealth-mode .alert.platform-tipeee-stream .text,
+body.stealth-mode .alert.platform-fourthwall .text,
+body.stealth-mode .alert.platform-patreon .text,
+body.stealth-mode .alert.platform-donordrive .text {
+  line-height: 1.34;
+}
+
+body.stealth-mode:not(.stealth-colored-text) .special-highlight .text,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-streamlabs .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-streamelements .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-kofi .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-ko-fi .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-tipeeestream .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-tipeee-stream .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-fourthwall .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-patreon .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-donordrive .name {
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  animation: none;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.76),
+    0 0 6px rgba(0,0,0,0.55);
+}
+
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-count,
+body.stealth-mode:not(.stealth-emote-glow) .emote,
+body.stealth-mode:not(.stealth-emote-glow) .msg.gigantified .emote,
+body.stealth-mode:not(.stealth-media-backgrounds) .embed,
+body.stealth-mode:not(.stealth-media-backgrounds) .media-embed-tenor,
+body.stealth-mode:not(.stealth-media-backgrounds) .link-preview {
+  filter: none !important;
+  box-shadow: none !important;
+}
+
+body.stealth-mode:not(.stealth-colored-text) .special-highlight .text,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-streamlabs .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-streamelements .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-kofi .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-ko-fi .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-tipeeestream .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-tipeee-stream .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-fourthwall .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-patreon .name,
+body.stealth-mode:not(.stealth-colored-text) .alert.platform-donordrive .name {
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  animation: none;
+}
+
+body.stealth-mode.stealth-colored-text .special-highlight .text {
+  background: linear-gradient(
+    90deg,
+    var(--rainbow-color-1),
+    var(--rainbow-color-2),
+    var(--rainbow-color-3),
+    var(--rainbow-color-4),
+    var(--rainbow-color-5),
+    var(--rainbow-color-6),
+    var(--rainbow-color-7),
+    var(--rainbow-color-1)
+  );
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  animation: rainbowText 1.8s linear infinite;
+}
+
+body.stealth-mode.stealth-colored-text .alert.platform-streamlabs .name,
+body.stealth-mode.stealth-colored-text .alert.platform-streamelements .name,
+body.stealth-mode.stealth-colored-text .alert.platform-kofi .name,
+body.stealth-mode.stealth-colored-text .alert.platform-ko-fi .name,
+body.stealth-mode.stealth-colored-text .alert.platform-tipeeestream .name,
+body.stealth-mode.stealth-colored-text .alert.platform-tipeee-stream .name,
+body.stealth-mode.stealth-colored-text .alert.platform-fourthwall .name,
+body.stealth-mode.stealth-colored-text .alert.platform-patreon .name,
+body.stealth-mode.stealth-colored-text .alert.platform-donordrive .name {
+  background: linear-gradient(
+    90deg,
+    #ffffff 0%,
+    color-mix(in srgb, var(--platform-color) 72%, white 28%) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--platform-color) 24%, transparent);
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .msg.gigantified .message-bubble {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+/* Per-source/type styling. Kept late so donation and special-event themes still obey config controls. */
+.name-bubble::before {
+  right: calc(var(--name-icon-section-width) - var(--name-bubble-layer-overlap));
+  border-radius:
+    var(--name-bubble-radius)
+    var(--name-bubble-seam-curve)
+    var(--name-bubble-seam-curve)
+    var(--name-bubble-radius);
+  background: var(--title-bg-gradient);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.48),
+    inset 0 -1px 0 rgba(0,0,0,0.24);
+}
+
+.name-bubble::after {
+  display: block;
+  background: transparent;
+  box-shadow: none;
+}
+
+.msg.type-style-message-border:not(.alert):not(.tiktok-gift) .message-bubble {
+  border-color: transparent;
+}
+
+.msg.special-highlight .name-bubble::before {
+  animation: rainbowFill 2.2s linear infinite;
+  background-size: 300% 100%;
+}
+
+.msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble {
+  animation:
+    highlightPulse 1.8s ease-in-out infinite,
+    rainbowBorder 2.2s linear infinite;
+}
+
+/* Keep shape controls authoritative after stealth/display overrides. */
+body.bubble-shape-slant:not(.hide-name-backgrounds) .name-bubble,
+body.bubble-shape-slant:not(.hide-message-backgrounds) .message-bubble,
+body.bubble-shape-slant:not(.hide-alert-backgrounds) .alert .bubble-stack,
+body.bubble-shape-slant:not(.hide-gift-backgrounds) .tiktok-gift-card,
+body.bubble-shape-slant:not(.hide-media-backgrounds) .link-preview,
+body.bubble-shape-slant:not(.hide-media-backgrounds) .embed,
+body.bubble-shape-slant:not(.hide-media-backgrounds) .media-embed-tenor {
+  clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%);
+}
+
+body.bubble-shape-notch:not(.hide-name-backgrounds) .name-bubble,
+body.bubble-shape-notch:not(.hide-message-backgrounds) .message-bubble,
+body.bubble-shape-notch:not(.hide-alert-backgrounds) .alert .bubble-stack,
+body.bubble-shape-notch:not(.hide-gift-backgrounds) .tiktok-gift-card,
+body.bubble-shape-notch:not(.hide-media-backgrounds) .link-preview,
+body.bubble-shape-notch:not(.hide-media-backgrounds) .embed,
+body.bubble-shape-notch:not(.hide-media-backgrounds) .media-embed-tenor {
+  clip-path: polygon(var(--bubble-notch) 0, 100% 0, 100% calc(100% - var(--bubble-notch)), calc(100% - var(--bubble-notch)) 100%, 0 100%, 0 var(--bubble-notch));
+}
+
+body.bubble-shape-square:not(.hide-name-backgrounds) .name-bubble,
+body.bubble-shape-square:not(.hide-message-backgrounds) .message-bubble,
+body.bubble-shape-square:not(.hide-alert-backgrounds) .alert .bubble-stack,
+body.bubble-shape-square:not(.hide-gift-backgrounds) .tiktok-gift-card,
+body.bubble-shape-square:not(.hide-media-backgrounds) .link-preview,
+body.bubble-shape-square:not(.hide-media-backgrounds) .embed,
+body.bubble-shape-square:not(.hide-media-backgrounds) .media-embed-tenor {
+  border-radius: 4px;
+}
+
+/* Final shape overrides. Kept late so platform/card-specific styles cannot mask them. */
+body.bubble-shape-slant .name-bubble,
+body.bubble-shape-slant .message-bubble,
+body.bubble-shape-slant .alert .bubble-stack,
+body.bubble-shape-slant .tiktok-gift-card,
+body.bubble-shape-slant .link-preview,
+body.bubble-shape-slant .embed,
+body.bubble-shape-slant .media-embed-tenor {
+  border-radius: max(2px, calc(var(--bubble-radius) * 0.25)) !important;
+  -webkit-clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%) !important;
+  clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%) !important;
+  overflow: hidden !important;
+}
+
+body.bubble-shape-notch .name-bubble,
+body.bubble-shape-notch .message-bubble,
+body.bubble-shape-notch .alert .bubble-stack,
+body.bubble-shape-notch .tiktok-gift-card,
+body.bubble-shape-notch .link-preview,
+body.bubble-shape-notch .embed,
+body.bubble-shape-notch .media-embed-tenor {
+  border-radius: max(2px, calc(var(--bubble-radius) * 0.3)) !important;
+  -webkit-clip-path: polygon(0 0, calc(100% - var(--bubble-notch)) 0, 100% var(--bubble-notch), 100% 100%, var(--bubble-notch) 100%, 0 calc(100% - var(--bubble-notch))) !important;
+  clip-path: polygon(0 0, calc(100% - var(--bubble-notch)) 0, 100% var(--bubble-notch), 100% 100%, var(--bubble-notch) 100%, 0 calc(100% - var(--bubble-notch))) !important;
+  overflow: hidden !important;
+}
+
+body.bubble-shape-square .name-bubble,
+body.bubble-shape-square .message-bubble,
+body.bubble-shape-square .alert .bubble-stack,
+body.bubble-shape-square .tiktok-gift-card,
+body.bubble-shape-square .link-preview,
+body.bubble-shape-square .embed,
+body.bubble-shape-square .media-embed-tenor {
+  border-radius: 4px !important;
+}
+
+/* Direct display toggles. These are the source of truth; when a toggle is on,
+   no override applies and the original styling shows through unchanged. */
+body.hide-platform-icons .name-bubble {
+  grid-template-columns: auto minmax(0, auto);
+  padding-right: 16px;
+  width: fit-content;
+  min-width: 0;
+}
+
+body.hide-platform-icons .name-bubble {
+  background: var(--title-bg-gradient);
+}
+
+body.hide-platform-icons .name-bubble::before {
+  right: 0;
+  border-radius: var(--name-bubble-radius);
+}
+
+body.hide-platform-icons .name-bubble::after,
+body.hide-platform-icons .platform-icon {
+  display: none !important;
+}
+
+body.name-icon-left.hide-platform-icons .name-bubble {
+  grid-template-columns: auto minmax(0, auto);
+  padding-left: 16px;
+  padding-right: 13px;
+  width: fit-content;
+  min-width: 0;
+}
+
+body.name-icon-left.hide-platform-icons .name-bubble {
+  background: var(--title-bg-gradient);
+}
+
+body.name-icon-left.hide-platform-icons .name-bubble::before {
+  left: 0;
+  right: 0;
+  border-radius: var(--name-bubble-radius);
+}
+
+body.hide-name-backgrounds .name-bubble {
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+  overflow: visible;
+  isolation: auto;
+  transform: none;
+}
+
+body.hide-name-backgrounds .name-bubble::before,
+body.hide-name-backgrounds .name-bubble::after {
+  display: none;
+}
+
+body.hide-name-backgrounds .platform-icon {
+  position: static;
+  transform: none;
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+}
+
+body.hide-name-backgrounds .name {
+  max-width: var(--chat-content-width);
+  color: rgba(255,255,255,0.86);
+  font-size: 14px;
+  line-height: 1.28;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.76),
+    0 0 6px rgba(0,0,0,0.55);
+}
+
+body.hide-message-backgrounds .message-bubble {
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+  overflow: visible;
+  isolation: auto;
+  transform: none;
+}
+
+body.hide-message-backgrounds .message-bubble::before,
+body.hide-message-backgrounds .message-bubble::after {
+  display: none;
+}
+
+body.hide-message-backgrounds .text {
+  display: block;
+  max-width: var(--chat-content-width);
+  line-height: 1.34;
+  color: #ffffff;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.84),
+    0 0 8px rgba(0,0,0,0.62);
+}
+
+body.hide-alert-backgrounds .alert .bubble-stack {
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+body.hide-alert-backgrounds .alert .message-bubble,
+body.hide-alert-backgrounds .alert .name-bubble {
+  background: transparent;
+  box-shadow: none;
+}
+
+body.hide-alert-backgrounds .alert .bubble-stack::before {
+  display: none;
+}
+
+body.hide-gift-backgrounds .tiktok-gift-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+body.hide-gift-backgrounds .tiktok-gift-card::before,
+body.hide-gift-backgrounds .tiktok-gift-card::after {
+  display: none;
+}
+
+body.hide-gift-backgrounds .tiktok-gift-count {
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.84),
+    0 0 8px rgba(0,0,0,0.62);
+}
+
+body.hide-media-backgrounds .link-preview {
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+body.hide-media-backgrounds .embed,
+body.hide-media-backgrounds .media-embed-tenor,
+body.hide-media-backgrounds .link-preview {
+  filter: none;
+  box-shadow: none;
+}
+
+body.hide-avatar-glow .avatar-wrap::before,
+body.hide-avatar-glow .avatar-wrap::after {
+  display: none;
+}
+
+body.hide-avatar-glow .avatar {
+  box-shadow:
+    0 4px 10px rgba(0,0,0,0.34);
+}
+
+body.hide-emote-glow .emote,
+body.hide-emote-glow .msg.gigantified .emote {
+  filter: none;
+}
+
+body.hide-colored-text .special-highlight .text,
+body.hide-colored-text .alert.platform-streamlabs .name,
+body.hide-colored-text .alert.platform-streamelements .name,
+body.hide-colored-text .alert.platform-kofi .name,
+body.hide-colored-text .alert.platform-ko-fi .name,
+body.hide-colored-text .alert.platform-tipeeestream .name,
+body.hide-colored-text .alert.platform-tipeee-stream .name,
+body.hide-colored-text .alert.platform-fourthwall .name,
+body.hide-colored-text .alert.platform-patreon .name,
+body.hide-colored-text .alert.platform-donordrive .name {
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  animation: none;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.76),
+    0 0 6px rgba(0,0,0,0.55);
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .alert .name-bubble,
+body.stealth-mode:not(.stealth-name-backgrounds) .special-highlight .name-bubble {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .alert .name-bubble::before,
+body.stealth-mode:not(.stealth-name-backgrounds) .alert .name-bubble::after,
+body.stealth-mode:not(.stealth-name-backgrounds) .special-highlight .name-bubble::before,
+body.stealth-mode:not(.stealth-name-backgrounds) .special-highlight .name-bubble::after {
+  display: none;
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .alert .message-bubble,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .alert .message-bubble::before,
+body.stealth-mode:not(.stealth-message-backgrounds) .alert .message-bubble::after,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card::before,
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card::after {
+  display: none;
+}
+
+body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-count {
+  color: #ffffff;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow:
+    0 2px 4px rgba(0,0,0,0.84),
+    0 0 8px rgba(0,0,0,0.62);
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .msg.gigantified .message-bubble::before,
+body.stealth-mode:not(.stealth-message-backgrounds) .msg.gigantified .message-bubble::after {
+  display: none;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .name-bubble {
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  isolation: auto;
+  transform: none;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .name-bubble::before,
+body.stealth-mode:not(.stealth-name-backgrounds) .name-bubble::after {
+  display: none;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .platform-icon {
+  position: static;
+  transform: none;
+  width: 16px;
+  height: 16px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.7));
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .message-bubble {
+  padding: 0;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  isolation: auto;
+  transform: none;
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .message-bubble::before,
+body.stealth-mode:not(.stealth-message-backgrounds) .message-bubble::after {
+  display: none;
+}
+
+body.stealth-mode:not(.stealth-message-backgrounds) .msg.gigantified .message-bubble {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
