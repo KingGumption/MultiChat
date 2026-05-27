@@ -2143,6 +2143,10 @@ body.stealth-mode:not(.stealth-message-backgrounds) .msg.gigantified .message-bu
   overflow: visible;
 }
 
+body.hide-message-backgrounds .msg.gigantified .message-bubble {
+  box-shadow: none !important;
+}
+
 /* Per-source/type styling. Kept late so donation and special-event themes still obey config controls. */
 .name-bubble::before {
   right: calc(var(--name-icon-section-width) - var(--name-bubble-layer-overlap));
@@ -2422,6 +2426,10 @@ body.hide-avatar-glow .avatar {
 body.hide-emote-glow .emote,
 body.hide-emote-glow .msg.gigantified .emote {
   filter: none;
+}
+
+body.stealth-mode .msg.gigantified .emote {
+  filter: none !important;
 }
 
 body.hide-colored-text .special-highlight .text,
