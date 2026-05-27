@@ -31,6 +31,7 @@ const DEFAULT_CONFIG = {
     bottom: 32,
     rowGap: 14,
     groupedMessageGap: 6,
+    avatarGap: 10,
     avatarSize: 52,
     avatarSizeGigantified: 64,
     maxMessageWidth: 680,
@@ -72,7 +73,15 @@ const DEFAULT_CONFIG = {
         follows: "#25f4ee",
         subscribers: "#25f4ee",
         gifts: "#25f4ee",
+        likes: "#25f4ee",
         treasureBoxes: "#25f4ee"
+      },
+      kick: {
+        chat: "#53fc18",
+        follows: "#53fc18",
+        subs: "#53fc18",
+        giftSubs: "#53fc18",
+        rewardRedemptions: "#53fc18"
       },
       donations: {
         streamlabs: "#80f5d2",
@@ -87,6 +96,7 @@ const DEFAULT_CONFIG = {
         twitchName: "#ffe45f",
         youtubeName: "#ffd6dc",
         tiktokName: "#061114",
+        kickName: "#ecffe8",
         muted: "#d6d6e0",
         dark: "#061114",
         stealth: "#ffffff"
@@ -100,10 +110,10 @@ const DEFAULT_CONFIG = {
         linkPreviewMeta: "#d6d6e0",
         badgeBackground: "#000000",
         avatarBorder: "#ffffff",
-        avatarFill: "#ffffff",
-        shadow: "#000000"
+        avatarFill: "#ffffff"
       },
       effects: {
+        shadow: "#000000",
         emoteSparkle: "#ffffff",
         gigantifiedSparkle: "#ffd65a",
         highlightGlow: "#ff00c8",
@@ -154,17 +164,27 @@ const DEFAULT_CONFIG = {
     },
 
     messageFontSize: 17,
+    titleLineHeight: 1.05,
+    messageLineHeight: 1.28,
     emoteOnlyFontSize: 30,
     gigantifiedFontSize: 44,
 
     bubbleRadius: 21,
-    nameBubbleRadius: 20
+    nameBubbleRadius: 20,
+    minimalStyle: false
   },
 
   behaviour: {
     removeMessagesAfterMs: 0,
     groupConsecutiveMessages: true,
     groupWindowMs: 30000,
+    showTimestamps: false,
+    timestampFormat: "time",
+    inlineChat: false,
+    highlightMentions: true,
+    autoScroll: true,
+    scrollDirection: "up",
+    hideAfterFade: true,
     showAlerts: true,
     compactAlerts: true,
     showImageEmbeds: true,
@@ -189,6 +209,14 @@ const DEFAULT_CONFIG = {
       tiktok: {
         enabled: true,
         everyone: false
+      },
+      kick: {
+        enabled: true,
+        everyone: false,
+        broadcaster: true,
+        moderators: true,
+        vips: true,
+        subscribers: true
       }
     },
     showBadges: true,
@@ -197,12 +225,14 @@ const DEFAULT_CONFIG = {
     sources: {
       twitch: true,
       youtube: true,
-      tiktok: true
+      tiktok: true,
+      kick: true
     },
     chat: {
       twitch: true,
       youtube: true,
-      tiktok: true
+      tiktok: true,
+      kick: true
     },
     alerts: {
       twitch: {
@@ -226,7 +256,15 @@ const DEFAULT_CONFIG = {
         follows: true,
         subscribers: true,
         gifts: true,
+        likes: true,
         treasureBoxes: true
+      },
+      kick: {
+        enabled: true,
+        follows: true,
+        subs: true,
+        giftSubs: true,
+        rewardRedemptions: true
       },
       donations: {
         enabled: true,
@@ -261,6 +299,10 @@ const DEFAULT_CONFIG = {
     tiktok: {
       color: "#25f4ee",
       glow: "rgba(37, 244, 238, 0.48)"
+    },
+    kick: {
+      color: "#53fc18",
+      glow: "rgba(83, 252, 24, 0.48)"
     }
   },
 
@@ -348,7 +390,14 @@ const ALERT_GROUP_TYPES = {
     "follows",
     "subscribers",
     "gifts",
+    "likes",
     "treasureBoxes"
+  ],
+  kick: [
+    "follows",
+    "subs",
+    "giftSubs",
+    "rewardRedemptions"
   ]
 };
 
@@ -370,7 +419,8 @@ const STYLE_TYPE_GROUPS = {
     "raids"
   ],
   youtube: ["chat", "superChats", "superStickers", "members"],
-  tiktok: ["chat", "follows", "subscribers", "gifts", "treasureBoxes"],
+  tiktok: ["chat", "follows", "subscribers", "gifts", "likes", "treasureBoxes"],
+  kick: ["chat", "follows", "subs", "giftSubs", "rewardRedemptions"],
   special: ["rainbow"],
   donations: ["streamlabs", "streamelements", "kofi", "tipeeestream", "fourthwall", "patreon", "donordrive"]
 };
@@ -406,7 +456,15 @@ const STYLE_TYPE_DEFAULT_COLORS = {
     follows: "#25f4ee",
     subscribers: "#25f4ee",
     gifts: "#25f4ee",
+    likes: "#25f4ee",
     treasureBoxes: "#25f4ee"
+  },
+  kick: {
+    chat: "#53fc18",
+    follows: "#53fc18",
+    subs: "#53fc18",
+    giftSubs: "#53fc18",
+    rewardRedemptions: "#53fc18"
   },
   donations: {
     streamlabs: "#80f5d2",
@@ -437,6 +495,12 @@ const STYLE_TYPE_DEFAULT_TITLE_COLORS = {
     titleBgColor2: "#04ADA7",
     titleIconBgColor: "#1A656D",
     titleIconBgColor2: "#13252d"
+  },
+  kick: {
+    titleBgColor: "#53fc18",
+    titleBgColor2: "#2fc80f",
+    titleIconBgColor: "#1fa20a",
+    titleIconBgColor2: "#0f3d10"
   }
 };
 
@@ -541,9 +605,17 @@ const TYPE_BORDER_PREFIXES = [
   "giftBorder"
 ];
 
+const TYPE_GLOW_PREFIXES = [
+  "avatarGlow",
+  "titleGlow",
+  "messageGlow",
+  "alertGlow",
+  "giftGlow"
+];
+
 TYPE_GRADIENT_PREFIXES.forEach(prefix => {
   DEFAULT_TYPE_STYLE[`${prefix}Mode`] = "linear";
-  if (TYPE_BORDER_PREFIXES.includes(prefix)) {
+  if (TYPE_BORDER_PREFIXES.includes(prefix) || TYPE_GLOW_PREFIXES.includes(prefix)) {
     DEFAULT_TYPE_STYLE[`${prefix}Enabled`] = true;
   }
 
@@ -578,6 +650,8 @@ const DEFAULT_STYLE_PRESET = {
   messageFontFamily: "'Sora', sans-serif",
   titleFontSize: 12,
   messageFontSize: 17,
+  titleLineHeight: 1.05,
+  messageLineHeight: 1.28,
   emoteOnlyFontSize: 30,
   gigantifiedFontSize: 44,
   messageTextColor: "#ffffff",
@@ -606,7 +680,15 @@ const DEFAULT_STYLE_PRESET = {
       follows: "#25f4ee",
       subscribers: "#25f4ee",
       gifts: "#25f4ee",
+      likes: "#25f4ee",
       treasureBoxes: "#25f4ee"
+    },
+    kick: {
+      chat: "#53fc18",
+      follows: "#53fc18",
+      subs: "#53fc18",
+      giftSubs: "#53fc18",
+      rewardRedemptions: "#53fc18"
     },
     donations: {
       streamlabs: "#80f5d2",
@@ -624,6 +706,7 @@ const DEFAULT_STYLE_PRESET = {
       twitchName: "#ffe45f",
       youtubeName: "#ffd6dc",
       tiktokName: "#061114",
+      kickName: "#ecffe8",
       muted: "#d6d6e0",
       dark: "#061114",
       stealth: "#ffffff"
@@ -637,10 +720,10 @@ const DEFAULT_STYLE_PRESET = {
       linkPreviewMeta: "#d6d6e0",
       badgeBackground: "#000000",
       avatarBorder: "#ffffff",
-      avatarFill: "#ffffff",
-      shadow: "#000000"
+      avatarFill: "#ffffff"
     },
     effects: {
+      shadow: "#000000",
       emoteSparkle: "#ffffff",
       gigantifiedSparkle: "#ffd65a",
       highlightGlow: "#ff00c8",
@@ -678,7 +761,8 @@ const DEFAULT_STYLE_PRESET = {
   showPageBackground: false,
   showAvatarGlow: true,
   showEmoteGlow: true,
-  showColoredText: true
+  showColoredText: true,
+  minimalStyle: false
 };
 
 const pendingTikTokCombos = new Map();
@@ -766,6 +850,17 @@ const SUBSCRIPTIONS = {
     "NewSponsor",
     "MemberMileStone",
     "GiftMembershipReceived"
+  ],
+
+  Kick: [
+    "ChatMessage",
+    "FirstWords",
+    "Follow",
+    "Subscription",
+    "Resubscription",
+    "GiftSubscription",
+    "MassGiftSubscription",
+    "RewardRedemption"
   ],
 
   streamlabs: [
@@ -878,6 +973,7 @@ function applyConfigToDocument() {
   root.style.setProperty("--chat-bottom", px(cfg.layout.bottom));
   root.style.setProperty("--chat-row-gap", px(cfg.layout.rowGap));
   root.style.setProperty("--grouped-message-gap", px(cfg.layout.groupedMessageGap));
+  root.style.setProperty("--chat-column-gap", px(cfg.layout.avatarGap ?? 10));
 
   root.style.setProperty("--font-family", cfg.style.fontFamily);
 
@@ -938,6 +1034,8 @@ function applyConfigToDocument() {
 
   root.style.setProperty("--message-font-size", px(cfg.style.messageFontSize));
   root.style.setProperty("--title-font-size", px(cfg.style.titleFontSize));
+  root.style.setProperty("--title-line-height", cfg.style.titleLineHeight ?? 1.05);
+  root.style.setProperty("--message-line-height", cfg.style.messageLineHeight ?? 1.28);
   root.style.setProperty("--emote-only-font-size", px(cfg.style.emoteOnlyFontSize));
   root.style.setProperty("--gigantified-font-size", px(cfg.style.gigantifiedFontSize));
 
@@ -974,6 +1072,7 @@ function applyConfigToDocument() {
   document.body.classList.toggle("hide-chat-twitch", cfg.behaviour.chat?.twitch === false);
   document.body.classList.toggle("hide-chat-youtube", cfg.behaviour.chat?.youtube === false);
   document.body.classList.toggle("hide-chat-tiktok", cfg.behaviour.chat?.tiktok === false);
+  document.body.classList.toggle("hide-chat-kick", cfg.behaviour.chat?.kick === false);
   document.body.classList.toggle("hide-avatars", !cfg.behaviour.showAvatars);
   document.body.classList.toggle("hide-badges", !cfg.behaviour.showBadges);
   document.body.classList.toggle("hide-platform-icons", !cfg.behaviour.showPlatformIcons);
@@ -986,6 +1085,11 @@ function applyConfigToDocument() {
   document.body.classList.toggle("hide-avatar-glow", !cfg.style.showAvatarGlow);
   document.body.classList.toggle("hide-emote-glow", !cfg.style.showEmoteGlow);
   document.body.classList.toggle("hide-colored-text", !cfg.style.showColoredText);
+  document.body.classList.toggle("inline-chat", !!cfg.behaviour.inlineChat);
+  document.body.classList.toggle("show-timestamps", !!cfg.behaviour.showTimestamps);
+  document.body.classList.toggle("minimal-style", !!cfg.style.minimalStyle);
+  document.body.classList.toggle("scroll-down", cfg.behaviour.scrollDirection === "down");
+  document.body.classList.toggle("auto-scroll-off", cfg.behaviour.autoScroll === false);
   document.body.classList.toggle(
     "no-animations",
     !cfg.animation.enabled || cfg.animation.preset === "none"
@@ -1022,6 +1126,7 @@ function getColorCssVariables(colors = {}) {
     "--twitch-name-text-color": text.twitchName || "#ffe45f",
     "--youtube-name-text-color": text.youtubeName || "#ffd6dc",
     "--tiktok-name-text-color": text.tiktokName || "#061114",
+    "--kick-name-text-color": text.kickName || "#ecffe8",
     "--muted-text-color": text.muted || "#d6d6e0",
     "--dark-text-color": text.dark || "#061114",
     "--stealth-text-color": text.stealth || "#ffffff",
@@ -1034,7 +1139,7 @@ function getColorCssVariables(colors = {}) {
     "--badge-background-color": surfaces.badgeBackground || "#000000",
     "--avatar-border-color": surfaces.avatarBorder || "#ffffff",
     "--avatar-fill-color": surfaces.avatarFill || "#ffffff",
-    "--shadow-color": surfaces.shadow || "#000000",
+    "--shadow-color": effects.shadow || surfaces.shadow || "#000000",
     "--emote-sparkle-color": effects.emoteSparkle || "#ffffff",
     "--gigantified-sparkle-color": effects.gigantifiedSparkle || "#ffd65a",
     "--highlight-glow-color": effects.highlightGlow || "#ff00c8",
@@ -1128,6 +1233,15 @@ window.setChatConfigValue = function (path, value, options = {}) {
     applyStealthPreset();
   }
 
+  if (path === "behaviour.autoScroll" && value) {
+    resumeScrollTestAutoScroll(false);
+    maybeAutoScrollToBottom();
+  }
+
+  if (path === "style.bubbleShape") {
+    applyBubbleShapeDefaults(value);
+  }
+
   applyConfigAfterWrite(options);
 
   if (path === "scrollTest.enabled") {
@@ -1181,6 +1295,21 @@ function applyStealthPreset() {
   applyConfigToDocument();
 }
 
+function applyBubbleShapeDefaults(shape) {
+  const defaults = {
+    rounded: { bubbleRadius: 21, nameBubbleRadius: 20, bubbleSlant: 26, bubbleNotch: 23 },
+    square: { bubbleRadius: 4, nameBubbleRadius: 4, bubbleSlant: 0, bubbleNotch: 0 },
+    slant: { bubbleRadius: 12, nameBubbleRadius: 12, bubbleSlant: 26, bubbleNotch: 0 },
+    notch: { bubbleRadius: 14, nameBubbleRadius: 14, bubbleSlant: 0, bubbleNotch: 20 }
+  }[String(shape || "rounded")];
+
+  if (!defaults) return;
+
+  Object.entries(defaults).forEach(([key, value]) => {
+    setDeepValue(cfg, `style.${key}`, value);
+  });
+}
+
 function applyStealthPresetTo(target) {
   setDeepValue(target, "style.stealthMode", true);
   setDeepValue(target, "style.showNameBackgrounds", false);
@@ -1192,6 +1321,7 @@ function applyStealthPresetTo(target) {
   setDeepValue(target, "style.showEmoteGlow", false);
   setDeepValue(target, "style.showColoredText", false);
   setDeepValue(target, "style.borderGlow", false);
+  setDeepValue(target, "style.minimalStyle", false);
 }
 
 function applyDefaultStylePreset() {
@@ -1327,13 +1457,15 @@ function syncAlertGroupTypes(path, value) {
 }
 
 function syncSourceGroupTypes(path, value) {
-  const match = String(path || "").match(/^behaviour\.sources\.(twitch|youtube|tiktok)$/);
+  const match = String(path || "").match(/^behaviour\.sources\.(twitch|youtube|tiktok|kick)$/);
 
   if (!match) return;
 
   const group = match[1];
 
   setDeepValue(cfg, `behaviour.chat.${group}`, !!value);
+  if (!ALERT_GROUP_TYPES[group]) return;
+
   setDeepValue(cfg, `behaviour.alerts.${group}.enabled`, !!value);
 
   ALERT_GROUP_TYPES[group].forEach(type => {
@@ -1366,7 +1498,7 @@ window.sendStackedMessageTest = function () {
 };
 
 function handleAutoScrollContainerScroll() {
-  if (!cfg.scrollTest?.autoScroll) return;
+  if (cfg.behaviour.autoScroll === false && !cfg.scrollTest?.autoScroll) return;
   if (Date.now() < autoScrollIgnoreUntil) return;
 
   if (isNearPageBottom()) {
@@ -1377,7 +1509,7 @@ function handleAutoScrollContainerScroll() {
 }
 
 function handleAutoScrollManualInput() {
-  if (!cfg.scrollTest?.autoScroll) return;
+  if (cfg.behaviour.autoScroll === false && !cfg.scrollTest?.autoScroll) return;
 
   autoScrollIgnoreUntil = 0;
   pauseScrollTestAutoScroll();
@@ -1455,7 +1587,8 @@ window.testChat = function (platform = "twitch", message = "Test message") {
   const sourceMap = {
     twitch: "Twitch",
     youtube: "YouTube",
-    tiktok: "TikTok"
+    tiktok: "TikTok",
+    kick: "Kick"
   };
 
   const payload = {
@@ -1465,6 +1598,8 @@ window.testChat = function (platform = "twitch", message = "Test message") {
       type:
         platform === "youtube"
           ? "Message"
+          : platform === "kick"
+            ? "ChatMessage"
           : "ChatMessage"
     },
 
@@ -1526,6 +1661,7 @@ function createScrollTestFixtures() {
   const twitchAvatar = fallbackAvatar("Twitch", "Demo");
   const youtubeAvatar = fallbackAvatar("YouTube", "Demo");
   const tiktokAvatar = fallbackAvatar("TikTok", "Demo");
+  const kickAvatar = fallbackAvatar("Kick", "Demo");
 
   const sb = (source, type, data, options = {}) => {
     const payloadData = {
@@ -1749,6 +1885,144 @@ function createScrollTestFixtures() {
       displayName: "MemberPig",
       profileImageUrl: youtubeAvatar
     }),
+    sb("Kick", "ChatMessage", {
+      user: {
+        name: "Kick Chat Pig",
+        login: "kickchatpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: false,
+        badges: []
+      },
+      text: "Kick standard chat message",
+      messageId: "kick-demo-chat-1"
+    }),
+    sb("Kick", "ChatMessage", {
+      user: {
+        name: "Kick VIP Pig",
+        login: "kickvippig",
+        profilePicture: kickAvatar,
+        role: 2,
+        isSubscribed: true,
+        badges: [{ name: "VIP", text: "VIP" }]
+      },
+      text: "Kick VIP/subscriber message with the platform logo and green styling",
+      messageId: "kick-demo-chat-2"
+    }),
+    burst(
+      sb("Kick", "ChatMessage", {
+        user: {
+          name: "Stacked Kick Pig",
+          login: "stackedkickpig",
+          profilePicture: kickAvatar,
+          role: 3,
+          isSubscribed: true,
+          badges: [{ name: "Moderator", text: "MOD" }]
+        },
+        text: "Kick stacked message 1",
+        messageId: "kick-stacked-1"
+      }),
+      sb("Kick", "ChatMessage", {
+        user: {
+          name: "Stacked Kick Pig",
+          login: "stackedkickpig",
+          profilePicture: kickAvatar,
+          role: 3,
+          isSubscribed: true,
+          badges: [{ name: "Moderator", text: "MOD" }]
+        },
+        text: "Kick stacked message 2",
+        messageId: "kick-stacked-2"
+      }),
+      sb("Kick", "ChatMessage", {
+        user: {
+          name: "Stacked Kick Pig",
+          login: "stackedkickpig",
+          profilePicture: kickAvatar,
+          role: 3,
+          isSubscribed: true,
+          badges: [{ name: "Moderator", text: "MOD" }]
+        },
+        text: "Kick stacked message 3",
+        messageId: "kick-stacked-3"
+      })
+    ),
+    sb("Kick", "Follow", {
+      user: {
+        name: "Kick Follow Pig",
+        login: "kickfollowpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: false
+      },
+      timestamp: new Date().toISOString()
+    }),
+    sb("Kick", "Subscription", {
+      user: {
+        name: "Kick Sub Pig",
+        login: "kicksubpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: true
+      },
+      duration: 1,
+      subscribedAt: new Date().toISOString()
+    }),
+    sb("Kick", "Resubscription", {
+      user: {
+        name: "Kick Resub Pig",
+        login: "kickresubpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: true
+      },
+      duration: 8,
+      subscribedAt: new Date().toISOString()
+    }),
+    sb("Kick", "GiftSubscription", {
+      user: {
+        name: "Kick Gift Pig",
+        login: "kickgiftpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: true
+      },
+      recipient: {
+        name: "Lucky Kick Pig",
+        login: "luckykickpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: true
+      },
+      subscribedAt: new Date().toISOString()
+    }),
+    sb("Kick", "MassGiftSubscription", {
+      user: {
+        name: "Kick Mass Gift Pig",
+        login: "kickmassgiftpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: true
+      },
+      recipients: [
+        { name: "Gifted Kick Pig 1", login: "giftedkickpig1" },
+        { name: "Gifted Kick Pig 2", login: "giftedkickpig2" },
+        { name: "Gifted Kick Pig 3", login: "giftedkickpig3" }
+      ],
+      subscribedAt: new Date().toISOString()
+    }),
+    sb("Kick", "RewardRedemption", {
+      user: {
+        name: "Kick Reward Pig",
+        login: "kickrewardpig",
+        profilePicture: kickAvatar,
+        role: 1,
+        isSubscribed: true
+      },
+      reward: { title: "Hydrate" },
+      input: "Kick reward redemption preview",
+      timestamp: new Date().toISOString()
+    }),
     sb("Streamlabs", "Donation", {
       username: "StreamlabsDonor",
       amount: 12.34,
@@ -1954,6 +2228,15 @@ function getScrollTestTikFinityItem(event) {
     };
   }
 
+  if (type.includes("like")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.likes",
+      title: "TikTok likes"
+    };
+  }
+
   if (type.includes("follow")) {
     return {
       kind: "alert",
@@ -1978,6 +2261,7 @@ function normaliseScrollTestPlatform(source) {
 
   if (key === "youtube") return "YouTube";
   if (key === "tiktok" || key === "tikfinity") return "TikTok";
+  if (key === "kick") return "Kick";
   if (key === "streamlabs") return "Streamlabs";
   if (key === "streamelements") return "StreamElements";
   if (key === "kofi") return "Ko-fi";
@@ -2014,6 +2298,14 @@ function getScrollTestAlertType(source, type) {
     ) {
       return "youtube.members";
     }
+    return "";
+  }
+
+  if (sourceKey === "kick") {
+    if (typeKey === "follow") return "kick.follows";
+    if (typeKey === "subscription" || typeKey === "resubscription") return "kick.subs";
+    if (typeKey === "giftsubscription" || typeKey === "massgiftsubscription") return "kick.giftSubs";
+    if (typeKey === "rewardredemption") return "kick.rewardRedemptions";
     return "";
   }
 
@@ -2077,6 +2369,8 @@ function normaliseDemoSource(source) {
 
   if (key === "twitch") return "twitch";
   if (key === "youtube") return "youtube";
+  if (key === "kick") return "kick";
+  if (key === "tiktok" || key === "tikfinity") return "tiktok";
 
   return "other";
 }
@@ -2085,6 +2379,7 @@ function interleaveScrollTestFixtures(fixtures) {
   const buckets = {
     twitch: [],
     youtube: [],
+    kick: [],
     tiktok: [],
     other: []
   };
@@ -2094,7 +2389,7 @@ function interleaveScrollTestFixtures(fixtures) {
     (buckets[key] || buckets.other).push(fixture);
   });
 
-  const order = ["twitch", "youtube", "tiktok", "other"];
+  const order = ["twitch", "youtube", "kick", "tiktok", "other"];
   const output = [];
 
   while (order.some(key => buckets[key].length > 0)) {
@@ -2167,6 +2462,7 @@ window.testAll = function () {
   testChat("twitch", "Testing Twitch chat");
   testChat("youtube", "Testing YouTube chat");
   testChat("tiktok", "Testing TikTok chat");
+  testChat("kick", "Testing Kick chat");
   testChat("twitch", "testing https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
   handleStreamerBotEvent({
@@ -2987,6 +3283,28 @@ function handleTikFinityEvent(payload) {
     return;
   }
 
+  if (type.includes("like")) {
+    const user =
+      data.nickname ||
+      data.uniqueId ||
+      data.userName ||
+      "TikTok viewer";
+
+    if (shouldIgnoreUser(user)) return;
+
+    addAlert({
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.likes",
+      title: "TikTok likes",
+      text: `${user} sent ${data.likeCount || data.likes || 1} likes`,
+      avatar: getAvatar(data, "TikTok", user),
+      raw: data
+    });
+
+    return;
+  }
+
 
 
   if (type.includes("follow")) {
@@ -3058,6 +3376,7 @@ function isTikFinityContentEvent(type) {
     "comment",
     "emote",
     "gift",
+    "like",
     "follow",
     "subscribe",
     "sub",
@@ -3071,6 +3390,8 @@ function normaliseEvent(source, type, data) {
   if (source === "YouTube") return normaliseYouTube(type, data);
 
   const normalizedSource = String(source || "").toLowerCase();
+
+  if (normalizedSource === "kick") return normaliseKick(type, data);
 
   if (
     normalizedSource === "streamlabs" ||
@@ -3098,6 +3419,152 @@ function normaliseEvent(source, type, data) {
   return null;
 }
 
+function normaliseKick(type, data) {
+  const kickUser = data.user || data.sender || data.author || {};
+  const recipient = data.recipient || {};
+  const recipients = Array.isArray(data.recipients) ? data.recipients : [];
+  const user = getKickUserName(kickUser, getUser(data));
+  const text = getText(data);
+  const parts = getParts(data);
+  const messageId = getMessageId(data);
+  const lowerType = String(type || "").toLowerCase();
+
+  if (
+    !lowerType ||
+    lowerType.includes("chat") ||
+    lowerType.includes("message") ||
+    lowerType.includes("firstword")
+  ) {
+    return {
+      kind: "chat",
+      platform: "Kick",
+      user,
+      login: kickUser.login || user,
+      text,
+      parts,
+      messageId,
+      avatar: kickUser.profilePicture || getAvatar(data, "Kick", user),
+      badges: getKickBadges(kickUser, data),
+      color: kickUser.color || data.color || null,
+      timestamp: data.timestamp || "",
+      raw: data
+    };
+  }
+
+  if (lowerType.includes("follow")) {
+    return {
+      kind: "alert",
+      platform: "Kick",
+      alertType: "kick.follows",
+      title: "Kick follow",
+      text: user,
+      avatar: kickUser.profilePicture || getAvatar(data, "Kick", user),
+      timestamp: data.timestamp || "",
+      raw: data
+    };
+  }
+
+  if (lowerType.includes("massgift")) {
+    const count = recipients.length || data.count || data.amount || 1;
+    return {
+      kind: "alert",
+      platform: "Kick",
+      alertType: "kick.giftSubs",
+      title: "Kick gift subs",
+      text: `${user} gifted ${count} subscription${Number(count) === 1 ? "" : "s"}`,
+      avatar: kickUser.profilePicture || getAvatar(data, "Kick", user),
+      timestamp: data.subscribedAt || data.timestamp || "",
+      raw: data
+    };
+  }
+
+  if (lowerType.includes("giftsubscription") || lowerType.includes("gift")) {
+    const recipientName = getKickUserName(recipient, "a viewer");
+    return {
+      kind: "alert",
+      platform: "Kick",
+      alertType: "kick.giftSubs",
+      title: "Kick gift sub",
+      text: `${user} gifted a subscription to ${recipientName}`,
+      avatar: kickUser.profilePicture || getAvatar(data, "Kick", user),
+      timestamp: data.subscribedAt || data.timestamp || "",
+      raw: data
+    };
+  }
+
+  if (lowerType.includes("resubscription") || lowerType.includes("subscription")) {
+    const months = Number(data.duration || kickUser.monthsSubscribed || 0);
+    return {
+      kind: "alert",
+      platform: "Kick",
+      alertType: "kick.subs",
+      title: lowerType.includes("resubscription") ? "Kick resub" : "Kick sub",
+      text: months > 1 ? `${user} - ${months} months` : user,
+      avatar: kickUser.profilePicture || getAvatar(data, "Kick", user),
+      timestamp: data.subscribedAt || data.timestamp || "",
+      raw: data
+    };
+  }
+
+  if (lowerType.includes("rewardredemption") || lowerType.includes("reward")) {
+    const reward =
+      data.reward?.title ||
+      data.reward?.name ||
+      data.rewardTitle ||
+      data.rewardName ||
+      data.title ||
+      "Kick reward";
+    const input = data.input || data.message || data.text || "";
+
+    return {
+      kind: "alert",
+      platform: "Kick",
+      alertType: "kick.rewardRedemptions",
+      title: `${user} redeemed ${reward}`,
+      text: input || "Reward redeemed",
+      avatar: kickUser.profilePicture || getAvatar(data, "Kick", user),
+      timestamp: data.timestamp || "",
+      raw: data
+    };
+  }
+
+  return null;
+}
+
+function getKickUserName(user = {}, fallback = "Kick Viewer") {
+  if (typeof user === "string") return user || fallback;
+
+  return (
+    user.name ||
+    user.displayName ||
+    user.login ||
+    user.username ||
+    fallback
+  );
+}
+
+function getKickBadges(user = {}, data = {}) {
+  const badges = [
+    ...(Array.isArray(user.badges) ? user.badges : []),
+    ...(Array.isArray(data.badges) ? data.badges : [])
+  ];
+  const normalized = badges.map(badge => ({
+    name: badge.name || badge.id || badge.info || "",
+    text: badge.imageUrl ? "" : badge.name || badge.id || "",
+    imageUrl: badge.imageUrl || ""
+  }));
+
+  if (user.isVerified) normalized.push({ name: "Verified", text: "✓" });
+  if (user.isSubscribed) normalized.push({ name: "Subscriber", text: "SUB" });
+
+  const role = Number(user.role);
+  if (role === 2) normalized.push({ name: "VIP", text: "VIP" });
+  if (role === 3) normalized.push({ name: "Moderator", text: "MOD" });
+  if (role === 4) normalized.push({ name: "Broadcaster", text: "OWNER" });
+
+  return normalized;
+}
+
 function normaliseTwitch(type, data) {
   const user = getUser(data);
   const text = getText(data);
@@ -3109,9 +3576,10 @@ function normaliseTwitch(type, data) {
     case "Message":
     case "Chat":
     case "SharedChatMessage": {
+      const mentioned = cfg.behaviour.highlightMentions !== false && hasTwitchMention(text, data);
       const highlighted =
         cfg.highlight.enabled &&
-        isHighlightedMessage(data);
+        (isHighlightedMessage(data) || mentioned);
 
       const isEmoteMessage =
         isEmoteOnlyMessage(text, parts);
@@ -3133,6 +3601,7 @@ function normaliseTwitch(type, data) {
         color: data.user?.color || data.color || null,
         special: highlighted ? "highlight" : null,
         styleType: highlighted ? "rainbow" : null,
+        sharedChannel: getSharedChatChannel(data),
         gigantified,
         emoteOnly: isEmoteMessage,
         raw: data
@@ -3377,6 +3846,26 @@ function normaliseTwitch(type, data) {
     default:
       return null;
   }
+}
+
+function hasTwitchMention(text, data = {}) {
+  if (data.isMentioned || data.mentioned || data.message?.isMentioned) return true;
+
+  return /(^|\s)@[a-z0-9_]{2,25}\b/i.test(String(text || ""));
+}
+
+function getSharedChatChannel(data = {}) {
+  const channel =
+    data.sourceRoom?.name ||
+    data.sourceRoom?.displayName ||
+    data.sharedChat?.channelName ||
+    data.sharedChat?.viewerChannel ||
+    data.sourceChannel ||
+    data.sourceChannelName ||
+    data.tags?.["source-room-name"] ||
+    data.tags?.["source-badge-info"];
+
+  return channel ? String(channel) : "";
 }
 
 function normaliseYouTube(type, data) {
@@ -3697,15 +4186,17 @@ function normaliseTikTok(type, data) {
     };
   }
 
-  // if (lowerType.includes("like") || data.likeCount) {
-  //   return {
-  //     kind: "alert",
-  //     platform: "TikTok",
-  //     title: "TikTok likes",
-  //     text: `${user} sent ${data.likeCount || data.likes || 1} likes`,
-  //     raw: data
-  //   };
-  // }
+  if (lowerType.includes("like") || data.likeCount || data.likes) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.likes",
+      title: "TikTok likes",
+      text: `${user} sent ${data.likeCount || data.likes || 1} likes`,
+      avatar: getAvatar(data, "TikTok", user),
+      raw: data
+    };
+  }
 
   // if (lowerType.includes("share")) {
   //   return {
@@ -3792,6 +4283,7 @@ function addMessage(item) {
   applyPlatformVariables(el, item.platform, item);
 
   if (item.special) el.classList.add(`special-${item.special}`);
+  if (item.sharedChannel) el.classList.add("shared-chat");
   if (item.gigantified) el.classList.add("gigantified");
   if (item.emoteOnly) el.classList.add("emote-only");
   if (item.platform === "Twitch" && item.color) {
@@ -3800,6 +4292,11 @@ function addMessage(item) {
   }
 
   const avatarId = `avatar-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const platformIcon = getPlatformIcon(item.platform);
+  const platformIconHtml = platformIcon
+    ? `<img class="platform-icon" src="${escapeAttr(platformIcon)}" alt="">`
+    : "";
+  if (!platformIcon) el.classList.add("no-platform-icon");
 
   el.innerHTML = `
     <div class="avatar-wrap">
@@ -3808,9 +4305,11 @@ function addMessage(item) {
 
     <div class="bubble-stack">
       <div class="name-bubble">
+        ${renderTimestamp(item)}
         <span class="badges">${renderBadges(item.badges)}</span>
         <span class="name">${escapeHtml(item.user)}</span>
-        <img class="platform-icon" src="${getPlatformIcon(item.platform)}" alt="">
+        ${item.sharedChannel ? `<span class="shared-chat-label">via ${escapeHtml(item.sharedChannel)}</span>` : ""}
+        ${platformIconHtml}
       </div>
     </div>
   `;
@@ -3910,6 +4409,20 @@ function createMessageBubble(item) {
     });
 
   return bubble;
+}
+
+function renderTimestamp(item = {}) {
+  if (!cfg.behaviour.showTimestamps) return "";
+
+  const date = item.timestamp ? new Date(item.timestamp) : new Date();
+  if (Number.isNaN(date.getTime())) return "";
+
+  const format = String(cfg.behaviour.timestampFormat || "time").toLowerCase();
+  const text = format === "datetime"
+    ? date.toLocaleString([], { hour: "2-digit", minute: "2-digit", month: "short", day: "numeric" })
+    : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  return `<span class="timestamp">${escapeHtml(text)}</span>`;
 }
 
 function findGroupForItem(item) {
@@ -4014,6 +4527,7 @@ function getAlertGroup(item) {
   if (platform === "twitch") return "twitch";
   if (platform === "youtube") return "youtube";
   if (platform === "tiktok") return "tiktok";
+  if (platform === "kick") return "kick";
   if (
     [
       "streamlabs",
@@ -4080,6 +4594,7 @@ function addAlert(item) {
   const platformIconHtml = platformIcon
     ? `<img class="platform-icon" src="${escapeAttr(platformIcon)}" alt="">`
     : "";
+  if (!platformIcon) el.classList.add("no-platform-icon");
 
   el.innerHTML = `
     <div class="avatar-wrap">
@@ -4090,6 +4605,7 @@ function addAlert(item) {
 
     <div class="bubble-stack">
       <div class="name-bubble">
+        ${renderTimestamp(item)}
         <span class="name">${escapeHtml(item.title)}</span>
         ${platformIconHtml}
       </div>
@@ -4419,7 +4935,7 @@ function applyPlatformVariables(el, platform, item = null) {
       : getMessageTypeColor(item, key) || platformConfig?.color;
   const typeStyle =
     cfg.style?.useCustomAccentColor
-      ? null
+      ? getAccentTypeStyle(color)
       : getMessageTypeStyle(item, key);
   const defaultTypeStyle = getDefaultMessageTypeStyle(item, key);
 
@@ -4494,6 +5010,42 @@ function getMessageTypeColor(item, platformKey = "") {
   }
 
   return "";
+}
+
+function getAccentTypeStyle(color) {
+  const accent = color || cfg.style?.accentColor || "#9146ff";
+  const style = { ...DEFAULT_TYPE_STYLE };
+
+  [
+    "avatarGlow",
+    "avatarBorder",
+    "titleGlow",
+    "titleBorder",
+    "titleBg",
+    "titleIconBg",
+    "messageGlow",
+    "messageBorder",
+    "alertGlow",
+    "alertBorder",
+    "alertBg",
+    "giftGlow",
+    "giftBorder",
+    "giftBg"
+  ].forEach(prefix => {
+    applySolidGradientDefault(style, prefix, accent, {
+      opacity: style[`${prefix}Opacity`] ?? 1
+    });
+  });
+
+  applyGradientDefaults(
+    style,
+    "messageBg",
+    [accent, "#10121e", "#06060c", "#08080f"],
+    [0, 36, 78, 100],
+    { mode: "radial", alphas: [0.22, 0.98, 1, 1] }
+  );
+
+  return style;
 }
 
 function getMessageTypeStyle(item, platformKey = "") {
@@ -4590,6 +5142,11 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     ...(typeStyle || {})
   };
   const base = fallbackColor || "#9146ff";
+  const avatarGlowEnabled = style.avatarGlowEnabled !== false;
+  const titleGlowEnabled = style.titleGlowEnabled !== false;
+  const messageGlowEnabled = style.messageGlowEnabled !== false;
+  const alertGlowEnabled = style.alertGlowEnabled !== false;
+  const giftGlowEnabled = style.giftGlowEnabled !== false;
   const avatarBorderEnabled = style.avatarBorderEnabled !== false;
   const titleBorderEnabled = style.titleBorderEnabled !== false;
   const messageBorderEnabled = style.messageBorderEnabled !== false;
@@ -4597,6 +5154,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   const giftBorderEnabled = style.giftBorderEnabled !== false;
   const hasOverrides = hasTypeStyleOverrides(typeStyle, defaultTypeStyle);
   const hasTitleGlowOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
+    "titleGlowEnabled",
     ...getTypeGradientStyleKeys("titleGlow")
   ]);
   const hasTitleBorderOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
@@ -4604,6 +5162,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     ...getTypeGradientStyleKeys("titleBorder")
   ]);
   const hasAvatarGlowOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
+    "avatarGlowEnabled",
     ...getTypeGradientStyleKeys("avatarGlow")
   ]);
   const hasAvatarBorderOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
@@ -4615,6 +5174,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     ...getTypeGradientStyleKeys("titleIconBg")
   ]);
   const hasMessageGlowOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
+    "messageGlowEnabled",
     ...getTypeGradientStyleKeys("messageGlow")
   ]);
   const hasMessageBorderOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
@@ -4625,6 +5185,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     ...getTypeGradientStyleKeys("messageBg")
   ]);
   const hasAlertGlowOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
+    "alertGlowEnabled",
     ...getTypeGradientStyleKeys("alertGlow")
   ]);
   const hasAlertBorderOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
@@ -4635,6 +5196,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     ...getTypeGradientStyleKeys("alertBg")
   ]);
   const hasGiftGlowOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
+    "giftGlowEnabled",
     ...getTypeGradientStyleKeys("giftGlow")
   ]);
   const hasGiftBorderOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
@@ -4660,7 +5222,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   el.classList.toggle("type-style-gift-glow", hasGiftGlowOverrides && el.classList.contains("tiktok-gift"));
   el.classList.toggle("type-style-gift-border", hasGiftBorderOverrides && el.classList.contains("tiktok-gift"));
   el.classList.toggle("type-style-gift-bg", hasGiftBgOverrides && el.classList.contains("tiktok-gift"));
-  applyTypeSolidColorVar(el, style, "avatarGlow", "--avatar-glow-color", base, style.avatarGlowOpacity);
+  applyGlowVars(el, style, "avatarGlow", "--avatar-glow-color", "--avatar-glow-gradient", base, style.avatarGlowOpacity, avatarGlowEnabled);
   if (avatarBorderEnabled) {
     el.style.setProperty("--avatar-border-width", "3px");
     applyTypeSolidColorVar(el, style, "avatarBorder", "--avatar-border-color", "#ffffff", style.avatarBorderOpacity);
@@ -4668,7 +5230,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     el.style.setProperty("--avatar-border-width", "0px");
     el.style.setProperty("--avatar-border-color", "transparent");
   }
-  applyTypeSolidColorVar(el, style, "titleGlow", "--title-glow-color", base, style.titleGlowOpacity);
+  applyGlowVars(el, style, "titleGlow", "--title-glow-color", "--title-glow-gradient", base, style.titleGlowOpacity, titleGlowEnabled);
   if (titleBorderEnabled) {
     el.style.setProperty("--title-border-width", "2px");
     applyTypeSolidColorVar(el, style, "titleBorder", "--title-border-color", base, style.titleBorderOpacity);
@@ -4682,7 +5244,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   setRgbaCssVar(el, "--title-icon-bg-color-2", style.titleIconBgColor2 || style.titleIconBgColor || style.titleBgColor2 || style.titleBgColor || base, style.titleBgOpacity);
   applyTypeGradientVar(el, style, "titleBg", "--title-bg-gradient", base, style.titleBgOpacity);
   applyTypeGradientVar(el, style, "titleIconBg", "--title-icon-bg-gradient", style.titleBgColor || base, style.titleBgOpacity);
-  applyTypeSolidColorVar(el, style, "messageGlow", "--message-glow-color", base, style.messageGlowOpacity);
+  applyGlowVars(el, style, "messageGlow", "--message-glow-color", "--message-glow-gradient", base, style.messageGlowOpacity, messageGlowEnabled);
   if (messageBorderEnabled) {
     el.style.setProperty("--message-border-width", "2px");
     applyTypeSolidColorVar(el, style, "messageBorder", "--message-border-color", base, style.messageBorderOpacity);
@@ -4697,7 +5259,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   if (el.dataset.styleType === "rainbow") {
     applyRainbowAnimationVariables(el, style, base);
   }
-  applyTypeSolidColorVar(el, style, "alertGlow", "--alert-glow-color", base, style.alertGlowOpacity);
+  applyGlowVars(el, style, "alertGlow", "--alert-glow-color", "--alert-glow-gradient", base, style.alertGlowOpacity, alertGlowEnabled);
   if (alertBorderEnabled) {
     el.style.setProperty("--alert-border-width", "2px");
     applyTypeSolidColorVar(el, style, "alertBorder", "--alert-border-color", base, style.alertBorderOpacity);
@@ -4709,7 +5271,7 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   }
   setRgbaCssVar(el, "--alert-bg-color", style.alertBgColor || base, style.alertBgOpacity);
   applyTypeGradientVar(el, style, "alertBg", "--alert-bg-gradient", base, style.alertBgOpacity);
-  applyTypeSolidColorVar(el, style, "giftGlow", "--gift-glow-color", base, style.giftGlowOpacity);
+  applyGlowVars(el, style, "giftGlow", "--gift-glow-color", "--gift-glow-gradient", base, style.giftGlowOpacity, giftGlowEnabled);
   if (giftBorderEnabled) {
     el.style.setProperty("--gift-border-width", "2px");
     applyTypeSolidColorVar(el, style, "giftBorder", "--gift-border-color", base, style.giftBorderOpacity);
@@ -4807,8 +5369,20 @@ function applyTypeGradientVar(el, style, prefix, cssVar, fallbackColor, opacity 
   );
 }
 
+function applyGlowVars(el, style, prefix, colorVar, gradientVar, fallbackColor, opacity = 1, enabled = true) {
+  if (!enabled) {
+    el.style.setProperty(colorVar, "transparent");
+    el.style.setProperty(gradientVar, "linear-gradient(90deg, transparent 0%, transparent 100%)");
+    return;
+  }
+
+  applyTypeSolidColorVar(el, style, prefix, colorVar, fallbackColor, opacity);
+  applyTypeGradientVar(el, style, prefix, gradientVar, fallbackColor, opacity);
+}
+
 function getTypeGradientStyleKeys(prefix) {
   return [
+    `${prefix}Enabled`,
     `${prefix}Mode`,
     `${prefix}Angle`,
     ...TYPE_GRADIENT_SUFFIXES.map(suffix => `${prefix}Color${suffix}`),
@@ -4894,6 +5468,7 @@ function getPlatformIcon(platform) {
   if (key === "twitch") return "icons/platforms/twitch-white.png";
   if (key === "youtube") return "icons/platforms/youtube.png";
   if (key === "tiktok") return "icons/platforms/tiktok.png";
+  if (key === "kick") return "icons/platforms/kick.png";
 
   return "";
 }
@@ -4958,7 +5533,12 @@ function maybeRemoveLater(el) {
 
   if (ms > 0) {
     setTimeout(() => {
-      el.remove();
+      if (cfg.behaviour.hideAfterFade !== false) {
+        el.classList.add("removing");
+        setTimeout(() => el.remove(), 320);
+      } else {
+        el.remove();
+      }
     }, ms);
   }
 }
@@ -5341,6 +5921,12 @@ function getUser(data) {
     data.user?.name ||
     data.user?.login ||
 
+    // Kick nested users
+    data.sender?.name ||
+    data.sender?.login ||
+    data.author?.name ||
+    data.author?.login ||
+
     // Generic display names
     data.displayName ||
     data.display_name ||
@@ -5474,6 +6060,9 @@ function getAvatar(data, platform, user) {
   return (
     data.user?.profileImageUrl ||
     data.user?.profileImage ||
+    data.user?.profilePicture ||
+    data.sender?.profilePicture ||
+    data.author?.profilePicture ||
     data.author?.profileImageUrl ||
     data.author?.profileImage ||
     data.authorProfileImageUrl ||
@@ -5758,6 +6347,7 @@ function getMessageRoles(item) {
   return {
     broadcaster:
       hasBadge(allBadges, "broadcaster") ||
+      Number(user.role) === 4 ||
       hasAnyTruthy(user, ["isBroadcaster", "broadcaster"]) ||
       hasAnyTruthy(raw, ["isBroadcaster", "broadcaster"]) ||
       hasAnyTruthy(message, ["isBroadcaster", "broadcaster"]),
@@ -5771,6 +6361,7 @@ function getMessageRoles(item) {
     moderator:
       hasBadge(allBadges, "moderator") ||
       hasBadge(allBadges, "mod") ||
+      Number(user.role) === 3 ||
       hasAnyTruthy(user, ["isModerator", "moderator", "isMod", "mod"]) ||
       hasAnyTruthy(raw, ["isModerator", "moderator", "isMod", "mod"]) ||
       hasAnyTruthy(message, ["isModerator", "moderator", "isMod", "mod"]) ||
@@ -5778,6 +6369,7 @@ function getMessageRoles(item) {
 
     vip:
       hasBadge(allBadges, "vip") ||
+      Number(user.role) === 2 ||
       hasAnyTruthy(user, ["isVip", "isVIP", "vip"]) ||
       hasAnyTruthy(raw, ["isVip", "isVIP", "vip"]) ||
       hasAnyTruthy(message, ["isVip", "isVIP", "vip"]),
@@ -5785,7 +6377,7 @@ function getMessageRoles(item) {
     subscriber:
       hasBadge(allBadges, "subscriber") ||
       hasBadge(allBadges, "founder") ||
-      hasAnyTruthy(user, ["isSubscriber", "subscriber"]) ||
+      hasAnyTruthy(user, ["isSubscriber", "subscriber", "isSubscribed"]) ||
       hasAnyTruthy(raw, ["isSubscriber", "subscriber"]) ||
       hasAnyTruthy(message, ["isSubscriber", "subscriber"]) ||
       hasAnyTruthy(tags, ["subscriber"]),
@@ -5901,19 +6493,20 @@ function isTikTokEmoteUrl(value) {
 
 function trimMessages() {
   while (chat.children.length > maxMessages) {
-    chat.removeChild(chat.firstChild);
+    chat.removeChild(cfg.behaviour.scrollDirection === "down" ? chat.lastChild : chat.firstChild);
   }
 }
 
 function maybeAutoScrollToBottom() {
-  if (!cfg.scrollTest?.autoScroll) return;
+  if (cfg.behaviour.autoScroll === false && !cfg.scrollTest?.autoScroll) return;
   if (autoScrollPaused) return;
 
   requestAnimationFrame(() => {
     autoScrollIgnoreUntil = Date.now() + 1200;
     const scroller = getAutoScrollContainer();
-    const top =
-      scroller === window
+    const top = cfg.behaviour.scrollDirection === "down"
+      ? 0
+      : scroller === window
         ? document.documentElement.scrollHeight
         : scroller.scrollHeight;
 
@@ -6141,7 +6734,8 @@ function buildDefaultTypeStyles(styleConfig = {}) {
         const titleBorderDefaults = {
           twitch: { color: "#e0beff", opacity: 0.88 },
           youtube: { color: "#ffc8d4", opacity: 0.88 },
-          tiktok: { color: "#bdebf1", opacity: 0.9 }
+          tiktok: { color: "#bdebf1", opacity: 0.9 },
+          kick: { color: "#d7ffc8", opacity: 0.9 }
         };
         const alertBgDefaults = {
           twitch: {
@@ -6157,6 +6751,11 @@ function buildDefaultTypeStyles(styleConfig = {}) {
           tiktok: {
             colors: [tiktokBlue, tiktokRed, tiktokRed, tiktokRed],
             alphas: [0.92, 0.72, 0.72, 0.72],
+            stops: [0, 100, 100, 100]
+          },
+          kick: {
+            colors: ["#53fc18", "#2fc80f", "#2fc80f", "#2fc80f"],
+            alphas: [0.94, 0.78, 0.78, 0.78],
             stops: [0, 100, 100, 100]
           },
           donations: {
@@ -6201,15 +6800,20 @@ function buildDefaultTypeStyles(styleConfig = {}) {
         const messageBgDefaults = {
           twitch: {
             colors: ["#b86cff", "#121020", "#06060c", "#08070e"],
-            alphas: [0.14, 0.98, 1, 1]
+            alphas: [0.7, 0.98, 1, 1]
           },
           youtube: {
             colors: ["#ff4058", "#12101c", "#06060c", "#08070c"],
-            alphas: [0.13, 0.98, 1, 1]
+            alphas: [0.7, 0.98, 1, 1]
           },
           tiktok: {
             colors: [color, "#10121e", "#06060c", "#08080f"],
-            alphas: [0.13, 0.98, 1, 1],
+            alphas: [0.7, 0.98, 1, 1],
+            secondStop: 35
+          },
+          kick: {
+            colors: ["#53fc18", "#102214", "#061008", "#071109"],
+            alphas: [0.7, 0.98, 1, 1],
             secondStop: 35
           }
         };
@@ -6418,6 +7022,12 @@ function getUrlConfigOverrides() {
     youtubeImagesMembers: "behaviour.imageEmbeds.youtube.members",
     tiktokImages: "behaviour.imageEmbeds.tiktok.enabled",
     tiktokImagesEveryone: "behaviour.imageEmbeds.tiktok.everyone",
+    kickImages: "behaviour.imageEmbeds.kick.enabled",
+    kickImagesEveryone: "behaviour.imageEmbeds.kick.everyone",
+    kickImagesBroadcaster: "behaviour.imageEmbeds.kick.broadcaster",
+    kickImagesMods: "behaviour.imageEmbeds.kick.moderators",
+    kickImagesVips: "behaviour.imageEmbeds.kick.vips",
+    kickImagesSubs: "behaviour.imageEmbeds.kick.subscribers",
     donations: "behaviour.alerts.donations.enabled",
     donationAlerts: "behaviour.alerts.donations.enabled",
     twitchAlerts: "behaviour.alerts.twitch.enabled",
@@ -6435,6 +7045,8 @@ function getUrlConfigOverrides() {
     tiktokAlerts: "behaviour.alerts.tiktok.enabled",
     tiktokFollows: "behaviour.alerts.tiktok.follows",
     tiktokSubscribers: "behaviour.alerts.tiktok.subscribers",
+    tiktokGifts: "behaviour.alerts.tiktok.gifts",
+    tiktokLikes: "behaviour.alerts.tiktok.likes",
     streamlabs: "behaviour.alerts.donations.streamlabs",
     streamelements: "behaviour.alerts.donations.streamelements",
     kofi: "behaviour.alerts.donations.kofi",
@@ -6483,7 +7095,14 @@ function getUrlConfigOverrides() {
     tiktokFollowsColor: "style.colors.tiktok.follows",
     tiktokSubscribersColor: "style.colors.tiktok.subscribers",
     tiktokGiftsColor: "style.colors.tiktok.gifts",
+    tiktokLikesColor: "style.colors.tiktok.likes",
     tiktokTreasureColor: "style.colors.tiktok.treasureBoxes",
+    kickNameColor: "style.colors.text.kickName",
+    kickChatColor: "style.colors.kick.chat",
+    kickFollowsColor: "style.colors.kick.follows",
+    kickSubsColor: "style.colors.kick.subs",
+    kickGiftSubsColor: "style.colors.kick.giftSubs",
+    kickRewardsColor: "style.colors.kick.rewardRedemptions",
     streamlabsColor: "style.colors.donations.streamlabs",
     streamelementsColor: "style.colors.donations.streamelements",
     kofiColor: "style.colors.donations.kofi",
@@ -6496,6 +7115,8 @@ function getUrlConfigOverrides() {
     titleFont: "style.accentFontFamily",
     messageFont: "style.messageFontFamily",
     titleSize: "style.titleFontSize",
+    titleLineHeight: "style.titleLineHeight",
+    messageLineHeight: "style.messageLineHeight",
     bubbleShape: "style.bubbleShape",
     nameRadius: "style.nameBubbleRadius",
     iconSide: "style.nameIconPosition",
@@ -6518,17 +7139,33 @@ function getUrlConfigOverrides() {
     stacked: "behaviour.groupConsecutiveMessages",
     stackedMessages: "behaviour.groupConsecutiveMessages",
     tiktok: "behaviour.sources.tiktok",
-    tiktokGifts: "behaviour.alerts.tiktok.gifts",
     tiktokTreasure: "behaviour.alerts.tiktok.treasureBoxes",
     tiktokTreasureBoxes: "behaviour.alerts.tiktok.treasureBoxes",
     twitch: "behaviour.sources.twitch",
     youtube: "behaviour.sources.youtube",
+    kick: "behaviour.sources.kick",
+    kickFollows: "behaviour.alerts.kick.follows",
+    kickSubs: "behaviour.alerts.kick.subs",
+    kickGiftSubs: "behaviour.alerts.kick.giftSubs",
+    kickRewards: "behaviour.alerts.kick.rewardRedemptions",
     twitchChat: "behaviour.chat.twitch",
     youtubeChat: "behaviour.chat.youtube",
     tiktokChat: "behaviour.chat.tiktok",
+    kickChat: "behaviour.chat.kick",
     max: "layout.maxMessages",
     maxMessages: "layout.maxMessages",
     messageSize: "style.messageFontSize",
+    avatarSize: "layout.avatarSize",
+    avatarGap: "layout.avatarGap",
+    inline: "behaviour.inlineChat",
+    inlineChat: "behaviour.inlineChat",
+    timestamps: "behaviour.showTimestamps",
+    timestampFormat: "behaviour.timestampFormat",
+    mentions: "behaviour.highlightMentions",
+    autoScroll: "behaviour.autoScroll",
+    scrollDirection: "behaviour.scrollDirection",
+    fadeAfter: "behaviour.hideAfterFade",
+    minimal: "style.minimalStyle",
     emoteSize: "style.emoteOnlyFontSize",
     gigantifiedSize: "style.gigantifiedFontSize",
     bubbleRadius: "style.bubbleRadius",
@@ -6634,13 +7271,14 @@ function syncAlertGroupTypesOn(target, path, value) {
 }
 
 function syncSourceGroupTypesOn(target, path, value) {
-  const match = String(path || "").match(/^behaviour\.sources\.(twitch|youtube|tiktok)$/);
+  const match = String(path || "").match(/^behaviour\.sources\.(twitch|youtube|tiktok|kick)$/);
 
   if (!match) return;
 
   const group = match[1];
 
   setDeepValue(target, `behaviour.chat.${group}`, !!value);
+  if (!ALERT_GROUP_TYPES[group]) return;
   setDeepValue(target, `behaviour.alerts.${group}.enabled`, !!value);
 
   ALERT_GROUP_TYPES[group].forEach(type => {

@@ -25,6 +25,7 @@ window.CHAT_CONFIG = {
     bottom: "clamp(12px, 4vw, 32px)",
     rowGap: 18,
     groupedMessageGap: 0,
+    avatarGap: 10,
     avatarSize: 52,
     avatarSizeGigantified: 64,
     maxMessageWidth: "var(--chat-content-width)",
@@ -65,7 +66,15 @@ window.CHAT_CONFIG = {
         follows: "#25f4ee",
         subscribers: "#25f4ee",
         gifts: "#25f4ee",
+        likes: "#25f4ee",
         treasureBoxes: "#25f4ee"
+      },
+      kick: {
+        chat: "#53fc18",
+        follows: "#53fc18",
+        subs: "#53fc18",
+        giftSubs: "#53fc18",
+        rewardRedemptions: "#53fc18"
       },
 
       donations: {
@@ -86,6 +95,7 @@ window.CHAT_CONFIG = {
         twitchName: "#ffe45f",
         youtubeName: "#ffd6dc",
         tiktokName: "#061114",
+        kickName: "#ecffe8",
         muted: "#d6d6e0",
         dark: "#061114",
         stealth: "#ffffff"
@@ -100,11 +110,11 @@ window.CHAT_CONFIG = {
         linkPreviewMeta: "#d6d6e0",
         badgeBackground: "#000000",
         avatarBorder: "#ffffff",
-        avatarFill: "#ffffff",
-        shadow: "#000000"
+        avatarFill: "#ffffff"
       },
 
       effects: {
+        shadow: "#000000",
         emoteSparkle: "#ffffff",
         gigantifiedSparkle: "#ffd65a",
         highlightGlow: "#ff00c8",
@@ -156,17 +166,27 @@ window.CHAT_CONFIG = {
     },
 
     messageFontSize: 17,
+    titleLineHeight: 1.05,
+    messageLineHeight: 1.28,
     emoteOnlyFontSize: 30,
     gigantifiedFontSize: 44,
 
     bubbleRadius: 21,
-    nameBubbleRadius: 20
+    nameBubbleRadius: 20,
+    minimalStyle: false
   },
 
   behaviour: {
     removeMessagesAfterMs: 0,
     groupConsecutiveMessages: true,
     groupWindowMs: 30000,
+    showTimestamps: false,
+    timestampFormat: "time",
+    inlineChat: false,
+    highlightMentions: true,
+    autoScroll: true,
+    scrollDirection: "up",
+    hideAfterFade: true,
     showAlerts: true,
     compactAlerts: true,
     showImageEmbeds: true,
@@ -193,6 +213,15 @@ window.CHAT_CONFIG = {
       tiktok: {
         enabled: true,
         everyone: false
+      },
+
+      kick: {
+        enabled: true,
+        everyone: false,
+        broadcaster: true,
+        moderators: true,
+        vips: false,
+        subscribers: false
       }
     },
     showBadges: true,
@@ -202,13 +231,15 @@ window.CHAT_CONFIG = {
     sources: {
       twitch: true,
       youtube: true,
-      tiktok: true
+      tiktok: true,
+      kick: true
     },
 
     chat: {
       twitch: true,
       youtube: true,
-      tiktok: true
+      tiktok: true,
+      kick: true
     },
 
     alerts: {
@@ -235,7 +266,15 @@ window.CHAT_CONFIG = {
         follows: true,
         subscribers: true,
         gifts: true,
+        likes: true,
         treasureBoxes: true
+      },
+      kick: {
+        enabled: true,
+        follows: true,
+        subs: true,
+        giftSubs: true,
+        rewardRedemptions: true
       },
 
       donations: {
@@ -282,6 +321,11 @@ window.CHAT_CONFIG = {
     tiktok: {
       color: "#25f4ee",
       glow: "rgba(37, 244, 238, 0.48)"
+    },
+
+    kick: {
+      color: "#53fc18",
+      glow: "rgba(83, 252, 24, 0.48)"
     }
   },
 

@@ -1,0 +1,3801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi Chat Overlay Settings</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    html,
+    body {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: #101018;
+      color: #ffffff;
+      box-sizing: border-box;
+    }
+
+    .config-page {
+      display: grid;
+      grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .config-panel {
+      height: 100vh;
+      overflow: auto;
+      box-sizing: border-box;
+      padding: 18px;
+      border-right: 1px solid rgba(255,255,255,0.12);
+      background: rgba(8,8,16,0.96);
+    }
+
+    .config-title {
+      margin: 0 0 16px;
+      font: 900 20px/1.1 var(--font-family);
+    }
+
+    .config-section {
+      padding: 14px 0;
+      border-top: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .config-section h2 {
+      margin: 0 0 10px;
+      color: rgba(255,255,255,0.72);
+      font: 900 12px/1 var(--font-family);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .config-description {
+      margin: -4px 0 10px;
+      color: rgba(255,255,255,0.52);
+      font: 700 12px/1.35 var(--font-family);
+    }
+
+    .config-control {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      margin: 9px 0;
+      font: 700 13px/1.2 var(--font-family);
+    }
+
+    .config-control input,
+    .config-control select {
+      min-width: 82px;
+      max-width: 150px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      padding: 7px 8px;
+      font: 700 13px/1 var(--font-family);
+    }
+
+    .range-wrap {
+      display: grid;
+      grid-template-columns: minmax(80px, 1fr) 68px auto;
+      gap: 6px;
+      align-items: center;
+      min-width: min(240px, 100%);
+    }
+
+    .config-control .range-number {
+      min-width: 0;
+      max-width: 68px;
+    }
+
+    .config-control select option {
+      color: #111111;
+    }
+
+    .preset-control {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+      justify-items: end;
+    }
+
+    .preset-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+      width: min(230px, 100%);
+    }
+
+    .preset-buttons button {
+      padding: 6px 8px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.78);
+      font: 800 11px/1 var(--font-family);
+      cursor: pointer;
+      min-width: 0;
+    }
+
+    .preset-buttons button.active {
+      background: rgba(145,70,255,0.70);
+      color: #ffffff;
+    }
+
+    .preset-description {
+      max-width: 230px;
+      color: rgba(255,255,255,0.58);
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.25;
+      text-align: right;
+    }
+
+    .config-control .preset-custom-input {
+      width: 100%;
+      max-width: 230px;
+      justify-self: end;
+    }
+
+    .config-control-preset {
+      grid-template-columns: 92px minmax(0, 1fr);
+      align-items: start;
+      gap: 12px;
+      margin: 14px 0;
+    }
+
+    .preset-custom-input[hidden] {
+      display: none;
+    }
+
+    .font-picker {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 32px;
+      width: 190px;
+      max-width: min(190px, 50vw);
+    }
+
+    .config-control .font-picker input {
+      width: 100%;
+      max-width: none;
+      min-width: 0;
+      border-radius: 8px 0 0 8px;
+    }
+
+    .font-picker-button {
+      border: 1px solid rgba(255,255,255,0.18);
+      border-left: 0;
+      border-radius: 0 8px 8px 0;
+      background: rgba(255,255,255,0.10);
+      color: #ffffff;
+      cursor: pointer;
+      font: 900 13px/1 var(--font-family);
+    }
+
+    .font-picker-list {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 4px);
+      z-index: 30;
+      width: min(280px, 78vw);
+      max-height: 260px;
+      overflow: auto;
+      padding: 6px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: #15151f;
+      box-shadow: 0 18px 42px rgba(0,0,0,0.48);
+    }
+
+    .font-picker-list[hidden] {
+      display: none;
+    }
+
+    .font-picker-option {
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding: 9px 10px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #ffffff;
+      text-align: left;
+      cursor: pointer;
+      font-size: 15px;
+      line-height: 1.1;
+    }
+
+    .font-picker-option:hover,
+    .font-picker-option:focus {
+      background: rgba(255,255,255,0.12);
+      outline: none;
+    }
+
+    .font-picker-empty {
+      padding: 8px 10px;
+      color: rgba(255,255,255,0.58);
+      font: 700 12px/1.3 var(--font-family);
+    }
+
+    .config-control input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      min-width: 18px;
+      accent-color: #9146ff;
+    }
+
+    .config-control input[type="range"] {
+      width: 138px;
+      padding: 0;
+      accent-color: #9146ff;
+    }
+
+    .config-control input[type="color"] {
+      width: 44px;
+      min-width: 44px;
+      height: 32px;
+      padding: 2px;
+      cursor: pointer;
+    }
+
+    .gradient-editor {
+      padding: 10px 12px 12px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .gradient-bar {
+      position: relative;
+      height: 34px;
+      margin: 8px 4px 18px;
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: 8px;
+      cursor: crosshair;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.26),
+        0 8px 18px rgba(0,0,0,0.24);
+    }
+
+    .gradient-stop {
+      position: absolute;
+      top: 50%;
+      width: 14px;
+      height: 42px;
+      border: 2px solid rgba(255,255,255,0.92);
+      border-radius: 5px;
+      background: var(--stop-color, #9146ff);
+      box-shadow:
+        0 0 0 2px rgba(10,10,18,0.88),
+        0 4px 10px rgba(0,0,0,0.34);
+      transform: translate(-50%, -50%);
+      cursor: grab;
+    }
+
+    .gradient-stop:active {
+      cursor: grabbing;
+    }
+
+    .gradient-stop.active {
+      box-shadow:
+        0 0 0 2px #ffffff,
+        0 0 0 5px rgba(145,70,255,0.44),
+        0 4px 10px rgba(0,0,0,0.34);
+    }
+
+    .gradient-stop-list {
+      display: grid;
+      gap: 8px;
+      margin: 8px 0 10px;
+    }
+
+    .gradient-mode-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      margin: 4px 0 10px;
+    }
+
+    .gradient-mode {
+      display: inline-flex;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .gradient-mode button {
+      min-width: 66px;
+      border: 0;
+      border-right: 1px solid rgba(255,255,255,0.14);
+      background: transparent;
+      color: rgba(255,255,255,0.76);
+      padding: 8px 12px;
+      cursor: pointer;
+      font: 800 13px/1 var(--font-family);
+    }
+
+    .gradient-mode button:last-child {
+      border-right: 0;
+    }
+
+    .gradient-mode button.active {
+      background: rgba(255,255,255,0.20);
+      color: #ffffff;
+    }
+
+    .gradient-picker-grid {
+      display: grid;
+      grid-template-columns: minmax(150px, 1fr) minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+      margin: 8px 0 10px;
+    }
+
+    .gradient-picker-label {
+      display: block;
+      margin: 0 0 7px;
+      color: rgba(255,255,255,0.58);
+      font: 900 11px/1 var(--font-family);
+      text-transform: uppercase;
+    }
+
+    .gradient-color-plane {
+      position: relative;
+      height: 150px;
+      border-radius: 6px;
+      cursor: crosshair;
+      overflow: hidden;
+      background:
+        linear-gradient(0deg, #000000 0%, rgba(0,0,0,0) 100%),
+        linear-gradient(90deg, #ffffff 0%, var(--picker-hue-color, #9146ff) 100%);
+    }
+
+    .gradient-picker-cursor {
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(5,5,10,0.78);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .gradient-hue {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 100%;
+      margin: 9px 0 0;
+      padding: 0;
+      height: 12px;
+      border: 0;
+      border-radius: 999px;
+      background: linear-gradient(
+        90deg,
+        #ff0000 0%,
+        #ffff00 16.67%,
+        #00ff00 33.33%,
+        #00ffff 50%,
+        #0000ff 66.67%,
+        #ff00ff 83.33%,
+        #ff0000 100%
+      );
+      cursor: pointer;
+    }
+
+    .gradient-hue::-webkit-slider-thumb {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 10px;
+      height: 22px;
+      border: 2px solid #ffffff;
+      border-radius: 5px;
+      background: #0e1020;
+      box-shadow: 0 0 0 2px rgba(5,5,10,0.78);
+    }
+
+    .gradient-angle {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .gradient-angle-dial {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      border: 2px solid rgba(255,255,255,0.92);
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      cursor: grab;
+      box-sizing: border-box;
+    }
+
+    .gradient-angle-dial.disabled {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+
+    .gradient-angle-dial::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #8bb8ff;
+      box-shadow: 0 0 0 2px rgba(5,5,10,0.82);
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--angle, 0deg))
+        translateY(-11px);
+    }
+
+    .gradient-angle-input {
+      width: 58px;
+      min-width: 58px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      padding: 8px 10px;
+      font: 800 13px/1 var(--font-family);
+    }
+
+    .gradient-opacity-control {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .gradient-opacity-track {
+      position: relative;
+      flex: 1 1 auto;
+      width: 100%;
+      min-width: 120px;
+      height: 12px;
+      border: 0;
+      border-radius: 999px;
+      background:
+        linear-gradient(90deg, rgba(139,184,255,0) 0%, var(--opacity-color, #8bb8ff) 100%),
+        conic-gradient(#d8dce6 25%, #ffffff 0 50%, #d8dce6 0 75%, #ffffff 0) 0 / 12px 12px;
+      cursor: pointer;
+    }
+
+    .gradient-opacity-handle {
+      position: absolute;
+      top: 50%;
+      width: 10px;
+      height: 22px;
+      border: 2px solid #ffffff;
+      border-radius: 5px;
+      background: #0e1020;
+      box-shadow: 0 0 0 2px rgba(5,5,10,0.78);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .gradient-opacity-input {
+      width: 58px;
+      min-width: 58px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      padding: 8px 10px;
+      font: 800 13px/1 var(--font-family);
+    }
+
+    .gradient-color-fields {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 9px;
+    }
+
+    .gradient-color-fields label:first-child {
+      grid-column: 1 / -1;
+    }
+
+    .gradient-hex-combo {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr);
+      gap: 8px;
+      align-items: center;
+    }
+
+    .gradient-hex-combo input[type="color"] {
+      width: 44px;
+      min-width: 44px;
+      height: 32px;
+      padding: 2px;
+      cursor: pointer;
+    }
+
+    .gradient-color-fields label {
+      display: grid;
+      gap: 4px;
+      color: rgba(255,255,255,0.58);
+      font: 900 10px/1 var(--font-family);
+      text-transform: uppercase;
+    }
+
+    .gradient-color-fields input {
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      padding: 7px 8px;
+      font: 800 13px/1 var(--font-family);
+    }
+
+    .gradient-color-fields .gradient-hex-combo input[type="color"] {
+      width: 44px;
+      min-width: 44px;
+      padding: 2px;
+    }
+
+    .gradient-tool-row {
+      display: grid;
+      grid-template-columns: 72px minmax(0, 1fr);
+      gap: 10px;
+      align-items: center;
+      margin: 10px 0;
+      font: 700 13px/1.2 var(--font-family);
+    }
+
+    .gradient-hue::-moz-range-thumb {
+      width: 10px;
+      height: 22px;
+      border: 2px solid #ffffff;
+      border-radius: 5px;
+      background: #0e1020;
+      box-shadow: 0 0 0 2px rgba(5,5,10,0.78);
+    }
+
+    .gradient-stop-row {
+      display: grid;
+      grid-template-columns: 44px minmax(0, 1fr) 64px 26px;
+      gap: 8px;
+      align-items: center;
+      padding: 4px;
+      border-radius: 8px;
+    }
+
+    .gradient-stop-row.active {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .gradient-stop-row input[type="color"] {
+      width: 44px;
+      min-width: 44px;
+      height: 32px;
+      padding: 2px;
+    }
+
+    .gradient-stop-row input[type="text"],
+    .gradient-stop-row input[type="number"] {
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      padding: 7px 8px;
+      font: 700 13px/1 var(--font-family);
+    }
+
+    .gradient-remove {
+      width: 26px;
+      height: 26px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: rgba(255,255,255,0.56);
+      cursor: pointer;
+      font: 900 18px/1 var(--font-family);
+    }
+
+    .gradient-remove:disabled {
+      opacity: 0.22;
+      cursor: default;
+    }
+
+    .config-reset {
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.76);
+      padding: 6px 8px;
+      cursor: pointer;
+      font: 900 11px/1 var(--font-family);
+    }
+
+    .config-reset:hover {
+      background: rgba(255,255,255,0.13);
+      color: #ffffff;
+    }
+
+    .config-group {
+      margin: 9px 0;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+      overflow: hidden;
+    }
+
+    .config-group summary {
+      list-style: none;
+      cursor: pointer;
+    }
+
+    .config-group summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .config-group .config-control {
+      margin: 0;
+      padding: 9px 10px;
+    }
+
+    .config-group-summary span::before {
+      content: ">";
+      display: inline-block;
+      width: 14px;
+      color: rgba(255,255,255,0.62);
+      transition: transform 0.16s ease;
+    }
+
+    .config-group[open] .config-group-summary span::before {
+      transform: rotate(90deg);
+    }
+
+    .config-group-controls {
+      padding: 2px 10px 9px 18px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .config-group-controls .config-control {
+      padding: 6px 0;
+    }
+
+    .config-group-description {
+      margin: 2px 0 8px;
+      color: rgba(255,255,255,0.48);
+      font: 700 11px/1.35 var(--font-family);
+    }
+
+    .range-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .range-value {
+      min-width: 36px;
+      color: rgba(255,255,255,0.74);
+      text-align: right;
+      font-size: 12px;
+    }
+
+    .config-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .config-actions button,
+    .autoscroll-resume {
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: 8px;
+      background: rgba(10,10,18,0.78);
+      color: #ffffff;
+      font: 800 13px/1 sans-serif;
+      cursor: pointer;
+    }
+
+    .config-actions button:hover,
+    .autoscroll-resume:hover {
+      background: rgba(145,70,255,0.84);
+    }
+
+    .url-output {
+      width: 100%;
+      max-width: none;
+      margin-top: 10px;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.82);
+      padding: 8px;
+      font: 700 12px/1.25 Consolas, monospace;
+    }
+
+    .preview-pane {
+      min-width: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 36px 24px 24px 56px;
+      box-sizing: border-box;
+      background: var(--test-area-bg, transparent);
+      background-position: var(--test-area-bg-position, 0 0);
+      background-size: var(--test-area-bg-size, auto);
+    }
+
+    .preview-pane.preview-surface-checker {
+      --test-area-bg:
+        linear-gradient(45deg, rgba(255,255,255,0.14) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.14) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.14) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.14) 75%),
+        #15151d;
+      --test-area-bg-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      --test-area-bg-size: 16px 16px;
+    }
+
+    .autoscroll-quick-controls {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 70;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 8px;
+      background: rgba(8,8,16,0.88);
+      box-shadow:
+        0 0 18px rgba(145,70,255,0.22),
+        0 10px 24px rgba(0,0,0,0.30);
+      backdrop-filter: blur(12px);
+    }
+
+    .autoscroll-quick-controls .config-control {
+      display: flex;
+      grid-template-columns: none;
+      gap: 6px;
+      margin: 0;
+      white-space: nowrap;
+      font-size: 11px;
+    }
+
+    .autoscroll-quick-controls .config-control input[type="checkbox"] {
+      width: 15px;
+      min-width: 15px;
+      height: 15px;
+    }
+
+    .autoscroll-quick-controls .config-control input[type="number"] {
+      width: 78px;
+      min-width: 78px;
+      padding: 5px 6px;
+      font-size: 11px;
+    }
+
+    .autoscroll-quick-controls button,
+    .surface-picker button {
+      padding: 5px 7px;
+      border: 1px solid rgba(255,255,255,0.20);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      font: 800 11px/1 var(--font-family);
+      cursor: pointer;
+    }
+
+    .autoscroll-quick-controls button:hover,
+    .surface-picker button:hover {
+      background: rgba(145,70,255,0.72);
+    }
+
+    .surface-picker {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .surface-picker button.active {
+      background: rgba(145,70,255,0.70);
+      color: #ffffff;
+    }
+
+    .surface-picker input[type="color"] {
+      width: 31px;
+      min-width: 31px;
+      height: 29px;
+      padding: 2px;
+      border: 1px solid rgba(255,255,255,0.22);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.08);
+      cursor: pointer;
+    }
+
+    #chat {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      width: var(--chat-width);
+      max-width: 100%;
+      margin: 0 auto;
+      padding-bottom: 24px;
+    }
+
+    .autoscroll-resume {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      z-index: 60;
+      display: none;
+      background: rgba(145,70,255,0.92);
+      transform: translateX(-50%);
+      box-shadow:
+        0 0 18px rgba(145,70,255,0.42),
+        0 10px 24px rgba(0,0,0,0.38);
+    }
+
+    .autoscroll-resume.visible {
+      display: block;
+    }
+
+    .connection-toast {
+      left: auto;
+      right: 12px;
+      bottom: calc(12px + (var(--toast-index, 0) * 44px));
+      width: auto;
+      max-width: min(300px, calc(100vw - 24px));
+      padding: 7px 9px;
+      border-width: 1px;
+      border-radius: 8px;
+      font-size: 11px;
+      line-height: 1.2;
+      box-shadow:
+        0 0 12px color-mix(in srgb, var(--toast-color) 42%, transparent),
+        0 8px 18px rgba(0,0,0,0.34);
+    }
+
+    .type-style-button-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .type-style-edit-button {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 10px;
+      align-items: center;
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.055);
+      color: #ffffff;
+      text-align: left;
+      font: 800 13px/1.2 var(--font-family);
+      cursor: pointer;
+    }
+
+    .type-style-edit-button::after {
+      content: "Edit";
+      color: rgba(255,255,255,0.66);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .type-style-edit-button:hover {
+      border-color: rgba(145,70,255,0.72);
+      background: rgba(145,70,255,0.18);
+    }
+
+    .type-style-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      background: rgba(4,4,10,0.70);
+      backdrop-filter: blur(10px);
+    }
+
+    .type-style-modal[hidden] {
+      display: none;
+    }
+
+    .type-style-modal-panel {
+      display: grid;
+      grid-template-rows: auto auto auto minmax(0, 1fr);
+      width: min(920px, 100%);
+      max-height: min(860px, calc(100vh - 44px));
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 8px;
+      background: rgba(10,10,18,0.98);
+      box-shadow:
+        0 0 30px rgba(145,70,255,0.30),
+        0 24px 60px rgba(0,0,0,0.56);
+      overflow: hidden;
+    }
+
+    .type-style-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .type-style-modal-header h2 {
+      margin: 0;
+      font: 900 16px/1.15 var(--font-family);
+    }
+
+    .type-style-modal-close {
+      width: 34px;
+      height: 34px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: #ffffff;
+      font: 900 20px/1 var(--font-family);
+      cursor: pointer;
+    }
+
+    .type-style-modal-preview {
+      padding: 28px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+      background: var(--type-preview-bg, transparent);
+      background-position: var(--type-preview-bg-position, 0 0);
+      background-size: var(--type-preview-bg-size, auto);
+      overflow: hidden;
+    }
+
+    .type-style-modal-preview.preview-surface-checker {
+      --type-preview-bg:
+        linear-gradient(45deg, rgba(255,255,255,0.14) 25%, transparent 25%),
+        linear-gradient(-45deg, rgba(255,255,255,0.14) 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, rgba(255,255,255,0.14) 75%),
+        linear-gradient(-45deg, transparent 75%, rgba(255,255,255,0.14) 75%),
+        #15151d;
+      --type-preview-bg-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      --type-preview-bg-size: 16px 16px;
+    }
+
+    .type-preview-tools {
+      display: flex;
+      justify-content: flex-end;
+      gap: 6px;
+      padding: 8px 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
+    .type-preview-tools .surface-picker {
+      margin-left: auto;
+    }
+
+    .type-preview-bg-button {
+      padding: 6px 9px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 7px;
+      background: rgba(255,255,255,0.07);
+      color: rgba(255,255,255,0.74);
+      font: 800 11px/1 var(--font-family);
+      cursor: pointer;
+    }
+
+    .type-preview-bg-button.active {
+      background: rgba(145,70,255,0.70);
+      color: #ffffff;
+    }
+
+    .type-style-modal-preview .msg {
+      margin: 0;
+      transform: none;
+    }
+
+    .type-style-modal-preview .preview-avatar {
+      background: #65cde0;
+    }
+
+    .type-style-modal-controls {
+      min-height: 0;
+      overflow: auto;
+      padding: 12px 16px 16px;
+    }
+
+    @media (max-width: 820px) {
+      .config-page {
+        grid-template-columns: 1fr;
+      }
+
+      .config-panel {
+        position: relative;
+        height: auto;
+      }
+
+      #chat {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="config-page">
+    <aside class="config-panel">
+      <h1 class="config-title">Chat Config</h1>
+      <div id="configControls"></div>
+      <div class="config-section">
+        <h2>URL</h2>
+        <input id="urlOutput" class="url-output" type="text" readonly>
+      </div>
+    </aside>
+
+    <section class="preview-pane" data-autoscroll-container>
+      <div id="chat"></div>
+    </section>
+
+    <div id="autoscrollQuickControls" class="autoscroll-quick-controls" aria-label="Auto scroll controls"></div>
+    <div id="typeStyleModal" class="type-style-modal" hidden>
+      <div class="type-style-modal-panel" role="dialog" aria-modal="true" aria-labelledby="typeStyleModalTitle">
+        <header class="type-style-modal-header">
+          <h2 id="typeStyleModalTitle">Style Editor</h2>
+          <button id="typeStyleModalClose" class="type-style-modal-close" type="button" aria-label="Close style editor">&times;</button>
+        </header>
+        <div id="typeStyleModalPreview" class="type-style-modal-preview"></div>
+        <div class="type-preview-tools" aria-label="Preview background">
+          <div class="surface-picker" data-surface-picker="type-preview">
+            <button class="type-preview-bg-button active" type="button" data-surface-mode="checker">Checker</button>
+            <button class="type-preview-bg-button" type="button" data-surface-mode="color">Colour</button>
+            <input type="color" value="#080810" data-surface-color aria-label="Preview background colour">
+          </div>
+        </div>
+        <div id="typeStyleModalControls" class="type-style-modal-controls"></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="config.js"></script>
+  <script>
+    window.CHAT_CONFIG.layout.maxMessages = 200;
+    window.CHAT_CONFIG.scrollTest = {
+      enabled: true,
+      intervalMs: 1300,
+      autoScroll: true,
+      ...(window.CHAT_CONFIG.scrollTest || {})
+    };
+  </script>
+  <script src="script.js"></script>
+  <script>
+    document
+      .querySelector("[data-autoscroll-container]")
+      ?.addEventListener("scroll", window.handleAutoScrollContainerScroll || (() => {}), {
+        passive: true
+      });
+
+    const autoscrollContainer = document.querySelector("[data-autoscroll-container]");
+    ["wheel", "touchstart", "pointerdown"].forEach(eventName => {
+      autoscrollContainer?.addEventListener(
+        eventName,
+        window.handleAutoScrollManualInput || (() => {}),
+        { passive: true }
+      );
+    });
+
+    const donationTypeOptions = [
+      ["Streamlabs", "streamlabs"],
+      ["StreamElements", "streamelements"],
+      ["Ko-fi", "kofi"],
+      ["TipeeeStream", "tipeeestream"],
+      ["Fourthwall", "fourthwall"],
+      ["Patreon", "patreon"],
+      ["DonorDrive", "donordrive"]
+    ];
+
+    const donationPreviewPlatforms = Object.fromEntries(
+      donationTypeOptions.map(([label, type]) => [type, label])
+    );
+
+    const typeStyleGroups = [
+      {
+        title: "Twitch Type Styling",
+        description: "Per Twitch chat/event control for avatar glow, title/name pill, message bubbles, and alert cards.",
+        group: "twitch",
+        types: [
+          ["Chat Messages", "chat"],
+          ["Announcements", "announcements"],
+          ["Announcements: Default", "announcementsDefault"],
+          ["Announcements: Blue", "announcementsBlue"],
+          ["Announcements: Green", "announcementsGreen"],
+          ["Announcements: Orange", "announcementsOrange"],
+          ["Announcements: Purple", "announcementsPurple"],
+          ["Announcements: Primary", "announcementsPrimary"],
+          ["Channel Points", "channelPointRedemptions"],
+          ["Cheers", "cheers"],
+          ["Follows", "follows"],
+          ["Subs", "subs"],
+          ["Gift Subs", "giftSubs"],
+          ["Raids", "raids"]
+        ]
+      },
+      {
+        title: "YouTube Type Styling",
+        description: "Per YouTube chat/event control for avatar glow, title/name pill, message bubbles, and alert cards.",
+        group: "youtube",
+        types: [
+          ["Chat Messages", "chat"],
+          ["Super Chats", "superChats"],
+          ["Stickers", "superStickers"],
+          ["Members", "members"]
+        ]
+      },
+      {
+        title: "TikTok Type Styling",
+        description: "Per TikTok chat/event control, including the gift card controls for TikTok gifts.",
+        group: "tiktok",
+        types: [
+          ["Chat Messages", "chat"],
+          ["Follows", "follows"],
+          ["Subscribers", "subscribers"],
+          ["Gifts", "gifts"],
+          ["Likes", "likes"],
+          ["Treasure Boxes", "treasureBoxes"]
+        ]
+      },
+      {
+        title: "Kick Type Styling",
+        description: "Per Kick chat/event control for avatar glow, title/name pill, message bubbles, and alert cards.",
+        group: "kick",
+        types: [
+          ["Chat Messages", "chat"],
+          ["Follows", "follows"],
+          ["Subs", "subs"],
+          ["Gift Subs", "giftSubs"],
+          ["Reward Redemptions", "rewardRedemptions"]
+        ]
+      },
+      {
+        title: "Special Type Styling",
+        description: "Per special message-state control for avatar glow, title/name pill, and message bubbles.",
+        group: "special",
+        types: [
+          ["Rainbow Chat", "rainbow"]
+        ]
+      },
+      {
+        title: "Donation Type Styling",
+        description: "Per donation service control for alert card glow, border, and background.",
+        group: "donations",
+        types: donationTypeOptions
+      }
+    ];
+
+    function gradientControls(title, prefix, description = "") {
+      return {
+        title,
+        description,
+        kind: "gradient",
+        prefix
+      };
+    }
+
+    const avatarTypeControls = [
+      gradientControls("Avatar Glow", "avatarGlow"),
+      gradientControls("Avatar Border", "avatarBorder")
+    ];
+
+    const titleTypeControls = [
+      gradientControls("Title Glow", "titleGlow"),
+      gradientControls("Title Border", "titleBorder"),
+      gradientControls("Name Section Gradient", "titleBg"),
+      gradientControls("Platform Icon Section Gradient", "titleIconBg")
+    ];
+
+    const messageTypeControls = [
+      gradientControls("Message Glow", "messageGlow"),
+      gradientControls("Message Border", "messageBorder"),
+      gradientControls("Message Background Gradient", "messageBg")
+    ];
+
+    const alertTypeControls = [
+      gradientControls("Alert Glow", "alertGlow"),
+      gradientControls("Alert Border", "alertBorder"),
+      gradientControls("Alert Background Gradient", "alertBg")
+    ];
+
+    const giftTypeControls = [
+      gradientControls("Gift Glow", "giftGlow"),
+      gradientControls("Gift Border", "giftBorder"),
+      gradientControls("Gift Background Gradient", "giftBg")
+    ];
+
+    function getTypeStyleControls(group, type) {
+      if (group === "tiktok" && type === "gifts") {
+        return [
+          ...avatarTypeControls,
+          ...giftTypeControls
+        ];
+      }
+
+      if (type === "chat" || (group === "special" && type === "rainbow")) {
+        return [
+          ...avatarTypeControls,
+          ...titleTypeControls,
+          ...messageTypeControls
+        ];
+      }
+
+      return [
+        ...avatarTypeControls,
+        ...alertTypeControls
+      ];
+    }
+
+    function mapTypeStyleControl(control, group, type) {
+      if (Array.isArray(control)) {
+        const [controlLabel, key, inputType, options] = control;
+        return [
+          controlLabel,
+          `style.typeStyles.${group}.${type}.${key}`,
+          inputType,
+          options
+        ];
+      }
+
+      if (control.kind === "gradient") {
+        return {
+          ...control,
+          pathPrefix: `style.typeStyles.${group}.${type}.${control.prefix}`
+        };
+      }
+
+      return {
+        ...control,
+        controls: control.controls.map(child => mapTypeStyleControl(child, group, type))
+      };
+    }
+
+    function createTypeStyleSections() {
+      return typeStyleGroups.map(source => ({
+        title: source.title,
+        description: source.description,
+        typeStyleButtons: source.types.map(([label, type]) => ({
+          label,
+          type,
+          group: source.group,
+          sectionTitle: source.title
+        }))
+      }));
+    }
+
+    const controlSections = [
+      {
+        title: "Connections",
+        description: "Set the local WebSocket details used by the overlay to talk to Streamer.bot and TikFinity.",
+        controls: [
+          {
+            title: "Streamer.bot",
+            description: "Defaults to Streamer.bot's WebSocket server on this machine.",
+            controls: [
+              ["Host", "streamerbot.host", "text"],
+              ["Port", "streamerbot.port", "number", { min: 1, max: 65535, step: 1 }],
+              ["Reconnect", "streamerbot.reconnectMs", "number", { min: 250, max: 60000, step: 250 }]
+            ]
+          },
+          {
+            title: "TikFinity",
+            description: "Enable TikFinity and set the local WebSocket details if yours differ from the default.",
+            path: "tikfinity.enabled",
+            type: "checkbox",
+            controls: [
+              ["Host", "tikfinity.host", "text"],
+              ["Port", "tikfinity.port", "number", { min: 1, max: 65535, step: 1 }],
+              ["Reconnect", "tikfinity.reconnectMs", "number", { min: 250, max: 60000, step: 250 }]
+            ]
+          }
+        ]
+      },
+      {
+        title: "Sources",
+        description: "Choose which platforms and event types are allowed into chat.",
+        controls: [
+          {
+            title: "Twitch",
+            description: "Turn Twitch off completely, or expand to allow only specific Twitch message types.",
+            path: "behaviour.sources.twitch",
+            type: "checkbox",
+            controls: [
+              ["Chat Messages", "behaviour.chat.twitch", "checkbox"],
+              ["Announcements", "behaviour.alerts.twitch.announcements", "checkbox"],
+              ["Channel Points", "behaviour.alerts.twitch.channelPointRedemptions", "checkbox"],
+              ["Cheers", "behaviour.alerts.twitch.cheers", "checkbox"],
+              ["Follows", "behaviour.alerts.twitch.follows", "checkbox"],
+              ["Subs", "behaviour.alerts.twitch.subs", "checkbox"],
+              ["Gift Subs", "behaviour.alerts.twitch.giftSubs", "checkbox"],
+              ["Raids", "behaviour.alerts.twitch.raids", "checkbox"]
+            ]
+          },
+          {
+            title: "YouTube",
+            description: "Turn YouTube off completely, or expand to allow only specific YouTube message types.",
+            path: "behaviour.sources.youtube",
+            type: "checkbox",
+            controls: [
+              ["Chat Messages", "behaviour.chat.youtube", "checkbox"],
+              ["Super Chats", "behaviour.alerts.youtube.superChats", "checkbox"],
+              ["Stickers", "behaviour.alerts.youtube.superStickers", "checkbox"],
+              ["Members", "behaviour.alerts.youtube.members", "checkbox"]
+            ]
+          },
+          {
+            title: "TikTok",
+            description: "Turn TikTok off completely, or expand to allow only chat, gifts, follows, or other events.",
+            path: "behaviour.sources.tiktok",
+            type: "checkbox",
+            controls: [
+              ["Chat Messages", "behaviour.chat.tiktok", "checkbox"],
+              ["Follows", "behaviour.alerts.tiktok.follows", "checkbox"],
+              ["Subscribers", "behaviour.alerts.tiktok.subscribers", "checkbox"],
+              ["Gifts", "behaviour.alerts.tiktok.gifts", "checkbox"],
+              ["Likes", "behaviour.alerts.tiktok.likes", "checkbox"],
+              ["Treasure Boxes", "behaviour.alerts.tiktok.treasureBoxes", "checkbox"]
+            ]
+          },
+          {
+            title: "Kick",
+            description: "Turn Kick chat messages on or off.",
+            path: "behaviour.sources.kick",
+            type: "checkbox",
+            controls: [
+              ["Chat Messages", "behaviour.chat.kick", "checkbox"],
+              ["Follows", "behaviour.alerts.kick.follows", "checkbox"],
+              ["Subs", "behaviour.alerts.kick.subs", "checkbox"],
+              ["Gift Subs", "behaviour.alerts.kick.giftSubs", "checkbox"],
+              ["Reward Redemptions", "behaviour.alerts.kick.rewardRedemptions", "checkbox"]
+            ]
+          },
+          {
+            title: "Donations",
+            description: "Donation and service alerts from integrations outside the main chat platforms.",
+            path: "behaviour.alerts.donations.enabled",
+            type: "checkbox",
+            controls: [
+              ["Streamlabs", "behaviour.alerts.donations.streamlabs", "checkbox"],
+              ["StreamElements", "behaviour.alerts.donations.streamelements", "checkbox"],
+              ["Ko-fi", "behaviour.alerts.donations.kofi", "checkbox"],
+              ["TipeeeStream", "behaviour.alerts.donations.tipeeestream", "checkbox"],
+              ["Fourthwall", "behaviour.alerts.donations.fourthwall", "checkbox"],
+              ["Patreon", "behaviour.alerts.donations.patreon", "checkbox"],
+              ["DonorDrive", "behaviour.alerts.donations.donordrive", "checkbox"]
+            ]
+          }
+        ]
+      },
+      {
+        title: "Styles",
+        description: "Apply quick style presets without changing which messages are allowed.",
+        actions: [
+          ["Stealth", "stealth"],
+          ["Default", "default"]
+        ],
+        controls: [
+          ["Use Global Accent Colour", "style.useCustomAccentColor", "checkbox"],
+          ["Global Accent Colour", "style.accentColor", "color"],
+          ["Title Text Color", "style.titleTextColor", "color"],
+          ["Message Text Color", "style.messageTextColor", "color"],
+          ["Title Font", "style.accentFontFamily", "font"],
+          ["Message Font", "style.messageFontFamily", "font"],
+          ["Title Size", "style.titleFontSize", "range", { min: 10, max: 34, step: 1 }],
+          ["Message Size", "style.messageFontSize", "range", { min: 12, max: 42, step: 1 }],
+          ["Title Line Spacing", "style.titleLineHeight", "range", { min: 0.9, max: 2, step: 0.01 }],
+          ["Message Line Spacing", "style.messageLineHeight", "range", { min: 0.9, max: 2, step: 0.01 }]
+        ]
+      },
+      {
+        title: "Global Colours",
+        description: "Choose shared text, surface, effect, and default rainbow colours.",
+        controls: [
+          {
+            title: "Text Colours",
+            description: "Text colours that are not tied to one event type.",
+            controls: [
+              ["Use Twitch Chat Identity Name Colour", "style.useTwitchChatNameColor", "checkbox"],
+              ["Twitch Names", "style.colors.text.twitchName", "color"],
+              ["YouTube Names", "style.colors.text.youtubeName", "color"],
+              ["TikTok Names", "style.colors.text.tiktokName", "color"],
+              ["Kick Names", "style.colors.text.kickName", "color"],
+              ["Muted Text", "style.colors.text.muted", "color"],
+              ["Dark Text", "style.colors.text.dark", "color"],
+              ["Stealth Text", "style.colors.text.stealth", "color"]
+            ]
+          },
+          {
+            title: "Surface Colours",
+            description: "Background, card, badge, avatar, and media colours.",
+            controls: [
+              ["Use Page Background", "style.showPageBackground", "checkbox"],
+              ["Page Background", "style.colors.surfaces.pageBackground", "color"],
+              ["Bubble Base", "style.colors.surfaces.bubbleBase", "color"],
+              ["Bubble Highlight", "style.colors.surfaces.bubbleHighlight", "color"],
+              ["Media Background", "style.colors.surfaces.mediaBackground", "color"],
+              ["Link Preview Text", "style.colors.surfaces.linkPreviewText", "color"],
+              ["Link Preview Meta", "style.colors.surfaces.linkPreviewMeta", "color"],
+              ["Badge Background", "style.colors.surfaces.badgeBackground", "color"],
+              ["Avatar Border", "style.colors.surfaces.avatarBorder", "color"],
+              ["Avatar Fill", "style.colors.surfaces.avatarFill", "color"]
+            ]
+          },
+          {
+            title: "Effect Colours",
+            description: "Shadow, glow, sparkle, highlight, and brand effect colours.",
+            controls: [
+              ["Shadow", "style.colors.effects.shadow", "color"],
+              ["Emote Sparkle", "style.colors.effects.emoteSparkle", "color"],
+              ["Gigantified Sparkle", "style.colors.effects.gigantifiedSparkle", "color"],
+              ["Highlight Glow", "style.colors.effects.highlightGlow", "color"],
+              ["Highlight Warm Glow", "style.colors.effects.highlightWarmGlow", "color"],
+              ["TikTok Red", "style.colors.effects.tiktokRed", "color"],
+              ["TikTok Blue", "style.colors.effects.tiktokBlue", "color"]
+            ]
+          },
+          {
+            title: "Rainbow Colours",
+            description: "The seven colours used by highlighted/rainbow message states.",
+            controls: [
+              ["Rainbow 1", "style.colors.rainbow.one", "color"],
+              ["Rainbow 2", "style.colors.rainbow.two", "color"],
+              ["Rainbow 3", "style.colors.rainbow.three", "color"],
+              ["Rainbow 4", "style.colors.rainbow.four", "color"],
+              ["Rainbow 5", "style.colors.rainbow.five", "color"],
+              ["Rainbow 6", "style.colors.rainbow.six", "color"],
+              ["Rainbow 7", "style.colors.rainbow.seven", "color"]
+            ]
+          }
+        ]
+      },
+      {
+        title: "Shape",
+        description: "Choose a bubble shape first. Slant Amount only affects slant, and Corner Notch only affects notch.",
+        controls: [
+          ["Fit To Screen", "layout.fitToScreen", "checkbox"],
+          ["Bubble Shape", "style.bubbleShape", "select", ["rounded", "square", "slant", "notch"]],
+          ["Bubble Radius", "style.bubbleRadius", "range", { min: 0, max: 48, step: 1 }],
+          ["Name Radius", "style.nameBubbleRadius", "range", { min: 0, max: 48, step: 1 }],
+          ["Platform Icon Side", "style.nameIconPosition", "select", ["right", "left"]],
+          ["Name/Icon Edge Overlap", "style.nameIconEdgeOverlap", "range", { min: 0, max: 42, step: 1 }],
+          ["Name/Icon Edge Radius", "style.nameIconEdgeRadius", "range", { min: 0, max: 48, step: 1 }],
+          ["Slant Amount (slant only)", "style.bubbleSlant", "range", { min: 0, max: 48, step: 1 }],
+          ["Corner Notch (notch only)", "style.bubbleNotch", "range", { min: 0, max: 48, step: 1 }]
+        ]
+      },
+      ...createTypeStyleSections(),
+      {
+        title: "Display",
+        description: "Show, hide, or simplify visual parts of messages that are already allowed.",
+        controls: [
+          {
+            title: "Message Layout",
+            description: "Controls how chat messages are arranged and labelled.",
+            controls: [
+              ["Stacked Messages", "behaviour.groupConsecutiveMessages", "checkbox"],
+              ["Inline Chat", "behaviour.inlineChat", "checkbox"],
+              ["Timestamps", "behaviour.showTimestamps", "checkbox"],
+              ["Timestamp Format", "behaviour.timestampFormat", "select", ["time", "datetime"]],
+              ["Mention Highlight", "behaviour.highlightMentions", "checkbox"]
+            ]
+          },
+          {
+            title: "Visibility",
+            description: "Show or hide repeated message parts without changing allowed sources.",
+            controls: [
+              ["Avatars", "behaviour.showAvatars", "checkbox"],
+              ["Badges", "behaviour.showBadges", "checkbox"],
+              ["Platform Icons", "behaviour.showPlatformIcons", "checkbox"],
+              ["Username Bubble Backgrounds", "style.showNameBackgrounds", "checkbox"],
+              ["Chat Message Backgrounds", "style.showMessageBackgrounds", "checkbox"],
+              ["Image/Preview Backgrounds", "style.showMediaBackgrounds", "checkbox"],
+              ["Border Glow", "style.borderGlow", "checkbox"],
+              ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
+              ["Emote Glow", "style.showEmoteGlow", "checkbox"],
+              ["Colored Text", "style.showColoredText", "checkbox"],
+              ["Minimal Style", "style.minimalStyle", "checkbox"]
+            ]
+          },
+          {
+            title: "Alert Behaviour",
+            description: "Controls alert visibility and alert-specific surfaces.",
+            controls: [
+              ["Alerts", "behaviour.showAlerts", "checkbox"],
+              ["Compact Alerts", "behaviour.compactAlerts", "checkbox"],
+              ["Alert Card Backgrounds", "style.showAlertBackgrounds", "checkbox"],
+              ["TikTok Gift Card Backgrounds", "style.showGiftBackgrounds", "checkbox"]
+            ]
+          },
+          {
+            title: "Auto Scroll / Lifespan",
+            description: "Controls automatic movement and timed message removal.",
+            controls: [
+              ["Auto Scroll", "behaviour.autoScroll", "checkbox"],
+              ["Scroll Direction", "behaviour.scrollDirection", "select", ["up", "down"]],
+              ["Hide After", "behaviour.removeMessagesAfterMs", "number", { min: 0, max: 600000, step: 1000 }],
+              ["Hide After Fade", "behaviour.hideAfterFade", "checkbox"]
+            ]
+          }
+        ]
+      },
+      {
+        title: "Chat Images",
+        description: "Controls URL previews and direct image/GIF/video embeds.",
+        controls: [
+          ["YouTube Link Preview Cards", "behaviour.showLinkPreviews", "checkbox"],
+          {
+            title: "Direct Media Embeds",
+            description: "Allows direct image, GIF, Tenor, and video embeds based on platform roles.",
+            path: "behaviour.showImageEmbeds",
+            type: "checkbox",
+            controls: [
+              {
+                title: "Twitch",
+                description: "Choose which Twitch roles can post direct media embeds.",
+                path: "behaviour.imageEmbeds.twitch.enabled",
+                type: "checkbox",
+                controls: [
+                  ["Everyone", "behaviour.imageEmbeds.twitch.everyone", "checkbox"],
+                  ["Broadcaster", "behaviour.imageEmbeds.twitch.broadcaster", "checkbox"],
+                  ["Moderators", "behaviour.imageEmbeds.twitch.moderators", "checkbox"],
+                  ["VIPs", "behaviour.imageEmbeds.twitch.vips", "checkbox"],
+                  ["Subscribers", "behaviour.imageEmbeds.twitch.subscribers", "checkbox"]
+                ]
+              },
+              {
+                title: "YouTube",
+                description: "Choose which YouTube roles can post direct media embeds.",
+                path: "behaviour.imageEmbeds.youtube.enabled",
+                type: "checkbox",
+                controls: [
+                  ["Everyone", "behaviour.imageEmbeds.youtube.everyone", "checkbox"],
+                  ["Owner", "behaviour.imageEmbeds.youtube.owner", "checkbox"],
+                  ["Moderators", "behaviour.imageEmbeds.youtube.moderators", "checkbox"],
+                  ["Members", "behaviour.imageEmbeds.youtube.members", "checkbox"]
+                ]
+              },
+              {
+                title: "TikTok",
+                description: "Choose whether TikTok chat can post direct media embeds.",
+                path: "behaviour.imageEmbeds.tiktok.enabled",
+                type: "checkbox",
+                controls: [
+                  ["Everyone", "behaviour.imageEmbeds.tiktok.everyone", "checkbox"]
+                ]
+              },
+              {
+                title: "Kick",
+                description: "Choose which Kick roles can post direct media embeds.",
+                path: "behaviour.imageEmbeds.kick.enabled",
+                type: "checkbox",
+                controls: [
+                  ["Everyone", "behaviour.imageEmbeds.kick.everyone", "checkbox"],
+                  ["Broadcaster", "behaviour.imageEmbeds.kick.broadcaster", "checkbox"],
+                  ["Moderators", "behaviour.imageEmbeds.kick.moderators", "checkbox"],
+                  ["VIPs", "behaviour.imageEmbeds.kick.vips", "checkbox"],
+                  ["Subscribers", "behaviour.imageEmbeds.kick.subscribers", "checkbox"]
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        title: "Animation",
+        description: "Controls motion effects and enlarged emote behavior.",
+        controls: [
+          ["Animations", "animation.enabled", "checkbox"],
+          ["Preset", "animation.preset", "select", ["normal", "subtle", "fast", "slow", "none"]],
+          ["Emote Bounce", "gigantified.bounceEmotes", "checkbox"],
+          ["Gigantified", "gigantified.enabled", "checkbox"]
+        ]
+      },
+      {
+        title: "Sizing",
+        description: "Tune dimensions and text size for the overlay.",
+        controls: [
+          ["Max Messages", "layout.maxMessages", "number", { min: 1, max: 500, step: 1 }],
+          ["Chat Width", "layout.chatWidth", "sizingPreset", "chatWidth"],
+          ["Message Width", "layout.maxMessageWidth", "sizingPreset", "messageWidth"],
+          ["Avatar Size", "layout.avatarSize", "range", { min: 0, max: 120, step: 1 }],
+          ["Avatar Distance", "layout.avatarGap", "range", { min: 0, max: 64, step: 1 }],
+          ["Emote-Only Size", "style.emoteOnlyFontSize", "range", { min: 18, max: 64, step: 1 }],
+          ["Gigantified Size", "style.gigantifiedFontSize", "range", { min: 24, max: 86, step: 1 }]
+        ]
+      },
+    ];
+
+    const aliasByPath = {
+      "behaviour.sources.twitch": "twitch",
+      "behaviour.sources.youtube": "youtube",
+      "behaviour.sources.tiktok": "tiktok",
+      "behaviour.sources.kick": "kick",
+      "behaviour.chat.twitch": "twitchChat",
+      "behaviour.chat.youtube": "youtubeChat",
+      "behaviour.chat.tiktok": "tiktokChat",
+      "behaviour.chat.kick": "kickChat",
+      "behaviour.alerts.kick.follows": "kickFollows",
+      "behaviour.alerts.kick.subs": "kickSubs",
+      "behaviour.alerts.kick.giftSubs": "kickGiftSubs",
+      "behaviour.alerts.kick.rewardRedemptions": "kickRewards",
+      "behaviour.showAlerts": "alerts",
+      "behaviour.showAvatars": "avatars",
+      "behaviour.showBadges": "badges",
+      "behaviour.showPlatformIcons": "platformIcons",
+      "behaviour.groupConsecutiveMessages": "stacked",
+      "behaviour.showImageEmbeds": "images",
+      "behaviour.showLinkPreviews": "previews",
+      "behaviour.imageEmbeds.twitch.enabled": "twitchImages",
+      "behaviour.imageEmbeds.twitch.everyone": "twitchImagesEveryone",
+      "behaviour.imageEmbeds.twitch.broadcaster": "twitchImagesBroadcaster",
+      "behaviour.imageEmbeds.twitch.moderators": "twitchImagesMods",
+      "behaviour.imageEmbeds.twitch.vips": "twitchImagesVips",
+      "behaviour.imageEmbeds.twitch.subscribers": "twitchImagesSubs",
+      "behaviour.imageEmbeds.youtube.enabled": "youtubeImages",
+      "behaviour.imageEmbeds.youtube.everyone": "youtubeImagesEveryone",
+      "behaviour.imageEmbeds.youtube.owner": "youtubeImagesOwner",
+      "behaviour.imageEmbeds.youtube.moderators": "youtubeImagesMods",
+      "behaviour.imageEmbeds.youtube.members": "youtubeImagesMembers",
+      "behaviour.imageEmbeds.tiktok.enabled": "tiktokImages",
+      "behaviour.imageEmbeds.tiktok.everyone": "tiktokImagesEveryone",
+      "behaviour.imageEmbeds.kick.enabled": "kickImages",
+      "behaviour.imageEmbeds.kick.everyone": "kickImagesEveryone",
+      "behaviour.imageEmbeds.kick.broadcaster": "kickImagesBroadcaster",
+      "behaviour.imageEmbeds.kick.moderators": "kickImagesMods",
+      "behaviour.imageEmbeds.kick.vips": "kickImagesVips",
+      "behaviour.imageEmbeds.kick.subscribers": "kickImagesSubs",
+      "behaviour.alerts.twitch.enabled": "twitchAlerts",
+      "behaviour.alerts.twitch.announcements": "twitchAnnouncements",
+      "behaviour.alerts.twitch.channelPointRedemptions": "twitchPoints",
+      "behaviour.alerts.twitch.cheers": "twitchCheers",
+      "behaviour.alerts.twitch.follows": "twitchFollows",
+      "behaviour.alerts.twitch.subs": "twitchSubs",
+      "behaviour.alerts.twitch.giftSubs": "twitchGiftSubs",
+      "behaviour.alerts.twitch.raids": "twitchRaids",
+      "behaviour.alerts.youtube.enabled": "youtubeAlerts",
+      "behaviour.alerts.youtube.superChats": "youtubeSuperChats",
+      "behaviour.alerts.youtube.superStickers": "youtubeStickers",
+      "behaviour.alerts.youtube.members": "youtubeMembers",
+      "behaviour.alerts.tiktok.enabled": "tiktokAlerts",
+      "behaviour.alerts.tiktok.follows": "tiktokFollows",
+      "behaviour.alerts.tiktok.subscribers": "tiktokSubscribers",
+      "behaviour.alerts.tiktok.gifts": "tiktokGifts",
+      "behaviour.alerts.tiktok.likes": "tiktokLikes",
+      "behaviour.alerts.tiktok.treasureBoxes": "tiktokTreasure",
+      "behaviour.alerts.donations.enabled": "donations",
+      "behaviour.alerts.donations.streamlabs": "streamlabs",
+      "behaviour.alerts.donations.streamelements": "streamelements",
+      "behaviour.alerts.donations.kofi": "kofi",
+      "behaviour.alerts.donations.tipeeestream": "tipeeestream",
+      "behaviour.alerts.donations.fourthwall": "fourthwall",
+      "behaviour.alerts.donations.patreon": "patreon",
+      "behaviour.alerts.donations.donordrive": "donordrive",
+      "style.showNameBackgrounds": "nameBg",
+      "style.showMessageBackgrounds": "messageBg",
+      "style.showAlertBackgrounds": "alertBg",
+      "style.showGiftBackgrounds": "giftBg",
+      "style.showMediaBackgrounds": "mediaBg",
+      "style.showPageBackground": "pageBg",
+      "style.showAvatarGlow": "avatarGlow",
+      "style.showEmoteGlow": "emoteGlow",
+      "style.showColoredText": "coloredText",
+      "style.stealthMode": "stealth",
+      "style.borderGlow": "borderGlow",
+      "style.nameIconPosition": "iconSide",
+      "style.nameIconEdgeOverlap": "nameIconOverlap",
+      "style.nameIconEdgeRadius": "nameIconRadius",
+      "style.useTwitchChatNameColor": "twitchNameColor",
+      "style.useCustomAccentColor": "customAccent",
+      "style.accentColor": "accentColor",
+      "style.titleTextColor": "titleColor",
+      "style.messageTextColor": "messageColor",
+      "style.colors.twitch.chat": "twitchChatColor",
+      "style.colors.twitch.announcements": "twitchAnnouncementsColor",
+      "style.colors.twitch.channelPointRedemptions": "twitchPointsColor",
+      "style.colors.twitch.cheers": "twitchCheersColor",
+      "style.colors.twitch.follows": "twitchFollowsColor",
+      "style.colors.twitch.subs": "twitchSubsColor",
+      "style.colors.twitch.giftSubs": "twitchGiftSubsColor",
+      "style.colors.twitch.raids": "twitchRaidsColor",
+      "style.colors.youtube.chat": "youtubeChatColor",
+      "style.colors.youtube.superChats": "youtubeSuperChatsColor",
+      "style.colors.youtube.superStickers": "youtubeStickersColor",
+      "style.colors.youtube.members": "youtubeMembersColor",
+      "style.colors.tiktok.chat": "tiktokChatColor",
+      "style.colors.tiktok.follows": "tiktokFollowsColor",
+      "style.colors.tiktok.subscribers": "tiktokSubscribersColor",
+      "style.colors.tiktok.gifts": "tiktokGiftsColor",
+      "style.colors.tiktok.likes": "tiktokLikesColor",
+      "style.colors.tiktok.treasureBoxes": "tiktokTreasureColor",
+      "style.colors.kick.chat": "kickChatColor",
+      "style.colors.kick.follows": "kickFollowsColor",
+      "style.colors.kick.subs": "kickSubsColor",
+      "style.colors.kick.giftSubs": "kickGiftSubsColor",
+      "style.colors.kick.rewardRedemptions": "kickRewardsColor",
+      "style.colors.text.kickName": "kickNameColor",
+      "style.colors.donations.streamlabs": "streamlabsColor",
+      "style.colors.donations.streamelements": "streamelementsColor",
+      "style.colors.donations.kofi": "kofiColor",
+      "style.colors.donations.tipeeestream": "tipeeestreamColor",
+      "style.colors.donations.fourthwall": "fourthwallColor",
+      "style.colors.donations.patreon": "patreonColor",
+      "style.colors.donations.donordrive": "donordriveColor",
+      "style.colors.special.rainbow": "rainbowChatColor",
+      "style.accentFontFamily": "titleFont",
+      "style.messageFontFamily": "messageFont",
+      "style.titleFontSize": "titleSize",
+      "style.titleLineHeight": "titleLineHeight",
+      "style.messageLineHeight": "messageLineHeight",
+      "style.bubbleShape": "bubbleShape",
+      "style.nameBubbleRadius": "nameRadius",
+      "style.bubbleSlant": "slant",
+      "style.bubbleNotch": "notch",
+      "layout.fitToScreen": "fitToScreen",
+      "layout.chatWidth": "chatWidth",
+      "layout.maxMessageWidth": "messageWidth",
+      "animation.enabled": "animations",
+      "animation.preset": "animation",
+      "gigantified.bounceEmotes": "bounce",
+      "gigantified.enabled": "gigantified",
+      "layout.maxMessages": "max",
+      "style.messageFontSize": "messageSize",
+      "layout.avatarSize": "avatarSize",
+      "layout.avatarGap": "avatarGap",
+      "behaviour.inlineChat": "inline",
+      "behaviour.showTimestamps": "timestamps",
+      "behaviour.timestampFormat": "timestampFormat",
+      "behaviour.highlightMentions": "mentions",
+      "behaviour.compactAlerts": "compactAlerts",
+      "behaviour.autoScroll": "autoScroll",
+      "behaviour.scrollDirection": "scrollDirection",
+      "behaviour.hideAfterFade": "fadeAfter",
+      "style.minimalStyle": "minimal",
+      "style.emoteOnlyFontSize": "emoteSize",
+      "style.gigantifiedFontSize": "gigantifiedSize",
+      "style.bubbleRadius": "bubbleRadius",
+      "behaviour.removeMessagesAfterMs": "removeAfter",
+      "scrollTest.enabled": "test",
+      "scrollTest.autoScroll": "testAutoScroll",
+      "scrollTest.intervalMs": "testInterval",
+      "streamerbot.host": "streamerbotHost",
+      "streamerbot.port": "streamerbotPort",
+      "streamerbot.reconnectMs": "streamerbotReconnect",
+      "tikfinity.enabled": "tikfinityEnabled",
+      "tikfinity.host": "tikfinityHost",
+      "tikfinity.port": "tikfinityPort",
+      "tikfinity.reconnectMs": "tikfinityReconnect"
+    };
+
+    function toUrlPascalPart(value) {
+      return String(value || "").replace(/^[a-z]/, char => char.toUpperCase());
+    }
+
+    function getFriendlyTypeStyleParam(path) {
+      const match = String(path || "").match(/^style\.typeStyles\.([^.]+)\.([^.]+)\.([^.]+)$/);
+      if (!match) return "";
+
+      const [, group, type, field] = match;
+      const friendlyField = field.endsWith("Enabled")
+        ? field.slice(0, -"Enabled".length)
+        : field;
+
+      return `${group}${toUrlPascalPart(type)}${toUrlPascalPart(friendlyField)}`;
+    }
+
+    function getUrlParamName(path) {
+      return aliasByPath[path] || getFriendlyTypeStyleParam(path) || path;
+    }
+
+    const packagedFontFamilies = [
+      "Sora",
+      "Inter",
+      "Poppins",
+      "Montserrat",
+      "Roboto",
+      "Oswald",
+      "Bebas Neue",
+      "Anton",
+      "Bangers",
+      "Black Ops One",
+      "Caveat",
+      "Chakra Petch",
+      "Cinzel",
+      "DM Sans",
+      "Exo 2",
+      "Fredoka",
+      "Orbitron",
+      "Permanent Marker",
+      "Playfair Display",
+      "Righteous",
+      "Rubik",
+      "Space Grotesk",
+      "Teko",
+      "Ubuntu",
+      "Work Sans",
+      "Arial",
+      "Georgia",
+      "Courier New"
+    ];
+    const fontFallbacks = {
+      Arial: "sans-serif",
+      Georgia: "serif",
+      "Courier New": "monospace"
+    };
+    const fontPickerRows = new Set();
+    let fontFamilies = [...packagedFontFamilies];
+    let localFontLoadPromise = null;
+
+    const sizingPresetGroups = {
+      chatWidth: {
+        path: "layout.chatWidth",
+        options: [
+          {
+            label: "Compact",
+            value: "clamp(320px, 70vw, 560px)",
+            description: "A slimmer chat lane for tight scenes or side docks."
+          },
+          {
+            label: "Standard",
+            value: "clamp(320px, 92vw, 820px)",
+            description: "Balanced default width for most overlays."
+          },
+          {
+            label: "Wide",
+            value: "clamp(420px, 96vw, 1100px)",
+            description: "More room for long names, alerts, and wide scenes."
+          }
+        ],
+        customDescription: "Use a custom CSS width for the whole chat lane."
+      },
+      messageWidth: {
+        path: "layout.maxMessageWidth",
+        options: [
+          {
+            label: "Auto",
+            value: "var(--chat-content-width)",
+            description: "Uses the available width after avatar and spacing."
+          },
+          {
+            label: "Match Chat",
+            value: "100%",
+            description: "Lets message bubbles fill the chat lane."
+          },
+          {
+            label: "Narrow",
+            value: "min(520px, var(--chat-content-width))",
+            description: "Keeps individual messages shorter and easier to scan."
+          }
+        ],
+        customDescription: "Use a custom CSS width for individual message bubbles."
+      }
+    };
+
+    function quoteFontFamily(family) {
+      const clean = String(family || "").trim().replace(/^['"]|['"]$/g, "");
+      if (!clean) return "'Sora', sans-serif";
+      const fallback = fontFallbacks[clean] || "sans-serif";
+      return `'${clean.replace(/'/g, "\\'")}', ${fallback}`;
+    }
+
+    function fontLabelFromCss(value) {
+      const first = String(value || "")
+        .split(",")[0]
+        .trim()
+        .replace(/^['"]|['"]$/g, "");
+
+      return first || String(value || "").trim() || "Sora";
+    }
+
+    function fontValueFromInput(value) {
+      const text = String(value || "").trim();
+      if (!text) return "'Sora', sans-serif";
+      if (text.includes(",") || /^['"].*['"]$/.test(text)) return text;
+      return quoteFontFamily(text);
+    }
+
+    function normaliseFontList(families) {
+      const seen = new Set();
+      return families
+        .map(fontLabelFromCss)
+        .filter(Boolean)
+        .sort((a, b) => a.localeCompare(b))
+        .filter(family => {
+          const key = family.toLowerCase();
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+    }
+
+    async function loadLocalFonts() {
+      if (localFontLoadPromise) return localFontLoadPromise;
+
+      localFontLoadPromise = (async () => {
+        if (typeof window.queryLocalFonts !== "function") return fontFamilies;
+
+        try {
+          const fonts = await window.queryLocalFonts();
+          fontFamilies = normaliseFontList([
+            ...packagedFontFamilies,
+            ...fonts.map(font => font.family || font.fullName)
+          ]);
+          refreshFontPickerRows();
+        } catch (error) {
+          fontFamilies = normaliseFontList(fontFamilies);
+        }
+
+        return fontFamilies;
+      })();
+
+      return localFontLoadPromise;
+    }
+
+    function closeFontPickerLists(except = null) {
+      fontPickerRows.forEach(row => {
+        if (row !== except) {
+          row.querySelector(".font-picker-list")?.setAttribute("hidden", "");
+        }
+      });
+    }
+
+    function renderFontPickerOptions(row, query = "") {
+      const list = row.querySelector(".font-picker-list");
+      if (!list) return;
+
+      const needle = String(query || "").trim().toLowerCase();
+      const matches = fontFamilies
+        .filter(family => !needle || family.toLowerCase().includes(needle))
+        .slice(0, 140);
+
+      list.replaceChildren();
+
+      if (!matches.length) {
+        const empty = document.createElement("div");
+        empty.className = "font-picker-empty";
+        empty.textContent = "Type a font name to use it";
+        list.appendChild(empty);
+        return;
+      }
+
+      matches.forEach(family => {
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "font-picker-option";
+        option.textContent = family;
+        option.style.fontFamily = quoteFontFamily(family);
+        option.addEventListener("click", () => {
+          const input = row.querySelector("[data-font-picker-input]");
+          const value = quoteFontFamily(family);
+          input.value = family;
+          input.dataset.value = value;
+          input.style.fontFamily = value;
+          list.setAttribute("hidden", "");
+          writeConfig(row.dataset.path, value);
+        });
+        list.appendChild(option);
+      });
+    }
+
+    function refreshFontPickerRows() {
+      fontPickerRows.forEach(row => {
+        renderFontPickerOptions(row);
+      });
+    }
+
+    function getActiveSizingPreset(group, value) {
+      return group.options.find(option => String(option.value) === String(value)) || null;
+    }
+
+    function syncSizingPresetControl(row, value = readConfig(row.dataset.path)) {
+      const group = sizingPresetGroups[row.dataset.presetGroup];
+      if (!group) return;
+
+      const active = getActiveSizingPreset(group, value);
+      const customActive = !active;
+      const description = row.querySelector(".preset-description");
+      const customInput = row.querySelector(".preset-custom-input");
+
+      row.querySelectorAll("[data-preset-value]").forEach(button => {
+        button.classList.toggle("active", String(button.dataset.presetValue) === String(value));
+      });
+      row.querySelector("[data-preset-custom]")?.classList.toggle("active", customActive);
+
+      if (description) {
+        description.textContent = active?.description || group.customDescription;
+      }
+
+      if (customInput) {
+        customInput.hidden = !customActive;
+        customInput.value = value ?? "";
+      }
+    }
+
+    function createSizingPresetControl(row, presetGroupKey, value) {
+      const group = sizingPresetGroups[presetGroupKey];
+      const wrap = document.createElement("span");
+      const buttons = document.createElement("span");
+      const description = document.createElement("span");
+      const customInput = document.createElement("input");
+
+      row.dataset.presetGroup = presetGroupKey;
+      wrap.className = "preset-control";
+      buttons.className = "preset-buttons";
+      description.className = "preset-description";
+      customInput.className = "preset-custom-input";
+      customInput.type = "text";
+      customInput.spellcheck = false;
+
+      group.options.forEach(option => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.presetValue = option.value;
+        button.textContent = option.label;
+        button.addEventListener("click", () => {
+          writeConfig(group.path, option.value);
+        });
+        buttons.appendChild(button);
+      });
+
+      const customButton = document.createElement("button");
+      customButton.type = "button";
+      customButton.dataset.presetCustom = "true";
+      customButton.textContent = "Custom";
+      customButton.addEventListener("click", () => {
+        customInput.hidden = false;
+        customInput.focus();
+        customInput.select();
+        syncSizingPresetControl(row, customInput.value || readConfig(group.path));
+      });
+      buttons.appendChild(customButton);
+
+      customInput.addEventListener("change", () => {
+        writeConfig(group.path, customInput.value);
+      });
+
+      customInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          customInput.blur();
+        }
+      });
+
+      wrap.append(buttons, description, customInput);
+      syncSizingPresetControl(row, value);
+      return wrap;
+    }
+
+    function createFontPicker(path, value) {
+      const picker = document.createElement("span");
+      picker.className = "font-picker";
+
+      const input = document.createElement("input");
+      input.type = "text";
+      input.autocomplete = "off";
+      input.spellcheck = false;
+      input.placeholder = "Type any font name";
+      input.dataset.fontPickerInput = "true";
+      input.value = fontLabelFromCss(value);
+      input.dataset.value = value || fontValueFromInput(input.value);
+      input.style.fontFamily = input.dataset.value;
+
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "font-picker-button";
+      button.textContent = "v";
+      button.setAttribute("aria-label", "Show fonts");
+
+      const list = document.createElement("div");
+      list.className = "font-picker-list";
+      list.setAttribute("hidden", "");
+
+      const open = (query = "") => {
+        const row = picker.closest(".config-control");
+        closeFontPickerLists(row);
+        renderFontPickerOptions(row, query);
+        list.removeAttribute("hidden");
+        loadLocalFonts();
+      };
+
+      input.addEventListener("focus", () => open());
+      input.addEventListener("input", () => {
+        const row = picker.closest(".config-control");
+        input.dataset.value = fontValueFromInput(input.value);
+        input.style.fontFamily = input.dataset.value;
+        renderFontPickerOptions(row, input.value);
+      });
+      input.addEventListener("change", () => {
+        const nextValue = fontValueFromInput(input.value);
+        input.value = fontLabelFromCss(nextValue);
+        input.dataset.value = nextValue;
+        input.style.fontFamily = nextValue;
+        writeConfig(path, nextValue);
+      });
+      button.addEventListener("click", () => {
+        open();
+        input.focus();
+        input.select();
+      });
+
+      picker.append(input, button, list);
+      return picker;
+    }
+
+    const initialValues = new Map();
+
+    function readConfig(path) {
+      return window.getChatConfigValue?.(path);
+    }
+
+    function readDefaultConfig(path) {
+      return window.getChatDefaultConfigValue?.(path);
+    }
+
+    function writeConfig(path, value, options = {}) {
+      window.setChatConfigValue?.(path, value, options);
+
+      if (path === "behaviour.groupConsecutiveMessages") {
+        window.sendStackedMessageTest?.();
+      }
+
+      if (options.deferUiSync) {
+        scheduleTypeStylePreviewRefresh();
+        return;
+      }
+
+      syncControls();
+      refreshTypeStylePreview();
+      updateUrlOutput();
+    }
+
+    function writeConfigEntries(entries) {
+      if (window.setChatConfigValues) {
+        window.setChatConfigValues(entries);
+      } else {
+        entries.forEach(([path, value]) => window.setChatConfigValue?.(path, value));
+      }
+
+      syncControls();
+      refreshTypeStylePreview();
+      updateUrlOutput();
+    }
+
+    let previewRefreshFrame = 0;
+
+    function scheduleTypeStylePreviewRefresh() {
+      if (previewRefreshFrame) return;
+
+      previewRefreshFrame = requestAnimationFrame(() => {
+        previewRefreshFrame = 0;
+        refreshTypeStylePreview();
+      });
+    }
+
+    function flushTypeStylePreviewRefresh() {
+      if (!previewRefreshFrame) return false;
+
+      cancelAnimationFrame(previewRefreshFrame);
+      previewRefreshFrame = 0;
+      refreshTypeStylePreview();
+      return true;
+    }
+
+    function collectControlPaths(control) {
+      if (Array.isArray(control)) return [control[1]];
+
+      if (control.kind === "gradient") {
+        return [
+          ...(control.prefix.includes("Border") || control.prefix.includes("Glow") ? [`${control.pathPrefix}Enabled`] : []),
+          `${control.pathPrefix}Mode`,
+          `${control.pathPrefix}Angle`,
+          `${control.pathPrefix}Opacity`,
+          ...gradientColorKeys.map(key => `${control.pathPrefix}${key}`),
+          ...gradientStopKeys.map(key => `${control.pathPrefix}${key}`),
+          ...gradientAlphaKeys.map(key => `${control.pathPrefix}${key}`)
+        ];
+      }
+
+      return (control.controls || []).flatMap(collectControlPaths);
+    }
+
+    function resetControlGroup(group, render = null) {
+      const entries = collectControlPaths(group)
+        .map(path => [path, readDefaultConfig(path)])
+        .filter(([, value]) => value !== undefined);
+
+      writeConfigEntries(entries);
+
+      if (typeof render === "function") {
+        render();
+      }
+    }
+
+    function syncControls() {
+      document.querySelectorAll(".config-control[data-path]").forEach(row => {
+        const path = row.dataset.path;
+        const fontInput = row.querySelector("[data-font-picker-input]");
+        const input = row.querySelector("input, select");
+        const value = readConfig(path);
+
+        if (fontInput) {
+          fontInput.value = fontLabelFromCss(value);
+          fontInput.dataset.value = value || fontValueFromInput(fontInput.value);
+          fontInput.style.fontFamily = fontInput.dataset.value;
+          return;
+        }
+
+        if (row.dataset.presetGroup) {
+          syncSizingPresetControl(row, value);
+          return;
+        }
+
+        if (!input) return;
+
+        if (input.type === "checkbox") {
+          input.checked = !!value;
+        } else {
+          input.value = value;
+        }
+
+        const rangeValue = row.querySelector(".range-value");
+        if (rangeValue) {
+          rangeValue.textContent = input.value;
+        }
+      });
+    }
+
+    function createControl([label, path, type, options]) {
+      const row = document.createElement("label");
+      row.className = "config-control";
+      row.dataset.path = path;
+
+      const text = document.createElement("span");
+      text.textContent = label;
+      row.appendChild(text);
+
+      let input;
+      const value = readConfig(path);
+      initialValues.set(path, value);
+
+      if (type === "font") {
+        row.appendChild(createFontPicker(path, value));
+        fontPickerRows.add(row);
+        return row;
+      }
+
+      if (type === "sizingPreset") {
+        row.classList.add("config-control-preset");
+        row.appendChild(createSizingPresetControl(row, options, value));
+        return row;
+      }
+
+      if (type === "select") {
+        input = document.createElement("select");
+        options.forEach(option => {
+          const el = document.createElement("option");
+          el.value = option;
+          el.textContent = option;
+          input.appendChild(el);
+        });
+        input.value = value;
+      } else {
+        input = document.createElement("input");
+        input.type = type;
+
+        if (type === "checkbox") {
+          input.checked = !!value;
+        } else {
+          input.value = value;
+        }
+
+        if (options && typeof options === "object") {
+          Object.entries(options).forEach(([key, optionValue]) => {
+            input.setAttribute(key, optionValue);
+          });
+        }
+      }
+
+      if (type === "range") {
+        const wrap = document.createElement("span");
+        const output = document.createElement("span");
+        const number = document.createElement("input");
+        wrap.className = "range-wrap";
+        output.className = "range-value";
+        number.type = "number";
+        number.className = "range-number";
+        number.value = input.value;
+        ["min", "max", "step"].forEach(attr => {
+          if (input.hasAttribute(attr)) number.setAttribute(attr, input.getAttribute(attr));
+        });
+        output.textContent = input.value;
+        wrap.append(input, number, output);
+        row.appendChild(wrap);
+        input.addEventListener("input", () => {
+          output.textContent = input.value;
+          number.value = input.value;
+          writeConfig(path, Number(input.value), { deferApply: true, deferUiSync: true });
+        });
+        input.addEventListener("change", () => {
+          output.textContent = input.value;
+          number.value = input.value;
+          writeConfig(path, Number(input.value));
+        });
+        number.addEventListener("input", () => {
+          input.value = number.value;
+          output.textContent = number.value;
+          writeConfig(path, Number(number.value), { deferApply: true, deferUiSync: true });
+        });
+        number.addEventListener("change", () => {
+          input.value = number.value;
+          output.textContent = number.value;
+          writeConfig(path, Number(number.value));
+        });
+        return row;
+      }
+
+      const handleInputChange = () => {
+        const nextValue =
+          type === "checkbox"
+            ? input.checked
+            : type === "number"
+              ? Number(input.value)
+              : input.value;
+
+        writeConfig(path, nextValue);
+      };
+
+      input.addEventListener("input", handleInputChange);
+      input.addEventListener("change", handleInputChange);
+
+      row.appendChild(input);
+      return row;
+    }
+
+    const gradientSuffixes = ["", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    const gradientColorKeys = gradientSuffixes.map(suffix => `Color${suffix}`);
+    const gradientStopKeys = gradientSuffixes.map(suffix => `Color${suffix}Stop`);
+    const gradientAlphaKeys = gradientSuffixes.map(suffix => `Color${suffix}Alpha`);
+
+    function clampPercent(value) {
+      const number = Number(value);
+      if (!Number.isFinite(number)) return 0;
+      return Math.min(100, Math.max(0, Math.round(number)));
+    }
+
+    function hexToRgb(hex) {
+      const match = String(hex || "").match(/^#?([0-9a-f]{6})$/i);
+      if (!match) return { r: 145, g: 70, b: 255 };
+
+      const value = match[1];
+      return {
+        r: parseInt(value.slice(0, 2), 16),
+        g: parseInt(value.slice(2, 4), 16),
+        b: parseInt(value.slice(4, 6), 16)
+      };
+    }
+
+    function rgbToHex({ r, g, b }) {
+      return `#${[r, g, b]
+        .map(value => Math.round(value).toString(16).padStart(2, "0"))
+        .join("")}`;
+    }
+
+    function rgbToHsv({ r, g, b }) {
+      const red = r / 255;
+      const green = g / 255;
+      const blue = b / 255;
+      const max = Math.max(red, green, blue);
+      const min = Math.min(red, green, blue);
+      const delta = max - min;
+      let h = 0;
+
+      if (delta) {
+        if (max === red) h = ((green - blue) / delta) % 6;
+        if (max === green) h = (blue - red) / delta + 2;
+        if (max === blue) h = (red - green) / delta + 4;
+        h *= 60;
+      }
+
+      if (h < 0) h += 360;
+
+      return {
+        h,
+        s: max === 0 ? 0 : delta / max,
+        v: max
+      };
+    }
+
+    function hsvToRgb({ h, s, v }) {
+      const chroma = v * s;
+      const x = chroma * (1 - Math.abs(((h / 60) % 2) - 1));
+      const match = v - chroma;
+      let rgb = [0, 0, 0];
+
+      if (h < 60) rgb = [chroma, x, 0];
+      else if (h < 120) rgb = [x, chroma, 0];
+      else if (h < 180) rgb = [0, chroma, x];
+      else if (h < 240) rgb = [0, x, chroma];
+      else if (h < 300) rgb = [x, 0, chroma];
+      else rgb = [chroma, 0, x];
+
+      return {
+        r: (rgb[0] + match) * 255,
+        g: (rgb[1] + match) * 255,
+        b: (rgb[2] + match) * 255
+      };
+    }
+
+    function readGradientStops(pathPrefix) {
+      const stops = gradientColorKeys.map((colorKey, index) => {
+        const color = readConfig(`${pathPrefix}${colorKey}`);
+        const fallbackColor = index === 0
+          ? "#9146ff"
+          : readConfig(`${pathPrefix}${gradientColorKeys[index - 1]}`) || "#9146ff";
+
+        return {
+          slot: index,
+          color: color || fallbackColor,
+          explicitColor: color || "",
+          stop: clampPercent(readConfig(`${pathPrefix}${gradientStopKeys[index]}`)),
+          alpha: readConfig(`${pathPrefix}${gradientAlphaKeys[index]}`)
+        };
+      });
+
+      const explicitStops = stops.filter(stop => stop.explicitColor);
+      const visibleStops = explicitStops.filter((stop, index) => {
+        if (index < 2) return true;
+
+        const previous = explicitStops[index - 1];
+        return !(
+          String(stop.color).toLowerCase() === String(previous.color).toLowerCase() &&
+          clampPercent(stop.stop) === clampPercent(previous.stop)
+        );
+      });
+
+      return visibleStops.sort((a, b) => a.stop - b.stop);
+    }
+
+    function writeGradientStops(pathPrefix, stops, options = {}) {
+      const sorted = [...stops]
+        .slice(0, 10)
+        .sort((a, b) => a.stop - b.stop);
+      const entries = [];
+
+      for (let index = 0; index < 10; index += 1) {
+        const stop = sorted[index];
+        const last = sorted[sorted.length - 1] || { color: "#9146ff", stop: 100 };
+
+        entries.push([
+          `${pathPrefix}${gradientColorKeys[index]}`,
+          stop ? stop.color : ""
+        ]);
+        entries.push([
+          `${pathPrefix}${gradientStopKeys[index]}`,
+          stop ? clampPercent(stop.stop) : clampPercent(last.stop)
+        ]);
+        entries.push([
+          `${pathPrefix}${gradientAlphaKeys[index]}`,
+          stop?.alpha ?? ""
+        ]);
+      }
+
+      if (window.setChatConfigValues) {
+        window.setChatConfigValues(entries, {
+          deferApply: false,
+          skipApply: !!options.deferUiSync
+        });
+      } else {
+        entries.forEach(([path, value]) => {
+          window.setChatConfigValue?.(path, value, {
+            deferApply: false,
+            skipApply: !!options.deferUiSync
+          });
+        });
+      }
+
+      if (options.deferUiSync) {
+        scheduleTypeStylePreviewRefresh();
+      } else {
+        if (!flushTypeStylePreviewRefresh()) {
+          refreshTypeStylePreview();
+        }
+      }
+
+      if (!options.deferUiSync) {
+        syncControls();
+        updateUrlOutput();
+      }
+    }
+
+    function getGradientCss(stops) {
+      const sorted = [...stops].sort((a, b) => a.stop - b.stop);
+      return `linear-gradient(90deg, ${sorted
+        .map(stop => `${stop.color} ${clampPercent(stop.stop)}%`)
+        .join(", ")})`;
+    }
+
+    function createGradientEditor(group) {
+      const details = document.createElement("details");
+      details.className = "config-group";
+      details.open = false;
+
+      const summary = document.createElement("summary");
+      summary.className = "config-control config-group-summary";
+
+      const title = document.createElement("span");
+      title.textContent = group.title;
+      summary.appendChild(title);
+
+      const resetButton = document.createElement("button");
+      resetButton.type = "button";
+      resetButton.className = "config-reset";
+      resetButton.textContent = "Reset";
+      resetButton.addEventListener("click", event => {
+        event.preventDefault();
+        event.stopPropagation();
+        resetControlGroup(group, render);
+      });
+      summary.appendChild(resetButton);
+
+      const editor = document.createElement("div");
+      editor.className = "gradient-editor";
+
+      const pathPrefix = group.pathPrefix;
+      let activeSlot = 0;
+      let pickerHsv = rgbToHsv(hexToRgb("#9146ff"));
+
+      initialValues.set(`${pathPrefix}Mode`, readConfig(`${pathPrefix}Mode`));
+      gradientColorKeys.forEach(key => {
+        initialValues.set(`${pathPrefix}${key}`, readConfig(`${pathPrefix}${key}`));
+      });
+      gradientStopKeys.forEach(key => {
+        initialValues.set(`${pathPrefix}${key}`, readConfig(`${pathPrefix}${key}`));
+      });
+      gradientAlphaKeys.forEach(key => {
+        initialValues.set(`${pathPrefix}${key}`, readConfig(`${pathPrefix}${key}`));
+      });
+
+      initialValues.set(`${pathPrefix}Angle`, readConfig(`${pathPrefix}Angle`));
+      initialValues.set(`${pathPrefix}Opacity`, readConfig(`${pathPrefix}Opacity`));
+      if (group.prefix.includes("Border") || group.prefix.includes("Glow")) {
+        initialValues.set(`${pathPrefix}Enabled`, readConfig(`${pathPrefix}Enabled`));
+      }
+
+      const enabledRow = group.prefix.includes("Border") || group.prefix.includes("Glow")
+        ? createControl(["Enabled", `${pathPrefix}Enabled`, "checkbox"])
+        : null;
+
+      const angleRow = document.createElement("label");
+      angleRow.className = "gradient-tool-row";
+
+      const angleLabel = document.createElement("span");
+      angleLabel.textContent = "Angle";
+
+      const angleControl = document.createElement("span");
+      angleControl.className = "gradient-angle";
+
+      const angleDial = document.createElement("span");
+      angleDial.className = "gradient-angle-dial";
+
+      const angleInput = document.createElement("input");
+      angleInput.className = "gradient-angle-input";
+      angleInput.type = "number";
+      angleInput.min = "0";
+      angleInput.max = "360";
+      angleInput.step = "1";
+
+      angleControl.append(angleDial, angleInput);
+      angleRow.append(angleLabel, angleControl);
+
+      const setAngle = (value, options = {}) => {
+        const angleValue = Math.min(360, Math.max(0, Math.round(Number(value) || 0)));
+
+        window.setChatConfigValue?.(
+          `${pathPrefix}Angle`,
+          angleValue,
+          {
+            deferApply: false,
+            skipApply: !!options.deferUiSync
+          }
+        );
+        angleInput.value = angleValue;
+        angleDial.style.setProperty("--angle", `${angleValue}deg`);
+        bar.style.background = getGradientCss(readGradientStops(pathPrefix));
+        if (options.deferUiSync) {
+          scheduleTypeStylePreviewRefresh();
+        } else if (!flushTypeStylePreviewRefresh()) {
+          refreshTypeStylePreview();
+        }
+
+        if (!options.deferUiSync) {
+          updateUrlOutput();
+        }
+      };
+
+      const updateAngleFromPointer = event => {
+        const rect = angleDial.getBoundingClientRect();
+        const x = event.clientX - (rect.left + rect.width / 2);
+        const y = event.clientY - (rect.top + rect.height / 2);
+        const degrees = (Math.atan2(y, x) * 180 / Math.PI + 450) % 360;
+        setAngle(degrees, { deferUiSync: true });
+      };
+
+      angleDial.addEventListener("pointerdown", event => {
+        event.preventDefault();
+        if (angleDial.getAttribute("aria-disabled") === "true") return;
+        angleDial.setPointerCapture(event.pointerId);
+        updateAngleFromPointer(event);
+
+        const move = moveEvent => updateAngleFromPointer(moveEvent);
+        const up = () => {
+          angleDial.removeEventListener("pointermove", move);
+          angleDial.removeEventListener("pointerup", up);
+          angleDial.removeEventListener("pointercancel", up);
+          flushTypeStylePreviewRefresh();
+          window.applyChatConfigToDocument?.();
+          updateUrlOutput();
+        };
+
+        angleDial.addEventListener("pointermove", move);
+        angleDial.addEventListener("pointerup", up);
+        angleDial.addEventListener("pointercancel", up);
+      });
+
+      angleInput.addEventListener("input", () => {
+        setAngle(angleInput.value, { deferUiSync: true });
+      });
+      angleInput.addEventListener("change", () => {
+        setAngle(angleInput.value);
+      });
+
+      const opacityRow = document.createElement("label");
+      opacityRow.className = "gradient-tool-row";
+
+      const opacityLabel = document.createElement("span");
+      opacityLabel.textContent = "Opacity";
+
+      const opacityControl = document.createElement("span");
+      opacityControl.className = "gradient-opacity-control";
+
+      const opacityTrack = document.createElement("span");
+      opacityTrack.className = "gradient-opacity-track";
+
+      const opacityHandle = document.createElement("span");
+      opacityHandle.className = "gradient-opacity-handle";
+      opacityTrack.appendChild(opacityHandle);
+
+      const opacityInput = document.createElement("input");
+      opacityInput.className = "gradient-opacity-input";
+      opacityInput.type = "number";
+      opacityInput.min = "0";
+      opacityInput.max = "1";
+      opacityInput.step = "0.01";
+
+      opacityControl.append(opacityTrack, opacityInput);
+      opacityRow.append(opacityLabel, opacityControl);
+
+      const clampUnit = value => {
+        const number = Number(value);
+
+        if (!Number.isFinite(number)) return 0;
+
+        return Math.min(1, Math.max(0, number));
+      };
+
+      const setOpacity = (value, options = {}) => {
+        const opacityValue = clampUnit(value);
+        const stops = readGradientStops(pathPrefix);
+
+        if (!stops[activeSlot]) return;
+
+        stops[activeSlot].alpha = opacityValue;
+        writeGradientStops(pathPrefix, stops, options);
+        opacityInput.value = opacityValue;
+        opacityHandle.style.left = `${opacityValue * 100}%`;
+        opacityTrack.style.setProperty(
+          "--opacity-color",
+          stops[activeSlot]?.color || "#8bb8ff"
+        );
+
+        if (!options.deferUiSync) {
+          updateUrlOutput();
+        }
+      };
+
+      const updateOpacityFromPointer = (event, options = {}) => {
+        const rect = opacityTrack.getBoundingClientRect();
+        const nextValue = clampUnit((event.clientX - rect.left) / rect.width);
+
+        setOpacity(nextValue, options);
+      };
+
+      opacityTrack.addEventListener("pointerdown", event => {
+        event.preventDefault();
+        opacityTrack.setPointerCapture(event.pointerId);
+        updateOpacityFromPointer(event, { deferUiSync: true });
+
+        const move = moveEvent => {
+          updateOpacityFromPointer(moveEvent, { deferUiSync: true });
+        };
+        const up = () => {
+          opacityTrack.removeEventListener("pointermove", move);
+          opacityTrack.removeEventListener("pointerup", up);
+          opacityTrack.removeEventListener("pointercancel", up);
+          flushTypeStylePreviewRefresh();
+          window.applyChatConfigToDocument?.();
+          updateUrlOutput();
+        };
+
+        opacityTrack.addEventListener("pointermove", move);
+        opacityTrack.addEventListener("pointerup", up);
+        opacityTrack.addEventListener("pointercancel", up);
+      });
+
+      opacityInput.addEventListener("input", () => {
+        setOpacity(opacityInput.value, { deferUiSync: true });
+      });
+
+      opacityInput.addEventListener("change", () => {
+        setOpacity(opacityInput.value);
+      });
+
+      const modeRow = document.createElement("div");
+      modeRow.className = "gradient-mode-row";
+
+      const modeGroup = document.createElement("div");
+      modeGroup.className = "gradient-mode";
+
+      const syncAngleDisabledState = () => {
+        const isRadial = String(readConfig(`${pathPrefix}Mode`) || "linear").toLowerCase() === "radial";
+        angleDial.classList.toggle("disabled", isRadial);
+        angleInput.disabled = isRadial;
+        angleDial.setAttribute("aria-disabled", isRadial ? "true" : "false");
+      };
+
+      ["linear", "radial"].forEach(mode => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = mode.charAt(0).toUpperCase() + mode.slice(1);
+        button.addEventListener("click", () => {
+          writeConfig(`${pathPrefix}Mode`, mode);
+          syncAngleDisabledState();
+          bar.style.background = getGradientCss(readGradientStops(pathPrefix));
+          render();
+        });
+        modeGroup.appendChild(button);
+      });
+
+      modeRow.appendChild(modeGroup);
+
+      const bar = document.createElement("div");
+      bar.className = "gradient-bar";
+
+      const pickerGrid = document.createElement("div");
+      pickerGrid.className = "gradient-picker-grid";
+
+      const pickerColumn = document.createElement("div");
+      const pickerLabel = document.createElement("span");
+      pickerLabel.className = "gradient-picker-label";
+      pickerLabel.textContent = "Picker";
+
+      const colorPlane = document.createElement("div");
+      colorPlane.className = "gradient-color-plane";
+
+      const colorCursor = document.createElement("span");
+      colorCursor.className = "gradient-picker-cursor";
+      colorPlane.appendChild(colorCursor);
+
+      const hue = document.createElement("input");
+      hue.className = "gradient-hue";
+      hue.type = "range";
+      hue.min = "0";
+      hue.max = "359";
+      hue.step = "1";
+
+      const colorFields = document.createElement("div");
+      colorFields.className = "gradient-color-fields";
+
+      const makeColorField = (label, type = "text") => {
+        const wrap = document.createElement("label");
+        const text = document.createElement("span");
+        const input = document.createElement("input");
+
+        text.textContent = label;
+        input.type = type;
+        wrap.append(text, input);
+
+        return { wrap, input };
+      };
+
+      const hexField = makeColorField("Hex");
+      const activeColor = document.createElement("input");
+      activeColor.type = "color";
+
+      const hexCombo = document.createElement("span");
+      hexCombo.className = "gradient-hex-combo";
+      hexCombo.append(activeColor, hexField.input);
+      hexField.wrap.append(hexCombo);
+
+      const redField = makeColorField("R", "number");
+      const greenField = makeColorField("G", "number");
+      const blueField = makeColorField("B", "number");
+
+      [redField.input, greenField.input, blueField.input].forEach(input => {
+        input.min = "0";
+        input.max = "255";
+        input.step = "1";
+      });
+
+      colorFields.append(
+        hexField.wrap,
+        redField.wrap,
+        greenField.wrap,
+        blueField.wrap
+      );
+
+      pickerColumn.append(pickerLabel, colorPlane, hue, colorFields, angleRow, opacityRow);
+
+      const stopList = document.createElement("div");
+      stopList.className = "gradient-stop-list";
+      pickerGrid.append(pickerColumn, stopList);
+      let pendingGradientUiSync = false;
+
+      const finishGradientEdit = () => {
+        flushTypeStylePreviewRefresh();
+        window.applyChatConfigToDocument?.();
+
+        if (!pendingGradientUiSync) return;
+
+        pendingGradientUiSync = false;
+        syncControls();
+        updateUrlOutput();
+      };
+
+      const setActiveStopColor = (color, options = {}) => {
+        const stops = readGradientStops(pathPrefix);
+        if (!stops[activeSlot]) return stops;
+
+        stops[activeSlot].color = color;
+        writeGradientStops(pathPrefix, stops, options);
+        pendingGradientUiSync = pendingGradientUiSync || !!options.deferUiSync;
+        return stops;
+      };
+
+      const updatePickerUi = stop => {
+        pickerHsv = rgbToHsv(hexToRgb(stop?.color || "#9146ff"));
+        const rgb = hexToRgb(stop?.color || "#9146ff");
+        const hueColor = rgbToHex(hsvToRgb({ h: pickerHsv.h, s: 1, v: 1 }));
+        colorPlane.style.setProperty("--picker-hue-color", hueColor);
+        hue.style.setProperty("--picker-hue-color", hueColor);
+        hue.value = Math.round(pickerHsv.h);
+        colorCursor.style.left = `${pickerHsv.s * 100}%`;
+        colorCursor.style.top = `${(1 - pickerHsv.v) * 100}%`;
+        hexField.input.value = stop?.color || "#9146ff";
+        activeColor.value = stop?.color || "#9146ff";
+        redField.input.value = rgb.r;
+        greenField.input.value = rgb.g;
+        blueField.input.value = rgb.b;
+        opacityTrack.style.setProperty("--opacity-color", stop?.color || "#8bb8ff");
+        opacityInput.value = stop?.alpha === "" || stop?.alpha === undefined
+          ? readConfig(`${pathPrefix}Opacity`) ?? 1
+          : stop.alpha;
+        opacityHandle.style.left = `${clampUnit(opacityInput.value) * 100}%`;
+      };
+
+      const setActiveStopColorFromFields = () => {
+        const color = rgbToHex({
+          r: Math.min(255, Math.max(0, Number(redField.input.value) || 0)),
+          g: Math.min(255, Math.max(0, Number(greenField.input.value) || 0)),
+          b: Math.min(255, Math.max(0, Number(blueField.input.value) || 0))
+        });
+
+        setActiveStopColor(color);
+        updatePickerUi({ color });
+        render();
+      };
+
+      hexField.input.addEventListener("change", () => {
+        if (!/^#[0-9a-f]{6}$/i.test(hexField.input.value)) {
+          updatePickerUi(readGradientStops(pathPrefix)[activeSlot]);
+          return;
+        }
+
+        setActiveStopColor(hexField.input.value);
+        updatePickerUi({ color: hexField.input.value });
+        render();
+      });
+
+      activeColor.addEventListener("input", () => {
+        const stops = setActiveStopColor(activeColor.value, { deferUiSync: true });
+        updatePickerUi({ color: activeColor.value });
+        bar.style.background = getGradientCss(stops);
+      });
+
+      activeColor.addEventListener("change", () => {
+        finishGradientEdit();
+        render();
+      });
+
+      [redField.input, greenField.input, blueField.input].forEach(input => {
+        input.addEventListener("change", setActiveStopColorFromFields);
+      });
+
+      const updateColorFromPicker = (event, options = {}) => {
+        const rect = colorPlane.getBoundingClientRect();
+        pickerHsv.s = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
+        pickerHsv.v = 1 - Math.min(1, Math.max(0, (event.clientY - rect.top) / rect.height));
+        const color = rgbToHex(hsvToRgb(pickerHsv));
+
+        const stops = setActiveStopColor(color, options);
+        updatePickerUi({ color });
+        bar.style.background = getGradientCss(stops);
+      };
+
+      colorPlane.addEventListener("pointerdown", event => {
+        event.preventDefault();
+        colorPlane.setPointerCapture(event.pointerId);
+        updateColorFromPicker(event, { deferUiSync: true });
+
+        const move = moveEvent => updateColorFromPicker(moveEvent, { deferUiSync: true });
+        const up = () => {
+          colorPlane.removeEventListener("pointermove", move);
+          colorPlane.removeEventListener("pointerup", up);
+          colorPlane.removeEventListener("pointercancel", up);
+          finishGradientEdit();
+          render();
+        };
+
+        colorPlane.addEventListener("pointermove", move);
+        colorPlane.addEventListener("pointerup", up);
+        colorPlane.addEventListener("pointercancel", up);
+      });
+
+      hue.addEventListener("input", () => {
+        pickerHsv.h = Number(hue.value);
+        const color = rgbToHex(hsvToRgb(pickerHsv));
+
+        const stops = setActiveStopColor(color, { deferUiSync: true });
+        updatePickerUi({ color });
+        bar.style.background = getGradientCss(stops);
+      });
+
+      hue.addEventListener("change", () => {
+        finishGradientEdit();
+        render();
+      });
+
+      const render = () => {
+        const stops = readGradientStops(pathPrefix);
+        activeSlot = Math.min(activeSlot, stops.length - 1);
+        if (activeSlot < 0) activeSlot = 0;
+
+        bar.style.background = getGradientCss(stops);
+        bar.replaceChildren();
+        stopList.replaceChildren();
+        updatePickerUi(stops[activeSlot]);
+        angleInput.value = readConfig(`${pathPrefix}Angle`) ?? 0;
+        angleDial.style.setProperty("--angle", `${angleInput.value}deg`);
+        syncAngleDisabledState();
+
+        [...modeGroup.children].forEach(button => {
+          button.classList.toggle(
+            "active",
+            button.textContent.toLowerCase() === String(readConfig(`${pathPrefix}Mode`) || "linear")
+          );
+        });
+
+        stops.forEach((stop, index) => {
+          const handle = document.createElement("button");
+          handle.type = "button";
+          handle.className = `gradient-stop${index === activeSlot ? " active" : ""}`;
+          handle.style.left = `${clampPercent(stop.stop)}%`;
+          handle.style.setProperty("--stop-color", stop.color);
+          handle.setAttribute("aria-label", `Gradient stop ${index + 1}`);
+          handle.addEventListener("pointerdown", event => {
+            event.preventDefault();
+            activeSlot = index;
+            handle.setPointerCapture(event.pointerId);
+
+            const move = moveEvent => {
+              const rect = bar.getBoundingClientRect();
+              const nextStops = readGradientStops(pathPrefix);
+              nextStops[index].stop = clampPercent(
+                ((moveEvent.clientX - rect.left) / rect.width) * 100
+              );
+              writeGradientStops(pathPrefix, nextStops, { deferUiSync: true });
+              pendingGradientUiSync = true;
+              activeSlot = index;
+              handle.style.left = `${nextStops[index].stop}%`;
+              bar.style.background = getGradientCss(nextStops);
+            };
+
+            const up = () => {
+              handle.removeEventListener("pointermove", move);
+              handle.removeEventListener("pointerup", up);
+              handle.removeEventListener("pointercancel", up);
+              finishGradientEdit();
+              render();
+            };
+
+            handle.addEventListener("pointermove", move);
+            handle.addEventListener("pointerup", up);
+            handle.addEventListener("pointercancel", up);
+          });
+          handle.addEventListener("click", event => {
+            event.stopPropagation();
+            activeSlot = index;
+            updatePickerUi(stop);
+            render();
+          });
+          bar.appendChild(handle);
+
+          const row = document.createElement("div");
+          row.className = "gradient-stop-row";
+          row.classList.toggle("active", index === activeSlot);
+
+          const color = document.createElement("input");
+          color.type = "color";
+          color.value = stop.color;
+          color.addEventListener("focus", () => {
+            activeSlot = index;
+            updatePickerUi(stop);
+            render();
+          });
+          color.addEventListener("input", () => {
+            const nextStops = readGradientStops(pathPrefix);
+            nextStops[index].color = color.value;
+            writeGradientStops(pathPrefix, nextStops, { deferUiSync: true });
+            pendingGradientUiSync = true;
+            activeSlot = index;
+            bar.style.background = getGradientCss(nextStops);
+          });
+
+          color.addEventListener("change", () => {
+            finishGradientEdit();
+            render();
+          });
+
+          const hex = document.createElement("input");
+          hex.type = "text";
+          hex.value = stop.color;
+          hex.addEventListener("focus", () => {
+            activeSlot = index;
+            updatePickerUi(stop);
+            render();
+          });
+          hex.addEventListener("change", () => {
+            if (!/^#[0-9a-f]{6}$/i.test(hex.value)) {
+              hex.value = stop.color;
+              return;
+            }
+            const nextStops = readGradientStops(pathPrefix);
+            nextStops[index].color = hex.value;
+            writeGradientStops(pathPrefix, nextStops);
+            activeSlot = index;
+            render();
+          });
+
+          const position = document.createElement("input");
+          position.type = "number";
+          position.min = "0";
+          position.max = "100";
+          position.step = "1";
+          position.value = stop.stop;
+          position.addEventListener("focus", () => {
+            activeSlot = index;
+            updatePickerUi(stop);
+            render();
+          });
+          position.addEventListener("input", () => {
+            const nextStops = readGradientStops(pathPrefix);
+            nextStops[index].stop = clampPercent(position.value);
+            writeGradientStops(pathPrefix, nextStops, { deferUiSync: true });
+            pendingGradientUiSync = true;
+            activeSlot = index;
+            bar.style.background = getGradientCss(nextStops);
+          });
+
+          position.addEventListener("change", () => {
+            finishGradientEdit();
+            render();
+          });
+
+          const remove = document.createElement("button");
+          remove.type = "button";
+          remove.className = "gradient-remove";
+          remove.textContent = "x";
+          remove.disabled = stops.length <= 2;
+          remove.addEventListener("click", () => {
+            const nextStops = readGradientStops(pathPrefix);
+            nextStops.splice(index, 1);
+            activeSlot = Math.max(0, index - 1);
+            writeGradientStops(pathPrefix, nextStops);
+            render();
+          });
+
+          row.append(color, hex, position, remove);
+          row.addEventListener("click", event => {
+            if (event.target !== row) return;
+            activeSlot = index;
+            updatePickerUi(stop);
+            render();
+          });
+          stopList.appendChild(row);
+        });
+      };
+
+      bar.addEventListener("click", event => {
+        if (event.target !== bar) return;
+
+        const stops = readGradientStops(pathPrefix);
+        if (stops.length >= 10) return;
+
+        const rect = bar.getBoundingClientRect();
+        const stop = clampPercent(((event.clientX - rect.left) / rect.width) * 100);
+        const nearest = [...stops].sort(
+          (a, b) => Math.abs(a.stop - stop) - Math.abs(b.stop - stop)
+        )[0];
+
+        stops.push({
+          color: nearest?.color || "#9146ff",
+          stop
+        });
+        activeSlot = stops.length - 1;
+        writeGradientStops(pathPrefix, stops);
+        render();
+      });
+
+      render();
+      editor.append(...[enabledRow, bar, modeRow, pickerGrid].filter(Boolean));
+      details.append(summary, editor);
+      return details;
+    }
+
+    function createControlGroup(group) {
+      if (group.kind === "gradient") {
+        return createGradientEditor(group);
+      }
+
+      const details = document.createElement("details");
+      details.className = "config-group";
+
+      const summary = document.createElement("summary");
+      summary.className = "config-control config-group-summary";
+      if (group.path) {
+        summary.dataset.path = group.path;
+      }
+
+      const text = document.createElement("span");
+      text.textContent = group.title;
+      summary.appendChild(text);
+
+      const paths = collectControlPaths(group);
+      const canResetSection = paths.some(path => String(path).startsWith("style.typeStyles."));
+
+      if (canResetSection) {
+        const resetButton = document.createElement("button");
+        resetButton.type = "button";
+        resetButton.className = "config-reset";
+        resetButton.textContent = "Reset";
+        resetButton.addEventListener("click", event => {
+          event.preventDefault();
+          event.stopPropagation();
+          resetControlGroup(group);
+        });
+        summary.appendChild(resetButton);
+      }
+
+      if (group.path) {
+        const input = document.createElement("input");
+        input.type = group.type || "checkbox";
+        input.checked = !!readConfig(group.path);
+        initialValues.set(group.path, readConfig(group.path));
+        input.addEventListener("click", event => event.stopPropagation());
+        input.addEventListener("input", () => {
+          writeConfig(group.path, input.checked);
+        });
+        summary.appendChild(input);
+      }
+
+      const controls = document.createElement("div");
+      controls.className = "config-group-controls";
+
+      if (group.description) {
+        const description = document.createElement("p");
+        description.className = "config-group-description";
+        description.textContent = group.description;
+        controls.appendChild(description);
+      }
+
+      group.controls.forEach(control => {
+        controls.appendChild(
+          Array.isArray(control)
+            ? createControl(control)
+            : createControlGroup(control)
+        );
+      });
+
+      details.append(summary, controls);
+      return details;
+    }
+
+    const typeStyleEditorState = {
+      group: "",
+      type: "",
+      label: "",
+      sectionTitle: "",
+      previewBg: "checker",
+      previewBgColor: "#080810"
+    };
+
+    const testAreaSurfaceState = {
+      mode: "checker",
+      color: "#080810"
+    };
+
+    function isHexColor(value) {
+      return /^#[0-9a-f]{6}$/i.test(String(value || ""));
+    }
+
+    function applySurfacePickerState(root, state) {
+      root?.querySelectorAll("[data-surface-mode]").forEach(button => {
+        button.classList.toggle("active", button.dataset.surfaceMode === state.mode);
+      });
+
+      const colorInput = root?.querySelector("[data-surface-color]");
+      if (colorInput && isHexColor(state.color)) {
+        colorInput.value = state.color;
+      }
+    }
+
+    function setTypeStylePreviewBackground(mode, color = typeStyleEditorState.previewBgColor) {
+      const preview = document.getElementById("typeStyleModalPreview");
+      const nextMode = mode === "color" ? "color" : "checker";
+      const nextColor = isHexColor(color) ? color : "#080810";
+      typeStyleEditorState.previewBg = nextMode;
+      typeStyleEditorState.previewBgColor = nextColor;
+
+      preview?.classList.toggle("preview-surface-checker", nextMode === "checker");
+      preview?.style.setProperty("--type-preview-bg", nextMode === "color" ? nextColor : "");
+      preview?.style.setProperty("--type-preview-bg-position", "");
+      preview?.style.setProperty("--type-preview-bg-size", "");
+      applySurfacePickerState(
+        document.querySelector("[data-surface-picker='type-preview']"),
+        { mode: nextMode, color: nextColor }
+      );
+    }
+
+    function setTestAreaSurface(mode, color = testAreaSurfaceState.color) {
+      const pane = document.querySelector(".preview-pane");
+      const nextMode = mode === "color" ? "color" : "checker";
+      const nextColor = isHexColor(color) ? color : "#080810";
+      testAreaSurfaceState.mode = nextMode;
+      testAreaSurfaceState.color = nextColor;
+
+      pane?.classList.toggle("preview-surface-checker", nextMode === "checker");
+      pane?.style.setProperty("--test-area-bg", nextMode === "color" ? nextColor : "");
+      pane?.style.setProperty("--test-area-bg-position", "");
+      pane?.style.setProperty("--test-area-bg-size", "");
+      applySurfacePickerState(
+        document.querySelector("[data-surface-picker='test-area']"),
+        { mode: nextMode, color: nextColor }
+      );
+    }
+
+    function buildSurfacePicker(scope, label, state, onChange) {
+      const root = document.createElement("div");
+      root.className = "surface-picker";
+      root.dataset.surfacePicker = scope;
+      root.setAttribute("aria-label", label);
+
+      ["checker", "color"].forEach(mode => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.dataset.surfaceMode = mode;
+        button.textContent = mode === "checker" ? "Checker" : "Colour";
+        button.addEventListener("click", () => onChange(mode, state.color));
+        root.appendChild(button);
+      });
+
+      const colorInput = document.createElement("input");
+      colorInput.type = "color";
+      colorInput.value = state.color;
+      colorInput.dataset.surfaceColor = "";
+      colorInput.setAttribute("aria-label", `${label} colour`);
+      colorInput.addEventListener("input", () => onChange("color", colorInput.value));
+      root.appendChild(colorInput);
+
+      applySurfacePickerState(root, state);
+      return root;
+    }
+
+    function getTypeStylePreviewPlatform(group, type = "") {
+      if (group === "youtube") return "YouTube";
+      if (group === "tiktok") return "TikTok";
+      if (group === "kick") return "Kick";
+      if (group === "special") return "Twitch";
+      if (group === "donations") {
+        return donationPreviewPlatforms[type] || donationTypeOptions[0][0];
+      }
+      return "Twitch";
+    }
+
+    function getAnnouncementPreviewDetails(type) {
+      const variants = {
+        announcementsDefault: ["default", "twitch.announcements.default"],
+        announcementsBlue: ["blue", "twitch.announcements.blue"],
+        announcementsGreen: ["green", "twitch.announcements.green"],
+        announcementsOrange: ["orange", "twitch.announcements.orange"],
+        announcementsPurple: ["purple", "twitch.announcements.purple"],
+        announcementsPrimary: ["primary", "twitch.announcements.primary"]
+      };
+
+      return variants[type] || ["primary", "twitch.announcements.primary"];
+    }
+
+    function getTypeStylePreviewItem(group, type, label) {
+      const platform = getTypeStylePreviewPlatform(group, type);
+
+      if (type === "chat") {
+        return {
+          kind: "chat",
+          platform,
+          user: platform === "TikTok" ? "TikTok Chat Pig" : `${platform} Chat Pig`,
+          text: "Preview chat message"
+        };
+      }
+
+      if (group === "special" && type === "rainbow") {
+        return {
+          kind: "chat",
+          platform,
+          user: "Rainbow Chat Pig",
+          text: "Preview rainbow chat message",
+          special: "highlight",
+          styleType: "rainbow"
+        };
+      }
+
+      if (group === "tiktok" && type === "gifts") {
+        return {
+          kind: "tiktokGift",
+          platform: "TikTok",
+          alertType: "tiktok.gifts",
+          user: "GiftPig",
+          giftName: "Rose",
+          count: 7
+        };
+      }
+
+      if (group === "donations") {
+        return {
+          kind: "alert",
+          platform,
+          alertType: `donations.${type}`,
+          user: label,
+          text: "Donation alert preview"
+        };
+      }
+
+      if (group === "twitch" && type.startsWith("announcements")) {
+        const [variant, alertType] = getAnnouncementPreviewDetails(type);
+        return {
+          kind: "alert",
+          platform,
+          alertType,
+          special: `announcement-${variant}`,
+          user: label,
+          text: "Twitch announcement preview"
+        };
+      }
+
+      return {
+        kind: "alert",
+        platform,
+        alertType: `${group}.${type}`,
+        user: label,
+        text: `${label} alert preview`
+      };
+    }
+
+    function makePreviewAvatar() {
+      const avatar = document.createElement("div");
+      avatar.className = "avatar preview-avatar";
+      return avatar;
+    }
+
+    function makePreviewNameBubble(item) {
+      const nameBubble = document.createElement("div");
+      nameBubble.className = "name-bubble";
+
+      const badges = document.createElement("span");
+      badges.className = "badges";
+
+      const badge = document.createElement("span");
+      badge.className = "badge-text";
+      badge.textContent = item.kind === "alert" ? "ALERT" : "VIP";
+      badges.appendChild(badge);
+
+      const name = document.createElement("span");
+      name.className = "name";
+      name.textContent = item.user;
+
+      const icon = document.createElement("img");
+      icon.className = "platform-icon";
+      icon.alt = "";
+      icon.src = window.getPlatformIcon?.(item.platform) || "";
+
+      nameBubble.append(badges, name);
+      if (icon.src) {
+        nameBubble.appendChild(icon);
+      }
+      return nameBubble;
+    }
+
+    function buildTypeStylePreview() {
+      const preview = document.getElementById("typeStyleModalPreview");
+      if (!preview || !typeStyleEditorState.group) return;
+
+      const item = getTypeStylePreviewItem(
+        typeStyleEditorState.group,
+        typeStyleEditorState.type,
+        typeStyleEditorState.label
+      );
+
+      preview.replaceChildren();
+
+      const el = document.createElement("div");
+      el.className = `msg platform-${String(item.platform).toLowerCase()}`;
+      el.dataset.kind = item.kind;
+      el.dataset.platform = item.platform;
+      el.dataset.alertType = item.alertType || "";
+      el.dataset.styleType = item.styleType || "";
+
+      if (item.kind === "alert") {
+        el.classList.add("alert");
+      }
+
+      if (item.special) {
+        el.classList.add(`special-${item.special}`);
+      }
+
+      if (item.kind === "tiktokGift") {
+        el.className = "msg tiktok-gift platform-tiktok gift-tier-2";
+        el.dataset.kind = "tiktokGift";
+        el.dataset.platform = "TikTok";
+        el.dataset.alertType = item.alertType;
+
+        const avatarWrap = document.createElement("div");
+        avatarWrap.className = "avatar-wrap";
+        avatarWrap.appendChild(makePreviewAvatar());
+
+        const card = document.createElement("div");
+        card.className = "tiktok-gift-card";
+
+        const info = document.createElement("div");
+        info.className = "tiktok-gift-info";
+
+        const user = document.createElement("div");
+        user.className = "tiktok-gift-user";
+        user.textContent = item.user;
+
+        const text = document.createElement("div");
+        text.className = "tiktok-gift-text";
+        text.textContent = `sent ${item.giftName}`;
+
+        const count = document.createElement("div");
+        count.className = "tiktok-gift-count";
+        count.textContent = `x${item.count}`;
+
+        info.append(user, text);
+        card.append(info, count);
+        el.append(avatarWrap, card);
+      } else {
+        const avatarWrap = document.createElement("div");
+        avatarWrap.className = "avatar-wrap";
+        avatarWrap.appendChild(makePreviewAvatar());
+
+        const stack = document.createElement("div");
+        stack.className = "bubble-stack";
+
+        const messageBubble = document.createElement("div");
+        messageBubble.className = "message-bubble";
+
+        const messageText = document.createElement("span");
+        messageText.className = "text";
+        messageText.textContent = item.text;
+
+        messageBubble.appendChild(messageText);
+        stack.append(makePreviewNameBubble(item), messageBubble);
+        el.append(avatarWrap, stack);
+      }
+
+      window.applyPreviewPlatformVariables?.(el, item.platform, item);
+      preview.appendChild(el);
+    }
+
+    function refreshTypeStylePreview() {
+      if (!typeStyleEditorState.group) return;
+
+      const preview = document.getElementById("typeStyleModalPreview");
+      const el = preview?.querySelector(".msg");
+
+      if (!el) {
+        buildTypeStylePreview();
+        return;
+      }
+
+      const item = getTypeStylePreviewItem(
+        typeStyleEditorState.group,
+        typeStyleEditorState.type,
+        typeStyleEditorState.label
+      );
+
+      el.className = `msg platform-${String(item.platform).toLowerCase()}`;
+      if (item.kind === "alert") el.classList.add("alert");
+      if (item.kind === "tiktokGift") el.className = "msg tiktok-gift platform-tiktok gift-tier-2";
+      if (item.special) el.classList.add(`special-${item.special}`);
+      el.dataset.kind = item.kind;
+      el.dataset.platform = item.platform;
+      el.dataset.alertType = item.alertType || "";
+      el.dataset.styleType = item.styleType || "";
+
+      const name = el.querySelector(".name");
+      if (name) name.textContent = item.user || item.label || typeStyleEditorState.label;
+
+      const text = el.querySelector(".text");
+      if (text) text.textContent = item.text || "";
+
+      const icon = el.querySelector(".platform-icon");
+      if (icon) icon.src = window.getPlatformIcon?.(item.platform) || "";
+
+      window.applyPreviewPlatformVariables?.(el, item.platform, item);
+    }
+
+    function openTypeStyleEditor({ group, type, label, sectionTitle }) {
+      typeStyleEditorState.group = group;
+      typeStyleEditorState.type = type;
+      typeStyleEditorState.label = label;
+      typeStyleEditorState.sectionTitle = sectionTitle;
+
+      const modal = document.getElementById("typeStyleModal");
+      const title = document.getElementById("typeStyleModalTitle");
+      const controls = document.getElementById("typeStyleModalControls");
+
+      title.textContent = `${sectionTitle}: ${label}`;
+      controls.replaceChildren();
+
+      getTypeStyleControls(group, type)
+        .map(control => mapTypeStyleControl(control, group, type))
+        .forEach(control => {
+          controls.appendChild(
+            Array.isArray(control)
+              ? createControl(control)
+              : createControlGroup(control)
+          );
+        });
+
+      buildTypeStylePreview();
+      syncControls();
+      modal.hidden = false;
+    }
+
+    function closeTypeStyleEditor() {
+      document.getElementById("typeStyleModal").hidden = true;
+      typeStyleEditorState.group = "";
+      typeStyleEditorState.type = "";
+      typeStyleEditorState.label = "";
+      typeStyleEditorState.sectionTitle = "";
+      setTypeStylePreviewBackground(typeStyleEditorState.previewBg, typeStyleEditorState.previewBgColor);
+    }
+
+    function buildTypeStyleButtonGrid(section) {
+      const grid = document.createElement("div");
+      grid.className = "type-style-button-grid";
+
+      section.typeStyleButtons.forEach(buttonConfig => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "type-style-edit-button";
+        button.textContent = buttonConfig.label;
+        button.addEventListener("click", () => openTypeStyleEditor(buttonConfig));
+        grid.appendChild(button);
+      });
+
+      return grid;
+    }
+
+    function buildPanel() {
+      const root = document.getElementById("configControls");
+
+      controlSections.forEach(section => {
+        const sectionEl = document.createElement("section");
+        sectionEl.className = "config-section";
+
+        const title = document.createElement("h2");
+        title.textContent = section.title;
+        sectionEl.appendChild(title);
+
+        if (section.description) {
+          const description = document.createElement("p");
+          description.className = "config-description";
+          description.textContent = section.description;
+          sectionEl.appendChild(description);
+        }
+
+        if (section.actions) {
+          const actions = document.createElement("div");
+          actions.className = "config-actions";
+
+          section.actions.forEach(([label, preset]) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = label;
+            button.addEventListener("click", () => {
+              window.applyChatStylePreset?.(preset);
+              syncControls();
+              refreshTypeStylePreview();
+              updateUrlOutput();
+            });
+            actions.appendChild(button);
+          });
+
+          sectionEl.appendChild(actions);
+        }
+
+        if (section.typeStyleButtons) {
+          sectionEl.appendChild(buildTypeStyleButtonGrid(section));
+        }
+
+        section.controls?.forEach(control => {
+          sectionEl.appendChild(
+            Array.isArray(control)
+              ? createControl(control)
+              : createControlGroup(control)
+          );
+        });
+
+        root.appendChild(sectionEl);
+      });
+
+      updateUrlOutput();
+    }
+
+    function updateUrlOutput() {
+      const params = new URLSearchParams();
+
+      initialValues.forEach((initial, path) => {
+        const current = readConfig(path);
+
+        if (String(current) === String(initial)) return;
+
+        params.set(getUrlParamName(path), current);
+      });
+
+      const query = params.toString();
+      const url = getOverlayUrl();
+      url.search = query;
+      url.hash = "";
+      document.getElementById("urlOutput").value = url.toString();
+    }
+
+    function getOverlayUrl() {
+      const url = new URL(window.location.href);
+      const path = url.pathname;
+      const withoutTrailingSlash = path.replace(/\/+$/, "");
+
+      if (/\/index-scroll\.html$/i.test(path)) {
+        url.pathname = path.replace(/index-scroll\.html$/i, "index.html");
+        return url;
+      }
+
+      if (/\/(?:settings|config)(?:\/index\.html)?$/i.test(withoutTrailingSlash)) {
+        url.pathname = `${withoutTrailingSlash.replace(/\/(?:settings|config)$/i, "") || "/"}`;
+        url.pathname = `${url.pathname.replace(/\/(?:settings|config)\/index\.html$/i, "") || "/"}`;
+        if (!url.pathname.endsWith("/")) {
+          url.pathname += "/";
+        }
+        return url;
+      }
+
+      if (/\/[^/]+\.html$/i.test(path)) {
+        url.pathname = path.replace(/[^/]+\.html$/i, "index.html");
+      }
+
+      return url;
+    }
+
+    function buildAutoscrollQuickControls() {
+      const root = document.getElementById("autoscrollQuickControls");
+      if (!root) return;
+
+      [
+        ["Enabled", "scrollTest.enabled", "checkbox"],
+        ["Auto Scroll", "scrollTest.autoScroll", "checkbox"],
+        ["Interval", "scrollTest.intervalMs", "number", { min: 200, max: 10000, step: 100 }]
+      ].forEach(control => {
+        root.appendChild(createControl(control));
+      });
+
+      const restartButton = document.createElement("button");
+      restartButton.type = "button";
+      restartButton.textContent = "Restart";
+      restartButton.addEventListener("click", () => {
+        window.restartScrollTestMessages?.();
+      });
+
+      const stopButton = document.createElement("button");
+      stopButton.type = "button";
+      stopButton.textContent = "Stop";
+      stopButton.addEventListener("click", () => {
+        window.stopScrollTestMessages?.("Manual stop");
+      });
+
+      root.append(
+        buildSurfacePicker("test-area", "Test area background", testAreaSurfaceState, setTestAreaSurface),
+        restartButton,
+        stopButton
+      );
+    }
+
+    document.getElementById("typeStyleModalClose")?.addEventListener("click", closeTypeStyleEditor);
+    document.getElementById("typeStyleModal")?.addEventListener("click", event => {
+      if (event.target.id === "typeStyleModal") {
+        closeTypeStyleEditor();
+      }
+    });
+    document.querySelector("[data-surface-picker='type-preview']")?.querySelectorAll("[data-surface-mode]").forEach(button => {
+      button.addEventListener("click", () => {
+        setTypeStylePreviewBackground(button.dataset.surfaceMode);
+      });
+    });
+    document.querySelector("[data-surface-picker='type-preview']")?.querySelector("[data-surface-color]")?.addEventListener("input", event => {
+      setTypeStylePreviewBackground("color", event.target.value);
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape" && !document.getElementById("typeStyleModal")?.hidden) {
+        closeTypeStyleEditor();
+      }
+      if (event.key === "Escape") {
+        closeFontPickerLists();
+      }
+    });
+    document.addEventListener("click", event => {
+      if (!event.target.closest(".font-picker")) {
+        closeFontPickerLists();
+      }
+    });
+
+    buildPanel();
+    buildAutoscrollQuickControls();
+    setTypeStylePreviewBackground(typeStyleEditorState.previewBg, typeStyleEditorState.previewBgColor);
+    setTestAreaSurface(testAreaSurfaceState.mode, testAreaSurfaceState.color);
+    syncControls();
+  </script>
+</body>
+</html>
