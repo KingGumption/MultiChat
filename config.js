@@ -36,7 +36,7 @@ window.CHAT_CONFIG = {
 
     accentFontFamily: "'Sora', sans-serif",
     messageFontFamily: "'Sora', sans-serif",
-    titleFontSize: 14,
+    titleFontSize: 12,
     messageTextColor: "#ffffff",
     titleTextColor: "#ffffff",
     accentColor: "#9146ff",
@@ -124,8 +124,8 @@ window.CHAT_CONFIG = {
       }
     },
     bubbleShape: "rounded",
-    bubbleSlant: 12,
-    bubbleNotch: 12,
+    bubbleSlant: 26,
+    bubbleNotch: 23,
     nameIconPosition: "right",
     nameIconEdgeOverlap: 16,
     nameIconEdgeRadius: 19,
@@ -155,12 +155,12 @@ window.CHAT_CONFIG = {
       platformIcons: true
     },
 
-    messageFontSize: 18,
+    messageFontSize: 17,
     emoteOnlyFontSize: 30,
     gigantifiedFontSize: 44,
 
-    bubbleRadius: 22,
-    nameBubbleRadius: 22
+    bubbleRadius: 21,
+    nameBubbleRadius: 20
   },
 
   behaviour: {

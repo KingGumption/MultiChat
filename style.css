@@ -986,7 +986,7 @@ body.name-icon-left .name-bubble .badges:empty + .name {
   transform: translateY(0.08em);
 }
 
-.msg.emote-only:not(.gigantified) .text {
+.message-bubble.emote-only .text {
   font-size: var(--emote-only-font-size);
   line-height: 1.05;
   font-weight: 800;

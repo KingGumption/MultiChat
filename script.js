@@ -42,7 +42,7 @@ const DEFAULT_CONFIG = {
 
     accentFontFamily: "'Sora', sans-serif",
     messageFontFamily: "'Sora', sans-serif",
-    titleFontSize: 14,
+    titleFontSize: 12,
     messageTextColor: "#ffffff",
     titleTextColor: "#ffffff",
     accentColor: "#9146ff",
@@ -122,8 +122,8 @@ const DEFAULT_CONFIG = {
       }
     },
     bubbleShape: "rounded",
-    bubbleSlant: 12,
-    bubbleNotch: 12,
+    bubbleSlant: 26,
+    bubbleNotch: 23,
     nameIconPosition: "right",
     nameIconEdgeOverlap: 16,
     nameIconEdgeRadius: 19,
@@ -153,12 +153,12 @@ const DEFAULT_CONFIG = {
       platformIcons: true
     },
 
-    messageFontSize: 18,
+    messageFontSize: 17,
     emoteOnlyFontSize: 30,
     gigantifiedFontSize: 44,
 
-    bubbleRadius: 22,
-    nameBubbleRadius: 22
+    bubbleRadius: 21,
+    nameBubbleRadius: 20
   },
 
   behaviour: {
@@ -576,8 +576,8 @@ const DEFAULT_STYLE_PRESET = {
   fontFamily: "'Sora', sans-serif",
   accentFontFamily: "'Sora', sans-serif",
   messageFontFamily: "'Sora', sans-serif",
-  titleFontSize: 14,
-  messageFontSize: 18,
+  titleFontSize: 12,
+  messageFontSize: 17,
   emoteOnlyFontSize: 30,
   gigantifiedFontSize: 44,
   messageTextColor: "#ffffff",
@@ -660,10 +660,10 @@ const DEFAULT_STYLE_PRESET = {
   },
   typeStyles: buildDefaultTypeStyles(DEFAULT_CONFIG.style),
   bubbleShape: "rounded",
-  bubbleRadius: 22,
-  nameBubbleRadius: 22,
-  bubbleSlant: 12,
-  bubbleNotch: 12,
+  bubbleRadius: 21,
+  nameBubbleRadius: 20,
+  bubbleSlant: 26,
+  bubbleNotch: 23,
   nameIconPosition: "right",
   nameIconEdgeOverlap: 16,
   nameIconEdgeRadius: 19,
@@ -3880,6 +3880,11 @@ function createMessageBubble(item) {
 
   const bubble = document.createElement("div");
   bubble.className = "message-bubble";
+  bubble.dataset.createdAt = Date.now();
+
+  if (item.emoteOnly) {
+    bubble.classList.add("emote-only");
+  }
 
   if (item.messageId) {
     bubble.dataset.messageId = item.messageId;
@@ -4355,13 +4360,14 @@ function deleteMessagesByUser(user) {
 }
 
 function removeLastPlainTwitchEmoteMessage(user) {
-  const rows = [
-    ...chat.querySelectorAll(".msg.platform-twitch.emote-only:not(.gigantified)")
+  const bubbles = [
+    ...chat.querySelectorAll(".msg.platform-twitch:not(.gigantified) .message-bubble.emote-only")
   ];
 
-  const matching = rows.filter(row => {
+  const matching = bubbles.filter(bubble => {
+    const row = bubble.closest(".msg");
     const name =
-      row.querySelector(".name")?.textContent?.trim()?.toLowerCase();
+      row?.querySelector(".name")?.textContent?.trim()?.toLowerCase();
 
     return name === String(user || "").toLowerCase();
   });
@@ -4375,7 +4381,14 @@ function removeLastPlainTwitchEmoteMessage(user) {
 
   if (age > 1500) return;
 
-  last.remove();
+  const row = last.closest(".msg");
+
+  if (row?.querySelectorAll(".message-bubble").length > 1) {
+    last.remove();
+  } else {
+    row?.remove();
+  }
+
   currentGroup = null;
 }
 
@@ -6307,8 +6320,50 @@ function buildDefaultTypeStyles(styleConfig = {}) {
           );
         }
 
+        if (group === "twitch" && type === "chat") {
+          defaults.messageBgMode = "linear";
+          defaults.messageBgColor2 = "#121020";
+          defaults.messageBgColor3 = "#06060c";
+          defaults.messageBgColor2Stop = 26;
+          defaults.messageBgColorAlpha = 0.6322463768115942;
+          defaults.messageBgColor2Alpha = 0.8315217391304348;
+        }
+
+        if (
+          group === "twitch" &&
+          [
+            "announcementsDefault",
+            "announcementsBlue",
+            "announcementsGreen",
+            "announcementsOrange",
+            "announcementsPurple",
+            "announcementsPrimary",
+            "channelPointRedemptions",
+            "follows",
+            "subs",
+            "giftSubs",
+            "raids",
+            "cheers"
+          ].includes(type)
+        ) {
+          defaults.alertBorderEnabled = false;
+        }
+
+        if (group === "tiktok" && type === "chat") {
+          defaults.messageBgColor2Stop = 18;
+          defaults.messageBgColorAlpha = 0.6902173913043478;
+        }
+
+        if (group === "tiktok" && type === "subscribers") {
+          defaults.alertGlowColor2 = "#25f4ee";
+          defaults.alertGlowColor2Alpha = "";
+          defaults.alertBorderEnabled = true;
+        }
+
         if (group === "special" && type === "rainbow") {
           applyRainbowTypeDefaults(defaults, styleConfig);
+          defaults.messageBgColor = "#121020";
+          defaults.messageBgColorAlpha = 0.7336956521739131;
         }
 
         return [type, defaults];
