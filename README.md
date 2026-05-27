@@ -6,7 +6,6 @@ A static browser overlay for Twitch, YouTube, TikTok, and donation/service alert
 
 - `index.html` is the overlay page for OBS/browser sources.
 - `settings/` is the settings/config page.
-- `index-scroll.html` is kept as the original settings page entry point.
 
 When hosted under `/multichat`, the intended URLs are:
 

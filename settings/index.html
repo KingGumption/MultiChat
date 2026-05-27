@@ -3710,11 +3710,6 @@
       const path = url.pathname;
       const withoutTrailingSlash = path.replace(/\/+$/, "");
 
-      if (/\/index-scroll\.html$/i.test(path)) {
-        url.pathname = path.replace(/index-scroll\.html$/i, "index.html");
-        return url;
-      }
-
       if (/\/(?:settings|config)(?:\/index\.html)?$/i.test(withoutTrailingSlash)) {
         url.pathname = `${withoutTrailingSlash.replace(/\/(?:settings|config)$/i, "") || "/"}`;
         url.pathname = `${url.pathname.replace(/\/(?:settings|config)\/index\.html$/i, "") || "/"}`;
