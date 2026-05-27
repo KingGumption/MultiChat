@@ -81,6 +81,19 @@
       font: 700 13px/1 var(--font-family);
     }
 
+    .range-wrap {
+      display: grid;
+      grid-template-columns: minmax(80px, 1fr) 68px auto;
+      gap: 6px;
+      align-items: center;
+      min-width: min(240px, 100%);
+    }
+
+    .config-control .range-number {
+      min-width: 0;
+      max-width: 68px;
+    }
+
     .config-control select option {
       color: #111111;
     }
@@ -1148,7 +1161,20 @@
           ["Follows", "follows"],
           ["Subscribers", "subscribers"],
           ["Gifts", "gifts"],
+          ["Likes", "likes"],
           ["Treasure Boxes", "treasureBoxes"]
+        ]
+      },
+      {
+        title: "Kick Type Styling",
+        description: "Per Kick chat/event control for avatar glow, title/name pill, message bubbles, and alert cards.",
+        group: "kick",
+        types: [
+          ["Chat Messages", "chat"],
+          ["Follows", "follows"],
+          ["Subs", "subs"],
+          ["Gift Subs", "giftSubs"],
+          ["Reward Redemptions", "rewardRedemptions"]
         ]
       },
       {
@@ -1267,6 +1293,32 @@
 
     const controlSections = [
       {
+        title: "Connections",
+        description: "Set the local WebSocket details used by the overlay to talk to Streamer.bot and TikFinity.",
+        controls: [
+          {
+            title: "Streamer.bot",
+            description: "Defaults to Streamer.bot's WebSocket server on this machine.",
+            controls: [
+              ["Host", "streamerbot.host", "text"],
+              ["Port", "streamerbot.port", "number", { min: 1, max: 65535, step: 1 }],
+              ["Reconnect", "streamerbot.reconnectMs", "number", { min: 250, max: 60000, step: 250 }]
+            ]
+          },
+          {
+            title: "TikFinity",
+            description: "Enable TikFinity and set the local WebSocket details if yours differ from the default.",
+            path: "tikfinity.enabled",
+            type: "checkbox",
+            controls: [
+              ["Host", "tikfinity.host", "text"],
+              ["Port", "tikfinity.port", "number", { min: 1, max: 65535, step: 1 }],
+              ["Reconnect", "tikfinity.reconnectMs", "number", { min: 250, max: 60000, step: 250 }]
+            ]
+          }
+        ]
+      },
+      {
         title: "Sources",
         description: "Choose which platforms and event types are allowed into chat.",
         controls: [
@@ -1308,7 +1360,21 @@
               ["Follows", "behaviour.alerts.tiktok.follows", "checkbox"],
               ["Subscribers", "behaviour.alerts.tiktok.subscribers", "checkbox"],
               ["Gifts", "behaviour.alerts.tiktok.gifts", "checkbox"],
+              ["Likes", "behaviour.alerts.tiktok.likes", "checkbox"],
               ["Treasure Boxes", "behaviour.alerts.tiktok.treasureBoxes", "checkbox"]
+            ]
+          },
+          {
+            title: "Kick",
+            description: "Turn Kick chat messages on or off.",
+            path: "behaviour.sources.kick",
+            type: "checkbox",
+            controls: [
+              ["Chat Messages", "behaviour.chat.kick", "checkbox"],
+              ["Follows", "behaviour.alerts.kick.follows", "checkbox"],
+              ["Subs", "behaviour.alerts.kick.subs", "checkbox"],
+              ["Gift Subs", "behaviour.alerts.kick.giftSubs", "checkbox"],
+              ["Reward Redemptions", "behaviour.alerts.kick.rewardRedemptions", "checkbox"]
             ]
           },
           {
@@ -1329,32 +1395,6 @@
         ]
       },
       {
-        title: "Connections",
-        description: "Set the local WebSocket details used by the overlay to talk to Streamer.bot and TikFinity.",
-        controls: [
-          {
-            title: "Streamer.bot",
-            description: "Defaults to Streamer.bot's WebSocket server on this machine.",
-            controls: [
-              ["Host", "streamerbot.host", "text"],
-              ["Port", "streamerbot.port", "number", { min: 1, max: 65535, step: 1 }],
-              ["Reconnect", "streamerbot.reconnectMs", "number", { min: 250, max: 60000, step: 250 }]
-            ]
-          },
-          {
-            title: "TikFinity",
-            description: "Enable TikFinity and set the local WebSocket details if yours differ from the default.",
-            path: "tikfinity.enabled",
-            type: "checkbox",
-            controls: [
-              ["Host", "tikfinity.host", "text"],
-              ["Port", "tikfinity.port", "number", { min: 1, max: 65535, step: 1 }],
-              ["Reconnect", "tikfinity.reconnectMs", "number", { min: 250, max: 60000, step: 250 }]
-            ]
-          }
-        ]
-      },
-      {
         title: "Styles",
         description: "Apply quick style presets without changing which messages are allowed.",
         actions: [
@@ -1364,13 +1404,14 @@
         controls: [
           ["Use Global Accent Colour", "style.useCustomAccentColor", "checkbox"],
           ["Global Accent Colour", "style.accentColor", "color"],
-          ["Use Twitch Chat Identity Name Colour", "style.useTwitchChatNameColor", "checkbox"],
           ["Title Text Color", "style.titleTextColor", "color"],
           ["Message Text Color", "style.messageTextColor", "color"],
           ["Title Font", "style.accentFontFamily", "font"],
           ["Message Font", "style.messageFontFamily", "font"],
           ["Title Size", "style.titleFontSize", "range", { min: 10, max: 34, step: 1 }],
-          ["Message Size", "style.messageFontSize", "range", { min: 12, max: 42, step: 1 }]
+          ["Message Size", "style.messageFontSize", "range", { min: 12, max: 42, step: 1 }],
+          ["Title Line Spacing", "style.titleLineHeight", "range", { min: 0.9, max: 2, step: 0.01 }],
+          ["Message Line Spacing", "style.messageLineHeight", "range", { min: 0.9, max: 2, step: 0.01 }]
         ]
       },
       {
@@ -1381,9 +1422,11 @@
             title: "Text Colours",
             description: "Text colours that are not tied to one event type.",
             controls: [
+              ["Use Twitch Chat Identity Name Colour", "style.useTwitchChatNameColor", "checkbox"],
               ["Twitch Names", "style.colors.text.twitchName", "color"],
               ["YouTube Names", "style.colors.text.youtubeName", "color"],
               ["TikTok Names", "style.colors.text.tiktokName", "color"],
+              ["Kick Names", "style.colors.text.kickName", "color"],
               ["Muted Text", "style.colors.text.muted", "color"],
               ["Dark Text", "style.colors.text.dark", "color"],
               ["Stealth Text", "style.colors.text.stealth", "color"]
@@ -1391,7 +1434,7 @@
           },
           {
             title: "Surface Colours",
-            description: "Background, card, badge, avatar, media, and shadow colours.",
+            description: "Background, card, badge, avatar, and media colours.",
             controls: [
               ["Use Page Background", "style.showPageBackground", "checkbox"],
               ["Page Background", "style.colors.surfaces.pageBackground", "color"],
@@ -1402,14 +1445,14 @@
               ["Link Preview Meta", "style.colors.surfaces.linkPreviewMeta", "color"],
               ["Badge Background", "style.colors.surfaces.badgeBackground", "color"],
               ["Avatar Border", "style.colors.surfaces.avatarBorder", "color"],
-              ["Avatar Fill", "style.colors.surfaces.avatarFill", "color"],
-              ["Shadow", "style.colors.surfaces.shadow", "color"]
+              ["Avatar Fill", "style.colors.surfaces.avatarFill", "color"]
             ]
           },
           {
             title: "Effect Colours",
-            description: "Glow, sparkle, highlight, and brand effect colours.",
+            description: "Shadow, glow, sparkle, highlight, and brand effect colours.",
             controls: [
+              ["Shadow", "style.colors.effects.shadow", "color"],
               ["Emote Sparkle", "style.colors.effects.emoteSparkle", "color"],
               ["Gigantified Sparkle", "style.colors.effects.gigantifiedSparkle", "color"],
               ["Highlight Glow", "style.colors.effects.highlightGlow", "color"],
@@ -1453,20 +1496,54 @@
         title: "Display",
         description: "Show, hide, or simplify visual parts of messages that are already allowed.",
         controls: [
-          ["Alerts", "behaviour.showAlerts", "checkbox"],
-          ["Avatars", "behaviour.showAvatars", "checkbox"],
-          ["Badges", "behaviour.showBadges", "checkbox"],
-          ["Platform Icons", "behaviour.showPlatformIcons", "checkbox"],
-          ["Stacked Messages", "behaviour.groupConsecutiveMessages", "checkbox"],
-          ["Border Glow", "style.borderGlow", "checkbox"],
-          ["Username Bubble Backgrounds", "style.showNameBackgrounds", "checkbox"],
-          ["Chat Message Backgrounds", "style.showMessageBackgrounds", "checkbox"],
-          ["Alert Card Backgrounds", "style.showAlertBackgrounds", "checkbox"],
-          ["TikTok Gift Card Backgrounds", "style.showGiftBackgrounds", "checkbox"],
-          ["Image/Preview Backgrounds", "style.showMediaBackgrounds", "checkbox"],
-          ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
-          ["Emote Glow", "style.showEmoteGlow", "checkbox"],
-          ["Colored Text", "style.showColoredText", "checkbox"]
+          {
+            title: "Message Layout",
+            description: "Controls how chat messages are arranged and labelled.",
+            controls: [
+              ["Stacked Messages", "behaviour.groupConsecutiveMessages", "checkbox"],
+              ["Inline Chat", "behaviour.inlineChat", "checkbox"],
+              ["Timestamps", "behaviour.showTimestamps", "checkbox"],
+              ["Timestamp Format", "behaviour.timestampFormat", "select", ["time", "datetime"]],
+              ["Mention Highlight", "behaviour.highlightMentions", "checkbox"]
+            ]
+          },
+          {
+            title: "Visibility",
+            description: "Show or hide repeated message parts without changing allowed sources.",
+            controls: [
+              ["Avatars", "behaviour.showAvatars", "checkbox"],
+              ["Badges", "behaviour.showBadges", "checkbox"],
+              ["Platform Icons", "behaviour.showPlatformIcons", "checkbox"],
+              ["Username Bubble Backgrounds", "style.showNameBackgrounds", "checkbox"],
+              ["Chat Message Backgrounds", "style.showMessageBackgrounds", "checkbox"],
+              ["Image/Preview Backgrounds", "style.showMediaBackgrounds", "checkbox"],
+              ["Border Glow", "style.borderGlow", "checkbox"],
+              ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
+              ["Emote Glow", "style.showEmoteGlow", "checkbox"],
+              ["Colored Text", "style.showColoredText", "checkbox"],
+              ["Minimal Style", "style.minimalStyle", "checkbox"]
+            ]
+          },
+          {
+            title: "Alert Behaviour",
+            description: "Controls alert visibility and alert-specific surfaces.",
+            controls: [
+              ["Alerts", "behaviour.showAlerts", "checkbox"],
+              ["Compact Alerts", "behaviour.compactAlerts", "checkbox"],
+              ["Alert Card Backgrounds", "style.showAlertBackgrounds", "checkbox"],
+              ["TikTok Gift Card Backgrounds", "style.showGiftBackgrounds", "checkbox"]
+            ]
+          },
+          {
+            title: "Auto Scroll / Lifespan",
+            description: "Controls automatic movement and timed message removal.",
+            controls: [
+              ["Auto Scroll", "behaviour.autoScroll", "checkbox"],
+              ["Scroll Direction", "behaviour.scrollDirection", "select", ["up", "down"]],
+              ["Hide After", "behaviour.removeMessagesAfterMs", "number", { min: 0, max: 600000, step: 1000 }],
+              ["Hide After Fade", "behaviour.hideAfterFade", "checkbox"]
+            ]
+          }
         ]
       },
       {
@@ -1513,6 +1590,19 @@
                 controls: [
                   ["Everyone", "behaviour.imageEmbeds.tiktok.everyone", "checkbox"]
                 ]
+              },
+              {
+                title: "Kick",
+                description: "Choose which Kick roles can post direct media embeds.",
+                path: "behaviour.imageEmbeds.kick.enabled",
+                type: "checkbox",
+                controls: [
+                  ["Everyone", "behaviour.imageEmbeds.kick.everyone", "checkbox"],
+                  ["Broadcaster", "behaviour.imageEmbeds.kick.broadcaster", "checkbox"],
+                  ["Moderators", "behaviour.imageEmbeds.kick.moderators", "checkbox"],
+                  ["VIPs", "behaviour.imageEmbeds.kick.vips", "checkbox"],
+                  ["Subscribers", "behaviour.imageEmbeds.kick.subscribers", "checkbox"]
+                ]
               }
             ]
           }
@@ -1535,6 +1625,8 @@
           ["Max Messages", "layout.maxMessages", "number", { min: 1, max: 500, step: 1 }],
           ["Chat Width", "layout.chatWidth", "sizingPreset", "chatWidth"],
           ["Message Width", "layout.maxMessageWidth", "sizingPreset", "messageWidth"],
+          ["Avatar Size", "layout.avatarSize", "range", { min: 0, max: 120, step: 1 }],
+          ["Avatar Distance", "layout.avatarGap", "range", { min: 0, max: 64, step: 1 }],
           ["Emote-Only Size", "style.emoteOnlyFontSize", "range", { min: 18, max: 64, step: 1 }],
           ["Gigantified Size", "style.gigantifiedFontSize", "range", { min: 24, max: 86, step: 1 }]
         ]
@@ -1545,9 +1637,15 @@
       "behaviour.sources.twitch": "twitch",
       "behaviour.sources.youtube": "youtube",
       "behaviour.sources.tiktok": "tiktok",
+      "behaviour.sources.kick": "kick",
       "behaviour.chat.twitch": "twitchChat",
       "behaviour.chat.youtube": "youtubeChat",
       "behaviour.chat.tiktok": "tiktokChat",
+      "behaviour.chat.kick": "kickChat",
+      "behaviour.alerts.kick.follows": "kickFollows",
+      "behaviour.alerts.kick.subs": "kickSubs",
+      "behaviour.alerts.kick.giftSubs": "kickGiftSubs",
+      "behaviour.alerts.kick.rewardRedemptions": "kickRewards",
       "behaviour.showAlerts": "alerts",
       "behaviour.showAvatars": "avatars",
       "behaviour.showBadges": "badges",
@@ -1568,6 +1666,12 @@
       "behaviour.imageEmbeds.youtube.members": "youtubeImagesMembers",
       "behaviour.imageEmbeds.tiktok.enabled": "tiktokImages",
       "behaviour.imageEmbeds.tiktok.everyone": "tiktokImagesEveryone",
+      "behaviour.imageEmbeds.kick.enabled": "kickImages",
+      "behaviour.imageEmbeds.kick.everyone": "kickImagesEveryone",
+      "behaviour.imageEmbeds.kick.broadcaster": "kickImagesBroadcaster",
+      "behaviour.imageEmbeds.kick.moderators": "kickImagesMods",
+      "behaviour.imageEmbeds.kick.vips": "kickImagesVips",
+      "behaviour.imageEmbeds.kick.subscribers": "kickImagesSubs",
       "behaviour.alerts.twitch.enabled": "twitchAlerts",
       "behaviour.alerts.twitch.announcements": "twitchAnnouncements",
       "behaviour.alerts.twitch.channelPointRedemptions": "twitchPoints",
@@ -1584,6 +1688,7 @@
       "behaviour.alerts.tiktok.follows": "tiktokFollows",
       "behaviour.alerts.tiktok.subscribers": "tiktokSubscribers",
       "behaviour.alerts.tiktok.gifts": "tiktokGifts",
+      "behaviour.alerts.tiktok.likes": "tiktokLikes",
       "behaviour.alerts.tiktok.treasureBoxes": "tiktokTreasure",
       "behaviour.alerts.donations.enabled": "donations",
       "behaviour.alerts.donations.streamlabs": "streamlabs",
@@ -1628,7 +1733,14 @@
       "style.colors.tiktok.follows": "tiktokFollowsColor",
       "style.colors.tiktok.subscribers": "tiktokSubscribersColor",
       "style.colors.tiktok.gifts": "tiktokGiftsColor",
+      "style.colors.tiktok.likes": "tiktokLikesColor",
       "style.colors.tiktok.treasureBoxes": "tiktokTreasureColor",
+      "style.colors.kick.chat": "kickChatColor",
+      "style.colors.kick.follows": "kickFollowsColor",
+      "style.colors.kick.subs": "kickSubsColor",
+      "style.colors.kick.giftSubs": "kickGiftSubsColor",
+      "style.colors.kick.rewardRedemptions": "kickRewardsColor",
+      "style.colors.text.kickName": "kickNameColor",
       "style.colors.donations.streamlabs": "streamlabsColor",
       "style.colors.donations.streamelements": "streamelementsColor",
       "style.colors.donations.kofi": "kofiColor",
@@ -1640,6 +1752,8 @@
       "style.accentFontFamily": "titleFont",
       "style.messageFontFamily": "messageFont",
       "style.titleFontSize": "titleSize",
+      "style.titleLineHeight": "titleLineHeight",
+      "style.messageLineHeight": "messageLineHeight",
       "style.bubbleShape": "bubbleShape",
       "style.nameBubbleRadius": "nameRadius",
       "style.bubbleSlant": "slant",
@@ -1653,9 +1767,21 @@
       "gigantified.enabled": "gigantified",
       "layout.maxMessages": "max",
       "style.messageFontSize": "messageSize",
+      "layout.avatarSize": "avatarSize",
+      "layout.avatarGap": "avatarGap",
+      "behaviour.inlineChat": "inline",
+      "behaviour.showTimestamps": "timestamps",
+      "behaviour.timestampFormat": "timestampFormat",
+      "behaviour.highlightMentions": "mentions",
+      "behaviour.compactAlerts": "compactAlerts",
+      "behaviour.autoScroll": "autoScroll",
+      "behaviour.scrollDirection": "scrollDirection",
+      "behaviour.hideAfterFade": "fadeAfter",
+      "style.minimalStyle": "minimal",
       "style.emoteOnlyFontSize": "emoteSize",
       "style.gigantifiedFontSize": "gigantifiedSize",
       "style.bubbleRadius": "bubbleRadius",
+      "behaviour.removeMessagesAfterMs": "removeAfter",
       "scrollTest.enabled": "test",
       "scrollTest.autoScroll": "testAutoScroll",
       "scrollTest.intervalMs": "testInterval",
@@ -2031,11 +2157,16 @@
       return window.getChatDefaultConfigValue?.(path);
     }
 
-    function writeConfig(path, value) {
-      window.setChatConfigValue?.(path, value);
+    function writeConfig(path, value, options = {}) {
+      window.setChatConfigValue?.(path, value, options);
 
       if (path === "behaviour.groupConsecutiveMessages") {
         window.sendStackedMessageTest?.();
+      }
+
+      if (options.deferUiSync) {
+        scheduleTypeStylePreviewRefresh();
+        return;
       }
 
       syncControls();
@@ -2080,7 +2211,7 @@
 
       if (control.kind === "gradient") {
         return [
-          ...(control.prefix.includes("Border") ? [`${control.pathPrefix}Enabled`] : []),
+          ...(control.prefix.includes("Border") || control.prefix.includes("Glow") ? [`${control.pathPrefix}Enabled`] : []),
           `${control.pathPrefix}Mode`,
           `${control.pathPrefix}Angle`,
           `${control.pathPrefix}Opacity`,
@@ -2193,18 +2324,37 @@
       if (type === "range") {
         const wrap = document.createElement("span");
         const output = document.createElement("span");
+        const number = document.createElement("input");
         wrap.className = "range-wrap";
         output.className = "range-value";
+        number.type = "number";
+        number.className = "range-number";
+        number.value = input.value;
+        ["min", "max", "step"].forEach(attr => {
+          if (input.hasAttribute(attr)) number.setAttribute(attr, input.getAttribute(attr));
+        });
         output.textContent = input.value;
-        wrap.append(input, output);
+        wrap.append(input, number, output);
         row.appendChild(wrap);
         input.addEventListener("input", () => {
           output.textContent = input.value;
-          writeConfig(path, Number(input.value));
+          number.value = input.value;
+          writeConfig(path, Number(input.value), { deferApply: true, deferUiSync: true });
         });
         input.addEventListener("change", () => {
           output.textContent = input.value;
+          number.value = input.value;
           writeConfig(path, Number(input.value));
+        });
+        number.addEventListener("input", () => {
+          input.value = number.value;
+          output.textContent = number.value;
+          writeConfig(path, Number(number.value), { deferApply: true, deferUiSync: true });
+        });
+        number.addEventListener("change", () => {
+          input.value = number.value;
+          output.textContent = number.value;
+          writeConfig(path, Number(number.value));
         });
         return row;
       }
@@ -2433,11 +2583,11 @@
 
       initialValues.set(`${pathPrefix}Angle`, readConfig(`${pathPrefix}Angle`));
       initialValues.set(`${pathPrefix}Opacity`, readConfig(`${pathPrefix}Opacity`));
-      if (group.prefix.includes("Border")) {
+      if (group.prefix.includes("Border") || group.prefix.includes("Glow")) {
         initialValues.set(`${pathPrefix}Enabled`, readConfig(`${pathPrefix}Enabled`));
       }
 
-      const enabledRow = group.prefix.includes("Border")
+      const enabledRow = group.prefix.includes("Border") || group.prefix.includes("Glow")
         ? createControl(["Enabled", `${pathPrefix}Enabled`, "checkbox"])
         : null;
 
@@ -3188,6 +3338,7 @@
     function getTypeStylePreviewPlatform(group, type = "") {
       if (group === "youtube") return "YouTube";
       if (group === "tiktok") return "TikTok";
+      if (group === "kick") return "Kick";
       if (group === "special") return "Twitch";
       if (group === "donations") {
         return donationPreviewPlatforms[type] || donationTypeOptions[0][0];
@@ -3300,7 +3451,10 @@
       icon.alt = "";
       icon.src = window.getPlatformIcon?.(item.platform) || "";
 
-      nameBubble.append(badges, name, icon);
+      nameBubble.append(badges, name);
+      if (icon.src) {
+        nameBubble.appendChild(icon);
+      }
       return nameBubble;
     }
 
@@ -3402,6 +3556,24 @@
         typeStyleEditorState.type,
         typeStyleEditorState.label
       );
+
+      el.className = `msg platform-${String(item.platform).toLowerCase()}`;
+      if (item.kind === "alert") el.classList.add("alert");
+      if (item.kind === "tiktokGift") el.className = "msg tiktok-gift platform-tiktok gift-tier-2";
+      if (item.special) el.classList.add(`special-${item.special}`);
+      el.dataset.kind = item.kind;
+      el.dataset.platform = item.platform;
+      el.dataset.alertType = item.alertType || "";
+      el.dataset.styleType = item.styleType || "";
+
+      const name = el.querySelector(".name");
+      if (name) name.textContent = item.user || item.label || typeStyleEditorState.label;
+
+      const text = el.querySelector(".text");
+      if (text) text.textContent = item.text || "";
+
+      const icon = el.querySelector(".platform-icon");
+      if (icon) icon.src = window.getPlatformIcon?.(item.platform) || "";
 
       window.applyPreviewPlatformVariables?.(el, item.platform, item);
     }
