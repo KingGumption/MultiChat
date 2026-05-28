@@ -156,16 +156,6 @@ body.monitor-mode {
   gap: var(--chat-row-gap);
 }
 
-body.monitor-mode #chat {
-  position: relative;
-  left: auto;
-  bottom: auto;
-  width: var(--chat-width);
-  max-width: min(var(--chat-width), calc(100vw - 24px));
-  margin: 12px auto;
-  padding-bottom: 24px;
-}
-
 body.scroll-down #chat {
   flex-direction: column-reverse;
 }
