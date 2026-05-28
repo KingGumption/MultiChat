@@ -193,6 +193,7 @@ window.CHAT_CONFIG = {
     timestampFormat: "time",
     inlineChat: false,
     highlightMentions: false,
+    monitorMode: false,
     autoScroll: true,
     scrollDirection: "up",
     hideAfterFade: true,

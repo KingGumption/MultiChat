@@ -196,6 +196,7 @@ const DEFAULT_CONFIG = {
     timestampFormat: "time",
     inlineChat: false,
     highlightMentions: false,
+    monitorMode: false,
     autoScroll: true,
     scrollDirection: "up",
     hideAfterFade: true,
@@ -1114,6 +1115,7 @@ function applyConfigToDocument() {
   document.body.classList.toggle("hide-colored-text", !cfg.style.showColoredText);
   document.body.classList.toggle("inline-chat", !!cfg.behaviour.inlineChat);
   document.body.classList.toggle("show-timestamps", !!cfg.behaviour.showTimestamps);
+  document.body.classList.toggle("monitor-mode", !!cfg.behaviour.monitorMode);
   document.body.classList.toggle("minimal-style", !!cfg.style.minimalStyle);
   document.body.classList.toggle("minimal-name-backgrounds", !!cfg.style.minimal?.nameBackgrounds);
   document.body.classList.toggle("minimal-message-backgrounds", !!cfg.style.minimal?.messageBackgrounds);
@@ -7263,6 +7265,8 @@ function getUrlConfigOverrides() {
     timestamps: "behaviour.showTimestamps",
     timestampFormat: "behaviour.timestampFormat",
     mentions: "behaviour.highlightMentions",
+    monitor: "behaviour.monitorMode",
+    dock: "behaviour.monitorMode",
     autoScroll: "behaviour.autoScroll",
     scrollDirection: "behaviour.scrollDirection",
     fadeAfter: "behaviour.hideAfterFade",

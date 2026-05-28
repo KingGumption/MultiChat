@@ -1703,7 +1703,8 @@
               ["Inline Chat", "behaviour.inlineChat", "checkbox"],
               ["Timestamps", "behaviour.showTimestamps", "checkbox"],
               ["Timestamp Format", "behaviour.timestampFormat", "select", ["time", "datetime"]],
-              ["Mention Highlight", "behaviour.highlightMentions", "checkbox"]
+              ["Mention Highlight", "behaviour.highlightMentions", "checkbox"],
+              ["Monitor Mode", "behaviour.monitorMode", "checkbox"]
             ]
           },
           {
@@ -1971,6 +1972,7 @@
       "behaviour.showTimestamps": "timestamps",
       "behaviour.timestampFormat": "timestampFormat",
       "behaviour.highlightMentions": "mentions",
+      "behaviour.monitorMode": "monitor",
       "behaviour.compactAlerts": "compactAlerts",
       "behaviour.autoScroll": "autoScroll",
       "behaviour.scrollDirection": "scrollDirection",
@@ -2057,6 +2059,7 @@
     }
 
     function resolveImportedUrlConfigPath(key) {
+      if (key === "dock") return "behaviour.monitorMode";
       return pathByAlias[key] || friendlyTypeStyleParamToPath(key) || key;
     }
 
