@@ -25,7 +25,7 @@ const DEFAULT_CONFIG = {
   },
 
   layout: {
-    maxMessages: 40,
+    maxMessages: 50,
     chatWidth: 820,
     left: 32,
     bottom: 32,
