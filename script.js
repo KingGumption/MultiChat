@@ -1,5 +1,12 @@
 const CONFIG = window.CHAT_CONFIG || {};
 
+const YOUTUBE_BADGE_ICONS = {
+  owner: "icons/badges/youtube-broadcaster.svg",
+  moderator: "icons/badges/youtube-moderator.svg",
+  member: "icons/badges/youtube-member.svg",
+  verified: "icons/badges/youtube-verified.svg"
+};
+
 const DEFAULT_CONFIG = {
   streamerbot: {
     host: "127.0.0.1",
@@ -6096,10 +6103,21 @@ function getYouTubeBadges(data) {
   const badges = [];
   const user = data.user || data.author || data;
 
-  if (user.isOwner || data.isOwner) badges.push({ name: "Owner", text: "OWNER" });
-  if (user.isModerator || data.isModerator) badges.push({ name: "Moderator", text: "MOD" });
-  if (user.isSponsor || data.isSponsor || user.isMember || data.isMember) badges.push({ name: "Member", text: "MEMBER" });
-  if (user.isVerified || data.isVerified) badges.push({ name: "Verified", text: "✓" });
+  if (user.isOwner || data.isOwner) {
+    badges.push({ name: "Owner", imageUrl: YOUTUBE_BADGE_ICONS.owner });
+  }
+
+  if (user.isModerator || data.isModerator) {
+    badges.push({ name: "Moderator", imageUrl: YOUTUBE_BADGE_ICONS.moderator });
+  }
+
+  if (user.isSponsor || data.isSponsor || user.isMember || data.isMember) {
+    badges.push({ name: "Member", imageUrl: YOUTUBE_BADGE_ICONS.member });
+  }
+
+  if (user.isVerified || data.isVerified) {
+    badges.push({ name: "Verified", imageUrl: YOUTUBE_BADGE_ICONS.verified });
+  }
 
   return badges;
 }

@@ -1114,6 +1114,16 @@ body.inline-chat .message-bubble {
   object-fit: contain;
 }
 
+.platform-youtube .badge {
+  width: 18px;
+  height: 18px;
+  padding: 2px;
+  border-radius: 999px;
+  background: rgb(0 0 0 / 28%);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 20%);
+  box-sizing: border-box;
+}
+
 .badge-text {
   display: inline-flex;
   align-items: center;
