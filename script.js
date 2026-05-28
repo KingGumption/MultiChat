@@ -25,7 +25,7 @@ const DEFAULT_CONFIG = {
   },
 
   layout: {
-    maxMessages: 18,
+    maxMessages: 40,
     chatWidth: 820,
     left: 32,
     bottom: 32,
@@ -40,7 +40,6 @@ const DEFAULT_CONFIG = {
 
   style: {
     fontFamily: "'Sora', sans-serif",
-
     accentFontFamily: "'Sora', sans-serif",
     messageFontFamily: "'Sora', sans-serif",
     titleFontSize: 12,
@@ -168,7 +167,6 @@ const DEFAULT_CONFIG = {
     messageLineHeight: 1.28,
     emoteOnlyFontSize: 30,
     gigantifiedFontSize: 44,
-
     bubbleRadius: 21,
     nameBubbleRadius: 20,
     minimalStyle: false
@@ -1322,12 +1320,22 @@ function applyStealthPresetTo(target) {
   setDeepValue(target, "style.showColoredText", false);
   setDeepValue(target, "style.borderGlow", false);
   setDeepValue(target, "style.minimalStyle", false);
+  setDeepValue(target, "animation.enabled", false);
+  setDeepValue(target, "behaviour.showPlatformIcons", false);
+  setDeepValue(target, "behaviour.showBadges", false);
+  setDeepValue(target, "layout.avatarSize", 30);
+  setDeepValue(target, "layout.avatarGap", 12);
 }
 
 function applyDefaultStylePreset() {
   Object.entries(DEFAULT_STYLE_PRESET).forEach(([key, value]) => {
     setDeepValue(cfg, `style.${key}`, cloneConfigValue(value));
   });
+
+  setDeepValue(cfg, "animation.enabled", true);
+  setDeepValue(cfg, "behaviour.showPlatformIcons", true);
+  setDeepValue(cfg, "behaviour.showBadges", true);
+  setDeepValue(cfg, "layout.avatarSize", 52);
 
   applyConfigToDocument();
 }

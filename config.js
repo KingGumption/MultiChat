@@ -19,7 +19,7 @@ window.CHAT_CONFIG = {
   },
 
   layout: {
-    maxMessages: 40,
+    maxMessages: 50,
     chatWidth: "clamp(320px, 92vw, 820px)",
     left: "clamp(12px, 4vw, 32px)",
     bottom: "clamp(12px, 4vw, 32px)",

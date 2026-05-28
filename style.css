@@ -2205,7 +2205,7 @@ body.stealth-mode .alert.platform-donordrive .bubble-stack::before {
 .alert.platform-fourthwall .name,
 .alert.platform-patreon .name,
 .alert.platform-donordrive .name {
-  font-size: 1.22em;
+  font-size: 1.12em;
   font-weight: 900;
   line-height: 1.05;
 
