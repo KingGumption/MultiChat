@@ -770,6 +770,75 @@
       font: 700 12px/1.25 Consolas, monospace;
     }
 
+    .url-tools {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .url-tools label {
+      display: grid;
+      gap: 6px;
+      color: rgba(255,255,255,0.66);
+      font: 800 12px/1.2 var(--font-family);
+    }
+
+    .url-import-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .url-import-input {
+      width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.88);
+      padding: 8px;
+      font: 700 12px/1.25 Consolas, monospace;
+    }
+
+    .url-import-button {
+      padding: 8px 10px;
+      border: 1px solid rgba(255,255,255,0.24);
+      border-radius: 8px;
+      background: rgba(10,10,18,0.78);
+      color: #ffffff;
+      font: 800 13px/1 sans-serif;
+      cursor: pointer;
+    }
+
+    .url-import-button:hover {
+      background: rgba(145,70,255,0.84);
+    }
+
+    .url-import-status {
+      min-height: 14px;
+      color: rgba(255,255,255,0.58);
+      font: 700 11px/1.25 var(--font-family);
+    }
+
+    .url-import-status.error {
+      color: #ff8aa8;
+    }
+
+    .url-quick-controls {
+      min-width: 0;
+    }
+
+    .url-quick-controls .url-tools {
+      margin-top: 0;
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .url-quick-controls .url-output {
+      margin-top: 0;
+    }
+
     .preview-pane {
       min-width: 0;
       height: 100vh;
@@ -797,8 +866,9 @@
       top: 12px;
       right: 12px;
       z-index: 70;
-      display: flex;
-      align-items: center;
+      width: min(680px, calc(100vw - 380px));
+      min-width: 380px;
+      display: grid;
       gap: 8px;
       padding: 8px 10px;
       border: 1px solid rgba(255,255,255,0.16);
@@ -808,6 +878,14 @@
         0 0 18px rgba(145,70,255,0.22),
         0 10px 24px rgba(0,0,0,0.30);
       backdrop-filter: blur(12px);
+    }
+
+    .autoscroll-control-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 0;
     }
 
     .autoscroll-quick-controls .config-control {
@@ -1091,17 +1169,15 @@
     <aside class="config-panel">
       <h1 class="config-title">Chat Config</h1>
       <div id="configControls"></div>
-      <div class="config-section">
-        <h2>URL</h2>
-        <input id="urlOutput" class="url-output" type="text" readonly>
-      </div>
     </aside>
 
     <section class="preview-pane" data-autoscroll-container>
       <div id="chat"></div>
     </section>
 
-    <div id="autoscrollQuickControls" class="autoscroll-quick-controls" aria-label="Auto scroll controls"></div>
+    <div id="autoscrollQuickControls" class="autoscroll-quick-controls" aria-label="Auto scroll controls">
+      <div id="urlQuickControls" class="url-quick-controls" aria-label="Overlay URL controls"></div>
+    </div>
     <div id="typeStyleModal" class="type-style-modal" hidden>
       <div class="type-style-modal-panel" role="dialog" aria-modal="true" aria-labelledby="typeStyleModalTitle">
         <header class="type-style-modal-header">
@@ -1245,32 +1321,44 @@
       };
     }
 
+    function glowControls(title, prefix, description = "") {
+      return {
+        title,
+        description,
+        controls: [
+          ["Enabled", `${prefix}Enabled`, "checkbox"],
+          ["Colour", `${prefix}Color`, "color"],
+          ["Opacity", `${prefix}Opacity`, "range", { min: 0, max: 1, step: 0.01 }]
+        ]
+      };
+    }
+
     const avatarTypeControls = [
-      gradientControls("Avatar Glow", "avatarGlow"),
+      glowControls("Avatar Glow", "avatarGlow"),
       gradientControls("Avatar Border", "avatarBorder")
     ];
 
     const titleTypeControls = [
-      gradientControls("Title Glow", "titleGlow"),
+      glowControls("Title Glow", "titleGlow"),
       gradientControls("Title Border", "titleBorder"),
       gradientControls("Name Section Gradient", "titleBg"),
       gradientControls("Platform Icon Section Gradient", "titleIconBg")
     ];
 
     const messageTypeControls = [
-      gradientControls("Message Glow", "messageGlow"),
+      glowControls("Message Glow", "messageGlow"),
       gradientControls("Message Border", "messageBorder"),
       gradientControls("Message Background Gradient", "messageBg")
     ];
 
     const alertTypeControls = [
-      gradientControls("Alert Glow", "alertGlow"),
+      glowControls("Alert Glow", "alertGlow"),
       gradientControls("Alert Border", "alertBorder"),
       gradientControls("Alert Background Gradient", "alertBg")
     ];
 
     const giftTypeControls = [
-      gradientControls("Gift Glow", "giftGlow"),
+      glowControls("Gift Glow", "giftGlow"),
       gradientControls("Gift Border", "giftBorder"),
       gradientControls("Gift Background Gradient", "giftBg")
     ];
@@ -1437,14 +1525,81 @@
           }
         ]
       },
+            {
+        title: "Presets",
+        description: "Apply the default, stealth, or minimal visual mode, then tune each preset.",
+        controls: [
+          {
+            title: "Default",
+            description: "Restore the standard visual mode and reset mode-specific layout values.",
+            preset: "default",
+            controls: [
+              ["Name Backgrounds", "style.showNameBackgrounds", "checkbox"],
+              ["Message Backgrounds", "style.showMessageBackgrounds", "checkbox"],
+              ["Alert Backgrounds", "style.showAlertBackgrounds", "checkbox"],
+              ["Gift Backgrounds", "style.showGiftBackgrounds", "checkbox"],
+              ["Media Backgrounds", "style.showMediaBackgrounds", "checkbox"],
+              ["Border Glow", "style.borderGlow", "checkbox"],
+              ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
+              ["Emote Glow", "style.showEmoteGlow", "checkbox"],
+              ["Colored Text", "style.showColoredText", "checkbox"],
+              ["Badges", "behaviour.showBadges", "checkbox"],
+              ["Platform Icons", "behaviour.showPlatformIcons", "checkbox"],
+              ["Animations", "animation.enabled", "checkbox"],
+              ["Avatar Size", "layout.avatarSize", "range", { min: 0, max: 120, step: 1 }],
+              ["Avatar Distance", "layout.avatarGap", "range", { min: 0, max: 64, step: 1 }]
+            ]
+          },
+          {
+            title: "Stealth",
+            description: "Use a compact transparent mode for minimal overlay presence.",
+            preset: "stealth",
+            path: "style.stealthMode",
+            type: "checkbox",
+            controls: [
+              ["Name Backgrounds", "style.showNameBackgrounds", "checkbox"],
+              ["Message Backgrounds", "style.showMessageBackgrounds", "checkbox"],
+              ["Alert Backgrounds", "style.showAlertBackgrounds", "checkbox"],
+              ["Gift Backgrounds", "style.showGiftBackgrounds", "checkbox"],
+              ["Media Backgrounds", "style.showMediaBackgrounds", "checkbox"],
+              ["Border Glow", "style.borderGlow", "checkbox"],
+              ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
+              ["Emote Glow", "style.showEmoteGlow", "checkbox"],
+              ["Colored Text", "style.showColoredText", "checkbox"],
+              ["Badges", "behaviour.showBadges", "checkbox"],
+              ["Platform Icons", "behaviour.showPlatformIcons", "checkbox"],
+              ["Animations", "animation.enabled", "checkbox"],
+              ["Avatar Size", "layout.avatarSize", "range", { min: 0, max: 120, step: 1 }],
+              ["Avatar Distance", "layout.avatarGap", "range", { min: 0, max: 64, step: 1 }]
+            ]
+          },
+          {
+            title: "Minimal",
+            description: "Use a simplified visual mode while choosing which features remain visible.",
+            preset: "minimal",
+            path: "style.minimalStyle",
+            type: "checkbox",
+            controls: [
+              ["Name Backgrounds", "style.minimal.nameBackgrounds", "checkbox"],
+              ["Message Backgrounds", "style.minimal.messageBackgrounds", "checkbox"],
+              ["Alert Backgrounds", "style.minimal.alertBackgrounds", "checkbox"],
+              ["Gift Backgrounds", "style.minimal.giftBackgrounds", "checkbox"],
+              ["Glow", "style.minimal.glow", "checkbox"],
+              ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
+              ["Emote Glow", "style.showEmoteGlow", "checkbox"],
+              ["Shine", "style.minimal.shine", "checkbox"],
+              ["Animations", "style.minimal.animations", "checkbox"],
+              ["Badges", "behaviour.showBadges", "checkbox"],
+              ["Platform Icons", "behaviour.showPlatformIcons", "checkbox"],
+              ["Avatar Size", "layout.avatarSize", "range", { min: 0, max: 120, step: 1 }],
+              ["Avatar Distance", "layout.avatarGap", "range", { min: 0, max: 64, step: 1 }]
+            ]
+          }
+        ]
+      },
       {
         title: "Styles",
-        description: "Apply quick style presets without changing which messages are allowed.",
-        actions: [
-          ["Default", "default"],
-          ["Stealth", "stealth"],
-          ["Minimal", "minimal"]
-        ],
+        description: "Adjust typography, colour, and message shape.",
         controls: [
           ["Use Global Accent Colour", "style.useCustomAccentColor", "checkbox"],
           ["Global Accent Colour", "style.accentColor", "color"],
@@ -1564,8 +1719,7 @@
               ["Border Glow", "style.borderGlow", "checkbox"],
               ["Avatar Glow", "style.showAvatarGlow", "checkbox"],
               ["Emote Glow", "style.showEmoteGlow", "checkbox"],
-              ["Colored Text", "style.showColoredText", "checkbox"],
-              ["Minimal Style", "style.minimalStyle", "checkbox"]
+              ["Colored Text", "style.showColoredText", "checkbox"]
             ]
           },
           {
@@ -1856,6 +2010,81 @@
 
     function getUrlParamName(path) {
       return aliasByPath[path] || getFriendlyTypeStyleParam(path) || path;
+    }
+
+    const pathByAlias = Object.fromEntries(
+      Object.entries(aliasByPath).map(([path, alias]) => [alias, path])
+    );
+
+    function friendlyTypeStyleParamToPath(key) {
+      const value = String(key || "");
+      const typeStyles = readDefaultConfig("style.typeStyles") || {};
+      const group = Object.keys(typeStyles)
+        .sort((a, b) => b.length - a.length)
+        .find(candidate => value.startsWith(candidate));
+
+      if (!group) return "";
+
+      const afterGroup = value.slice(group.length);
+      const types = typeStyles[group] || {};
+      const type = Object.keys(types)
+        .map(candidate => ({
+          raw: candidate,
+          param: toUrlPascalPart(candidate)
+        }))
+        .sort((a, b) => b.param.length - a.param.length)
+        .find(candidate => afterGroup.startsWith(candidate.param));
+
+      if (!type) return "";
+
+      const fieldParam = afterGroup.slice(type.param.length);
+      if (!fieldParam) return "";
+
+      const style = types[type.raw] || {};
+      const field = Object.keys(style)
+        .map(candidate => ({
+          raw: candidate,
+          param: toUrlPascalPart(candidate.endsWith("Enabled")
+            ? candidate.slice(0, -"Enabled".length)
+            : candidate)
+        }))
+        .sort((a, b) => b.param.length - a.param.length)
+        .find(candidate => candidate.param === fieldParam);
+
+      if (!field) return "";
+
+      return `style.typeStyles.${group}.${type.raw}.${field.raw}`;
+    }
+
+    function resolveImportedUrlConfigPath(key) {
+      return pathByAlias[key] || friendlyTypeStyleParamToPath(key) || key;
+    }
+
+    function isAllowedImportedUrlConfigPath(path) {
+      return [
+        "layout.",
+        "style.",
+        "behaviour.",
+        "animation.",
+        "scrollTest.",
+        "highlight.",
+        "gigantified.",
+        "thirdPartyEmotes.",
+        "streamerbot.",
+        "tikfinity."
+      ].some(prefix => String(path || "").startsWith(prefix));
+    }
+
+    function parseImportedUrlConfigValue(value) {
+      const text = String(value || "").trim();
+      const lower = text.toLowerCase();
+
+      if (["true", "1", "yes", "on"].includes(lower)) return true;
+      if (["false", "0", "no", "off"].includes(lower)) return false;
+      if (lower === "null") return null;
+      if (/^-?\d+(?:\.\d+)?$/.test(text)) return Number(text);
+
+      return text;
     }
 
     const packagedFontFamilies = [
@@ -2201,6 +2430,19 @@
       return window.getChatDefaultConfigValue?.(path);
     }
 
+    function getActiveStylePreset() {
+      if (readConfig("style.stealthMode")) return "stealth";
+      if (readConfig("style.minimalStyle")) return "minimal";
+      return "default";
+    }
+
+    function applyStylePreset(preset) {
+      window.applyChatStylePreset?.(preset);
+      syncControls();
+      refreshTypeStylePreview();
+      updateUrlOutput();
+    }
+
     function writeConfig(path, value, options = {}) {
       window.setChatConfigValue?.(path, value, options);
 
@@ -2281,7 +2523,15 @@
     }
 
     function syncControls() {
-      document.querySelectorAll(".config-control[data-path]").forEach(row => {
+      document.querySelectorAll(".config-control[data-path], .config-control[data-preset-mode]").forEach(row => {
+        if (row.dataset.presetMode) {
+          const presetInput = row.querySelector("input");
+          if (presetInput) {
+            presetInput.checked = getActiveStylePreset() === row.dataset.presetMode;
+          }
+          return;
+        }
+
         const path = row.dataset.path;
         const fontInput = row.querySelector("[data-font-picker-input]");
         const input = row.querySelector("input, select");
@@ -3226,6 +3476,10 @@
         return createGradientEditor(group);
       }
 
+      if (group.kind === "url") {
+        return createUrlEditor(group);
+      }
+
       const details = document.createElement("details");
       details.className = "config-group";
 
@@ -3233,6 +3487,9 @@
       summary.className = "config-control config-group-summary";
       if (group.path) {
         summary.dataset.path = group.path;
+      }
+      if (group.preset) {
+        summary.dataset.presetMode = group.preset;
       }
 
       const text = document.createElement("span");
@@ -3255,7 +3512,25 @@
         summary.appendChild(resetButton);
       }
 
-      if (group.path) {
+      if (group.preset) {
+        const input = document.createElement("input");
+        input.type = group.type || "checkbox";
+        input.checked = getActiveStylePreset() === group.preset;
+        if (group.path) {
+          initialValues.set(group.path, readConfig(group.path));
+        }
+        input.addEventListener("click", event => event.stopPropagation());
+        input.addEventListener("input", () => {
+          if (input.checked) {
+            applyStylePreset(group.preset);
+          } else if (getActiveStylePreset() === group.preset) {
+            applyStylePreset("default");
+          } else {
+            syncControls();
+          }
+        });
+        summary.appendChild(input);
+      } else if (group.path) {
         const input = document.createElement("input");
         input.type = group.type || "checkbox";
         input.checked = !!readConfig(group.path);
@@ -3277,7 +3552,24 @@
         controls.appendChild(description);
       }
 
-      group.controls.forEach(control => {
+      if (group.actions) {
+        const actions = document.createElement("div");
+        actions.className = "config-actions";
+
+        group.actions.forEach(([label, preset]) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = label;
+          button.addEventListener("click", () => {
+            applyStylePreset(preset);
+          });
+          actions.appendChild(button);
+        });
+
+        controls.appendChild(actions);
+      }
+
+      (group.controls || []).forEach(control => {
         controls.appendChild(
           Array.isArray(control)
             ? createControl(control)
@@ -3478,6 +3770,10 @@
       const nameBubble = document.createElement("div");
       nameBubble.className = "name-bubble";
 
+      const glow = document.createElement("span");
+      glow.className = "bubble-glow title-glow-layer";
+      glow.setAttribute("aria-hidden", "true");
+
       const badges = document.createElement("span");
       badges.className = "badges";
 
@@ -3495,7 +3791,7 @@
       icon.alt = "";
       icon.src = window.getPlatformIcon?.(item.platform) || "";
 
-      nameBubble.append(badges, name);
+      nameBubble.append(glow, badges, name);
       if (icon.src) {
         nameBubble.appendChild(icon);
       }
@@ -3542,6 +3838,10 @@
         const card = document.createElement("div");
         card.className = "tiktok-gift-card";
 
+        const glow = document.createElement("span");
+        glow.className = "bubble-glow gift-glow-layer";
+        glow.setAttribute("aria-hidden", "true");
+
         const info = document.createElement("div");
         info.className = "tiktok-gift-info";
 
@@ -3558,7 +3858,7 @@
         count.textContent = `x${item.count}`;
 
         info.append(user, text);
-        card.append(info, count);
+        card.append(glow, info, count);
         el.append(avatarWrap, card);
       } else {
         const avatarWrap = document.createElement("div");
@@ -3568,14 +3868,25 @@
         const stack = document.createElement("div");
         stack.className = "bubble-stack";
 
+        if (item.kind === "alert") {
+          const glow = document.createElement("span");
+          glow.className = "bubble-glow alert-glow-layer";
+          glow.setAttribute("aria-hidden", "true");
+          stack.appendChild(glow);
+        }
+
         const messageBubble = document.createElement("div");
         messageBubble.className = "message-bubble";
+
+        const messageGlow = document.createElement("span");
+        messageGlow.className = "bubble-glow message-glow-layer";
+        messageGlow.setAttribute("aria-hidden", "true");
 
         const messageText = document.createElement("span");
         messageText.className = "text";
         messageText.textContent = item.text;
 
-        messageBubble.appendChild(messageText);
+        messageBubble.append(messageGlow, messageText);
         stack.append(makePreviewNameBubble(item), messageBubble);
         el.append(avatarWrap, stack);
       }
@@ -3675,6 +3986,147 @@
       return grid;
     }
 
+    function createUrlEditor(group) {
+      const details = document.createElement("details");
+      details.className = "config-group";
+      details.open = true;
+
+      const summary = document.createElement("summary");
+      summary.className = "config-control config-group-summary";
+
+      const text = document.createElement("span");
+      text.textContent = group.title;
+      summary.appendChild(text);
+
+      const controls = document.createElement("div");
+      controls.className = "config-group-controls";
+
+      if (group.description) {
+        const description = document.createElement("p");
+        description.className = "config-group-description";
+        description.textContent = group.description;
+        controls.appendChild(description);
+      }
+
+      const tools = document.createElement("div");
+      tools.className = "url-tools";
+
+      const outputLabel = document.createElement("label");
+      outputLabel.textContent = "Generated URL";
+
+      const output = document.createElement("input");
+      output.id = "urlOutput";
+      output.className = "url-output";
+      output.type = "text";
+      output.readOnly = true;
+      outputLabel.appendChild(output);
+
+      const importLabel = document.createElement("label");
+      importLabel.textContent = "Paste URL";
+
+      const importRow = document.createElement("div");
+      importRow.className = "url-import-row";
+
+      const importInput = document.createElement("input");
+      importInput.id = "urlImportInput";
+      importInput.className = "url-import-input";
+      importInput.type = "text";
+      importInput.placeholder = "Paste a previously generated overlay URL";
+
+      const importButton = document.createElement("button");
+      importButton.className = "url-import-button";
+      importButton.type = "button";
+      importButton.textContent = "Apply";
+
+      const status = document.createElement("div");
+      status.id = "urlImportStatus";
+      status.className = "url-import-status";
+      status.setAttribute("aria-live", "polite");
+
+      const applyImport = () => importConfigFromUrl(importInput.value, status);
+      importButton.addEventListener("click", applyImport);
+      importInput.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        applyImport();
+      });
+      importInput.addEventListener("paste", () => {
+        requestAnimationFrame(() => {
+          if (importInput.value.trim()) {
+            applyImport();
+          }
+        });
+      });
+
+      importRow.append(importInput, importButton);
+      importLabel.appendChild(importRow);
+      tools.append(outputLabel, importLabel, status);
+      controls.appendChild(tools);
+      details.append(summary, controls);
+
+      return details;
+    }
+
+    function buildUrlQuickControls() {
+      const root = document.getElementById("urlQuickControls");
+      if (!root) return;
+
+      const tools = document.createElement("div");
+      tools.className = "url-tools";
+
+      const outputLabel = document.createElement("label");
+      outputLabel.textContent = "Generated URL";
+
+      const output = document.createElement("input");
+      output.id = "urlOutput";
+      output.className = "url-output";
+      output.type = "text";
+      output.readOnly = true;
+      outputLabel.appendChild(output);
+
+      const importLabel = document.createElement("label");
+      importLabel.textContent = "Paste URL";
+
+      const importRow = document.createElement("div");
+      importRow.className = "url-import-row";
+
+      const importInput = document.createElement("input");
+      importInput.id = "urlImportInput";
+      importInput.className = "url-import-input";
+      importInput.type = "text";
+      importInput.placeholder = "Paste a previously generated overlay URL";
+
+      const importButton = document.createElement("button");
+      importButton.className = "url-import-button";
+      importButton.type = "button";
+      importButton.textContent = "Apply";
+
+      const status = document.createElement("div");
+      status.id = "urlImportStatus";
+      status.className = "url-import-status";
+      status.setAttribute("aria-live", "polite");
+
+      const applyImport = () => importConfigFromUrl(importInput.value, status);
+      importButton.addEventListener("click", applyImport);
+      importInput.addEventListener("keydown", event => {
+        if (event.key !== "Enter") return;
+        event.preventDefault();
+        applyImport();
+      });
+      importInput.addEventListener("paste", () => {
+        requestAnimationFrame(() => {
+          if (importInput.value.trim()) {
+            applyImport();
+          }
+        });
+      });
+
+      importRow.append(importInput, importButton);
+      importLabel.appendChild(importRow);
+      tools.append(outputLabel, importLabel, status);
+      root.appendChild(tools);
+    }
+
     function buildPanel() {
       const root = document.getElementById("configControls");
 
@@ -3702,10 +4154,7 @@
             button.type = "button";
             button.textContent = label;
             button.addEventListener("click", () => {
-              window.applyChatStylePreset?.(preset);
-              syncControls();
-              refreshTypeStylePreview();
-              updateUrlOutput();
+              applyStylePreset(preset);
             });
             actions.appendChild(button);
           });
@@ -3732,12 +4181,20 @@
     }
 
     function updateUrlOutput() {
-      const params = new URLSearchParams();
+      const changedValues = new Map();
 
       initialValues.forEach((initial, path) => {
         const current = readConfig(path);
 
         if (String(current) === String(initial)) return;
+
+        changedValues.set(path, current);
+      });
+
+      const params = new URLSearchParams();
+
+      changedValues.forEach((current, path) => {
+        if (shouldOmitGeneratedUrlParam(path, changedValues)) return;
 
         params.set(getUrlParamName(path), current);
       });
@@ -3746,7 +4203,129 @@
       const url = getOverlayUrl();
       url.search = query;
       url.hash = "";
-      document.getElementById("urlOutput").value = url.toString();
+      const output = document.getElementById("urlOutput");
+      if (output) {
+        output.value = serializeOverlayUrl(url);
+      }
+    }
+
+    function shouldOmitGeneratedUrlParam(path, changedValues) {
+      const value = String(path || "");
+      const chatSource = value.match(/^behaviour\.chat\.(twitch|youtube|tiktok|kick)$/);
+
+      if (chatSource && changedValues.has(`behaviour.sources.${chatSource[1]}`)) {
+        return true;
+      }
+
+      const alertSource = value.match(/^behaviour\.alerts\.(twitch|youtube|tiktok)\.(enabled|[^.]+)$/);
+
+      if (alertSource && changedValues.has(`behaviour.sources.${alertSource[1]}`)) {
+        return true;
+      }
+
+      if (
+        alertSource &&
+        alertSource[2] !== "enabled" &&
+        changedValues.has(`behaviour.alerts.${alertSource[1]}.enabled`)
+      ) {
+        return true;
+      }
+
+      return false;
+    }
+
+    function serializeOverlayUrl(url) {
+      const serialized = url.toString();
+
+      if (url.protocol !== "file:") return serialized;
+
+      return serialized.replace(/^file:\/\/\/([A-Za-z])%3A/i, "file:///$1:");
+    }
+
+    function parseImportUrl(value) {
+      const text = String(value || "").trim();
+      if (!text) return null;
+
+      const base = getOverlayUrl();
+
+      if (text.startsWith("?")) {
+        base.search = text;
+        base.hash = "";
+        return base;
+      }
+
+      return new URL(text, base);
+    }
+
+    function importConfigFromUrl(value, statusEl = null) {
+      const setStatus = (message, isError = false) => {
+        if (!statusEl) return;
+        statusEl.textContent = message;
+        statusEl.classList.toggle("error", !!isError);
+      };
+
+      let url;
+
+      try {
+        url = parseImportUrl(value);
+      } catch {
+        setStatus("That does not look like a valid URL.", true);
+        return;
+      }
+
+      if (!url || !url.searchParams.size) {
+        setStatus("No config parameters found in that URL.", true);
+        return;
+      }
+
+      const entries = [];
+      let requestedStylePreset = "";
+      let ignored = 0;
+
+      url.searchParams.forEach((rawValue, rawKey) => {
+        const path = resolveImportedUrlConfigPath(rawKey);
+
+        if (!isAllowedImportedUrlConfigPath(path)) {
+          ignored += 1;
+          return;
+        }
+
+        const parsedValue = parseImportedUrlConfigValue(rawValue);
+
+        if (path === "style.stealthMode" && parsedValue) {
+          requestedStylePreset = "stealth";
+          return;
+        }
+
+        if (path === "style.minimalStyle" && parsedValue) {
+          requestedStylePreset = "minimal";
+          return;
+        }
+
+        entries.push([path, parsedValue]);
+      });
+
+      const baselineEntries = [...initialValues.entries()]
+        .filter(([, initial]) => initial !== undefined)
+        .map(([path, initial]) => [path, initial]);
+
+      window.setChatConfigValues?.(baselineEntries, { deferApply: true });
+
+      if (requestedStylePreset) {
+        window.applyChatStylePreset?.(requestedStylePreset);
+      }
+
+      entries.forEach(([path, parsedValue]) => {
+        window.setChatConfigValue?.(path, parsedValue, { deferApply: true });
+      });
+
+      window.applyChatConfigToDocument?.();
+      syncControls();
+      refreshTypeStylePreview();
+      updateUrlOutput();
+
+      const appliedCount = entries.length + (requestedStylePreset ? 1 : 0);
+      setStatus(`Applied ${appliedCount} setting${appliedCount === 1 ? "" : "s"}${ignored ? `, ignored ${ignored}` : ""}.`);
     }
 
     function getOverlayUrl() {
@@ -3774,12 +4353,15 @@
       const root = document.getElementById("autoscrollQuickControls");
       if (!root) return;
 
+      const row = document.createElement("div");
+      row.className = "autoscroll-control-row";
+
       [
         ["Enabled", "scrollTest.enabled", "checkbox"],
         ["Auto Scroll", "scrollTest.autoScroll", "checkbox"],
         ["Interval", "scrollTest.intervalMs", "number", { min: 200, max: 10000, step: 100 }]
       ].forEach(control => {
-        root.appendChild(createControl(control));
+        row.appendChild(createControl(control));
       });
 
       const restartButton = document.createElement("button");
@@ -3796,11 +4378,13 @@
         window.stopScrollTestMessages?.("Manual stop");
       });
 
-      root.append(
+      row.append(
         buildSurfacePicker("test-area", "Test area background", testAreaSurfaceState, setTestAreaSurface),
         restartButton,
         stopButton
       );
+
+      root.appendChild(row);
     }
 
     document.getElementById("typeStyleModalClose")?.addEventListener("click", closeTypeStyleEditor);
@@ -3831,8 +4415,10 @@
       }
     });
 
+    buildUrlQuickControls();
     buildPanel();
     buildAutoscrollQuickControls();
+    updateUrlOutput();
     setTypeStylePreviewBackground(typeStyleEditorState.previewBg, typeStyleEditorState.previewBgColor);
     setTestAreaSurface(testAreaSurfaceState.mode, testAreaSurfaceState.color);
     syncControls();

@@ -415,6 +415,13 @@ body.hide-border-glow .tiktok-gift-card {
     0 10px 20px rgba(0,0,0,0.34);
 }
 
+body.hide-border-glow .title-glow-layer,
+body.hide-border-glow .message-glow-layer,
+body.hide-border-glow .alert-glow-layer,
+body.hide-border-glow .gift-glow-layer {
+  display: none;
+}
+
 body.no-animations *,
 body.no-animations *::before,
 body.no-animations *::after {
@@ -529,6 +536,13 @@ body.stealth-mode:not(.stealth-name-backgrounds) .alert.compact-alert .name-bubb
 
 body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card::before,
 body.stealth-mode:not(.stealth-gift-backgrounds) .tiktok-gift-card::after {
+  display: none;
+}
+
+body.stealth-mode:not(.stealth-name-backgrounds) .title-glow-layer,
+body.stealth-mode:not(.stealth-message-backgrounds) .message-glow-layer,
+body.stealth-mode:not(.stealth-alert-backgrounds) .alert-glow-layer,
+body.stealth-mode:not(.stealth-gift-backgrounds) .gift-glow-layer {
   display: none;
 }
 
@@ -695,6 +709,54 @@ body.bubble-shape-square .media-embed-tenor {
   z-index: 4;
 }
 
+.bubble-glow {
+  position: absolute !important;
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: -1 !important;
+  background: transparent !important;
+  border-radius: var(--glow-radius, var(--bubble-radius));
+  box-shadow:
+    0 0 var(--glow-blur, 18px) var(--glow-spread, 7px) var(--glow-color, var(--platform-glow)),
+    0 0 calc(var(--glow-blur, 18px) * 1.45) calc(var(--glow-spread, 7px) * 0.45) color-mix(in srgb, var(--glow-color, var(--platform-glow)) 58%, transparent);
+}
+
+.title-glow-layer {
+  --glow-radius: var(--name-bubble-radius);
+  --glow-color: var(--title-glow-color);
+  --glow-blur: 16px;
+  --glow-spread: 6px;
+  inset: 0;
+  opacity: 1;
+}
+
+.message-glow-layer {
+  --glow-radius: var(--bubble-radius);
+  --glow-color: var(--message-glow-color);
+  --glow-blur: 20px;
+  --glow-spread: 8px;
+  inset: 0;
+  opacity: 1;
+}
+
+.alert-glow-layer {
+  --glow-radius: var(--bubble-radius);
+  --glow-color: var(--alert-glow-color);
+  --glow-blur: 20px;
+  --glow-spread: 8px;
+  inset: 0;
+  opacity: 0.9;
+}
+
+.gift-glow-layer {
+  --glow-radius: var(--bubble-radius);
+  --glow-color: var(--gift-glow-color);
+  --glow-blur: 21px;
+  --glow-spread: 8px;
+  inset: 0;
+  opacity: 1;
+}
+
 /* Name/header bubble */
 .name-bubble {
   position: relative;
@@ -722,7 +784,6 @@ body.bubble-shape-square .media-embed-tenor {
   background: var(--title-icon-bg-gradient);
 
   box-shadow:
-    0 0 18px var(--title-glow-color),
     0 8px 18px rgba(0,0,0,0.34);
 }
 
@@ -886,12 +947,12 @@ body.name-icon-left .name-bubble .badges:empty + .name {
   border-radius: var(--bubble-radius);
   border-width: 0;
   border-color: transparent;
+  overflow: visible;
 
   --message-fill-gradient: var(--message-bg-gradient) padding-box;
   background: var(--message-fill-gradient);
 
   box-shadow:
-    0 0 22px var(--message-glow-color),
     inset 0 1px 0 rgba(255,255,255,0.12),
     inset 0 -1px 0 rgba(0,0,0,0.28),
     0 12px 28px rgba(0,0,0,0.42);
@@ -1314,8 +1375,11 @@ body.inline-chat .message-bubble {
   border: var(--alert-border-width) solid transparent;
   --alert-fill-gradient: var(--alert-bg-gradient) padding-box;
   background: var(--alert-fill-gradient);
+  isolation: isolate;
+  overflow: hidden;
   box-shadow:
-    0 0 22px var(--alert-glow-color),
+    0 0 20px 8px var(--alert-glow-color),
+    0 0 29px 4px color-mix(in srgb, var(--alert-glow-color) 58%, transparent),
     0 10px 24px rgba(0,0,0,0.34);
 }
 
@@ -1353,6 +1417,12 @@ body.inline-chat .message-bubble {
 .alert .name-bubble::after,
 .alert .message-bubble::before,
 .alert .message-bubble::after {
+  display: none;
+}
+
+.alert .alert-glow-layer,
+.alert .title-glow-layer,
+.alert .message-glow-layer {
   display: none;
 }
 
@@ -1429,12 +1499,18 @@ body.name-icon-left .alert .name {
     var(--gift-border-gradient) border-box;
 
   box-shadow:
-    0 0 24px var(--gift-glow-color),
+     0 0 21px 8px var(--gift-glow-color),
+     0 0 30px 4px color-mix(in srgb, var(--gift-glow-color) 58%, transparent),
      inset 0 1px 0 rgba(255,255,255,0.12),
      0 12px 28px rgba(0,0,0,0.42);
 
   position: relative;
+  isolation: isolate;
   overflow: hidden;
+}
+
+.tiktok-gift-card .gift-glow-layer {
+  display: none;
 }
 
 body.use-twitch-name-colors .platform-twitch.has-twitch-name-color .name {
@@ -2021,9 +2097,7 @@ body.hide-avatars .tiktok-gift .avatar-wrap {
 .alert.platform-fourthwall,
 .alert.platform-patreon,
 .alert.platform-donordrive {
-  animation:
-    donationAlertSlam 0.55s cubic-bezier(.17,.89,.28,1.35),
-    donationAlertGlow 1.4s ease-in-out 3;
+  animation: donationAlertSlam 0.55s cubic-bezier(.17,.89,.28,1.35);
 }
 
 /* Donation alert card background inherits brand variables */
@@ -2052,28 +2126,54 @@ body.minimal-style {
   --platform-glow: transparent;
 }
 
-body.minimal-style .name-bubble,
-body.minimal-style .message-bubble,
-body.minimal-style .tiktok-gift-card {
+body.minimal-style:not(.minimal-name-backgrounds) .name-bubble,
+body.minimal-style:not(.minimal-message-backgrounds) .message-bubble,
+body.minimal-style:not(.minimal-gift-backgrounds) .tiktok-gift-card {
   background: transparent;
   border-color: transparent;
   box-shadow: none;
 }
 
-body.minimal-style .name-bubble::before,
-body.minimal-style .name-bubble::after,
-body.minimal-style .message-bubble::before,
-body.minimal-style .message-bubble::after,
-body.minimal-style .tiktok-gift-card::before,
-body.minimal-style .tiktok-gift-card::after {
+body.minimal-style:not(.minimal-name-backgrounds) .name-bubble::before,
+body.minimal-style:not(.minimal-name-backgrounds) .name-bubble::after,
+body.minimal-style:not(.minimal-message-backgrounds) .message-bubble::before,
+body.minimal-style:not(.minimal-message-backgrounds) .message-bubble::after,
+body.minimal-style:not(.minimal-gift-backgrounds) .tiktok-gift-card::before,
+body.minimal-style:not(.minimal-gift-backgrounds) .tiktok-gift-card::after,
+body.minimal-style:not(.minimal-shine) .tiktok-gift-card::before,
+body.minimal-style:not(.minimal-shine) .tiktok-gift-card::after {
   display: none;
 }
 
-body.minimal-style .alert .bubble-stack,
-body.minimal-style .tiktok-gift-card {
+body.minimal-style:not(.minimal-glow) .title-glow-layer,
+body.minimal-style:not(.minimal-glow) .message-glow-layer,
+body.minimal-style:not(.minimal-glow) .alert-glow-layer,
+body.minimal-style:not(.minimal-glow) .gift-glow-layer {
+  display: none;
+}
+
+body.minimal-style.minimal-alert-backgrounds .alert .bubble-stack,
+body.minimal-style.minimal-gift-backgrounds .tiktok-gift-card {
   background: rgba(22,22,22,0.88);
   border-color: rgba(255,255,255,0.14);
   box-shadow: 0 8px 18px rgba(0,0,0,0.28);
+}
+
+body.minimal-style:not(.minimal-alert-backgrounds) .alert .bubble-stack {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+body.minimal-style:not(.minimal-alert-backgrounds) .alert .bubble-stack::before {
+  display: none;
+}
+
+body.minimal-style:not(.minimal-animations) *,
+body.minimal-style:not(.minimal-animations) *::before,
+body.minimal-style:not(.minimal-animations) *::after {
+  animation: none !important;
+  transition: none !important;
 }
 
 body.hide-platform-icons .alert .name-bubble,
@@ -2090,7 +2190,8 @@ body.hide-platform-icons .alert .name {
 }
 
 body.hide-alert-backgrounds .alert .bubble-stack::after,
-body.minimal-style .alert .bubble-stack::after {
+body.minimal-style:not(.minimal-alert-backgrounds) .alert .bubble-stack::after,
+body.minimal-style:not(.minimal-shine) .alert .bubble-stack::after {
   display: none;
 }
 
@@ -2218,21 +2319,13 @@ body.stealth-mode .alert.platform-donordrive .bubble-stack::before {
   font-size: 1.12em;
   font-weight: 900;
   line-height: 1.05;
-
-  background: linear-gradient(
-    90deg,
-    #ffffff 0%,
-    color-mix(in srgb, var(--platform-color) 72%, white 28%) 100%
-  );
-
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-
-  text-shadow:
-    0 0 18px color-mix(in srgb, var(--platform-color) 24%, transparent);
-
-  letter-spacing: -0.03em;
+  background: none;
+  background-clip: border-box;
+  -webkit-background-clip: border-box;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  text-shadow: none;
+  letter-spacing: 0;
 }
 
 .alert.platform-streamlabs .text,
@@ -2247,6 +2340,7 @@ body.stealth-mode .alert.platform-donordrive .bubble-stack::before {
   font-size: 0.88em;
   line-height: 1.2;
   opacity: 0.92;
+  text-shadow: none;
 
   margin-top: 2px;
 }
@@ -2414,9 +2508,56 @@ body.hide-message-backgrounds .msg.gigantified .message-bubble {
 }
 
 .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble {
+  overflow: hidden;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.12),
+    inset 0 -1px 0 rgba(0,0,0,0.28),
+    0 12px 28px rgba(0,0,0,0.42);
   animation:
     highlightPulse 1.8s ease-in-out infinite,
     rainbowBorder 2.2s linear infinite;
+}
+
+.msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble .message-glow-layer {
+  display: none;
+}
+
+.msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble::after {
+  background:
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 32%,
+      rgba(255,255,255,0.24) 46%,
+      transparent 62%,
+      transparent 100%
+    );
+  transform: translateX(-130%);
+  animation: highlightShine 2.4s ease-in-out infinite;
+  z-index: 3;
+}
+
+body.hide-message-backgrounds .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble,
+body.minimal-style:not(.minimal-message-backgrounds) .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble,
+body.stealth-mode:not(.stealth-message-backgrounds) .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble {
+  box-shadow: none;
+  overflow: visible;
+}
+
+body.hide-message-backgrounds .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble::after,
+body.minimal-style:not(.minimal-message-backgrounds) .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble::after,
+body.stealth-mode:not(.stealth-message-backgrounds) .msg.special-highlight:not(.alert):not(.tiktok-gift) .message-bubble::after {
+  display: none;
+}
+
+@keyframes highlightShine {
+  0% {
+    transform: translateX(-130%);
+  }
+
+  45%, 100% {
+    transform: translateX(130%);
+  }
 }
 
 /* Keep shape controls authoritative after stealth/display overrides. */
@@ -2546,6 +2687,10 @@ body.hide-name-backgrounds .name-bubble::after {
   display: none;
 }
 
+body.hide-name-backgrounds .title-glow-layer {
+  display: none;
+}
+
 body.hide-name-backgrounds .platform-icon {
   position: static;
   transform: none;
@@ -2582,6 +2727,10 @@ body.hide-message-backgrounds .message-bubble::after {
   display: none;
 }
 
+body.hide-message-backgrounds .message-glow-layer {
+  display: none;
+}
+
 body.hide-message-backgrounds .text {
   display: block;
   max-width: var(--chat-content-width);
@@ -2612,6 +2761,10 @@ body.hide-alert-backgrounds .alert .bubble-stack::before {
   display: none;
 }
 
+body.hide-alert-backgrounds .alert-glow-layer {
+  display: none;
+}
+
 body.hide-gift-backgrounds .tiktok-gift-card {
   padding: 0;
   border: 0;
@@ -2623,6 +2776,10 @@ body.hide-gift-backgrounds .tiktok-gift-card {
 
 body.hide-gift-backgrounds .tiktok-gift-card::before,
 body.hide-gift-backgrounds .tiktok-gift-card::after {
+  display: none;
+}
+
+body.hide-gift-backgrounds .gift-glow-layer {
   display: none;
 }
 

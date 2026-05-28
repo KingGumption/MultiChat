@@ -155,6 +155,15 @@ const DEFAULT_CONFIG = {
     showAvatarGlow: true,
     showEmoteGlow: true,
     showColoredText: true,
+    minimal: {
+      nameBackgrounds: false,
+      messageBackgrounds: false,
+      alertBackgrounds: true,
+      giftBackgrounds: true,
+      glow: false,
+      shine: false,
+      animations: true
+    },
     stealth: {
       chatBackgrounds: false,
       nameBackgrounds: false,
@@ -345,6 +354,10 @@ if (baseConfig.style?.stealthMode) {
   applyStealthPresetTo(baseConfig);
 }
 
+if (baseConfig.style?.minimalStyle) {
+  applyMinimalPresetTo(baseConfig);
+}
+
 const cfg = mergeConfig(baseConfig, getUrlConfigOverrides());
 
 const SB_WS = `ws://${cfg.streamerbot.host}:${cfg.streamerbot.port}`;
@@ -518,7 +531,7 @@ const DEFAULT_TYPE_STYLE = {
   avatarBorderColor: "",
   avatarBorderOpacity: 0.94,
   titleGlowColor: "",
-  titleGlowOpacity: 0.58,
+  titleGlowOpacity: 0.2,
   titleBorderColor: "",
   titleBorderOpacity: 0.88,
   titleBgColor: "",
@@ -541,7 +554,7 @@ const DEFAULT_TYPE_STYLE = {
   titleIconBgColor3Stop: 100,
   titleIconBgColor4Stop: 100,
   messageGlowColor: "",
-  messageGlowOpacity: 0.58,
+  messageGlowOpacity: 0.2,
   messageBorderColor: "",
   messageBorderOpacity: 0.88,
   messageBgColor: "",
@@ -555,7 +568,7 @@ const DEFAULT_TYPE_STYLE = {
   messageBgColor4Stop: 100,
   messageBgOpacity: 0.13,
   alertGlowColor: "",
-  alertGlowOpacity: 0.38,
+  alertGlowOpacity: 0.2,
   alertBorderColor: "",
   alertBorderOpacity: 0.78,
   alertBgColor: "",
@@ -569,7 +582,7 @@ const DEFAULT_TYPE_STYLE = {
   alertBgColor4Stop: 100,
   alertBgOpacity: 0.92,
   giftGlowColor: "",
-  giftGlowOpacity: 0.54,
+  giftGlowOpacity: 0.2,
   giftBorderColor: "",
   giftBorderOpacity: 0.88,
   giftBgColor: "",
@@ -767,6 +780,15 @@ const DEFAULT_STYLE_PRESET = {
   showAvatarGlow: true,
   showEmoteGlow: true,
   showColoredText: true,
+  minimal: {
+    nameBackgrounds: false,
+    messageBackgrounds: false,
+    alertBackgrounds: true,
+    giftBackgrounds: true,
+    glow: false,
+    shine: false,
+    animations: true
+  },
   minimalStyle: false
 };
 
@@ -1093,6 +1115,13 @@ function applyConfigToDocument() {
   document.body.classList.toggle("inline-chat", !!cfg.behaviour.inlineChat);
   document.body.classList.toggle("show-timestamps", !!cfg.behaviour.showTimestamps);
   document.body.classList.toggle("minimal-style", !!cfg.style.minimalStyle);
+  document.body.classList.toggle("minimal-name-backgrounds", !!cfg.style.minimal?.nameBackgrounds);
+  document.body.classList.toggle("minimal-message-backgrounds", !!cfg.style.minimal?.messageBackgrounds);
+  document.body.classList.toggle("minimal-alert-backgrounds", !!cfg.style.minimal?.alertBackgrounds);
+  document.body.classList.toggle("minimal-gift-backgrounds", !!cfg.style.minimal?.giftBackgrounds);
+  document.body.classList.toggle("minimal-glow", !!cfg.style.minimal?.glow);
+  document.body.classList.toggle("minimal-shine", !!cfg.style.minimal?.shine);
+  document.body.classList.toggle("minimal-animations", cfg.style.minimal?.animations !== false);
   document.body.classList.toggle("scroll-down", cfg.behaviour.scrollDirection === "down");
   document.body.classList.toggle("auto-scroll-off", cfg.behaviour.autoScroll === false);
   document.body.classList.toggle(
@@ -1238,6 +1267,10 @@ window.setChatConfigValue = function (path, value, options = {}) {
     applyStealthPreset();
   }
 
+  if (path === "style.minimalStyle" && value) {
+    applyMinimalPresetTo(cfg);
+  }
+
   if (path === "behaviour.autoScroll" && value) {
     resumeScrollTestAutoScroll(false);
     maybeAutoScrollToBottom();
@@ -1317,6 +1350,8 @@ function applyBubbleShapeDefaults(shape) {
 
 function applyStealthPresetTo(target) {
   setDeepValue(target, "style.stealthMode", true);
+  setDeepValue(target, "style.minimalStyle", false);
+  setDeepValue(target, "style.minimal", cloneConfigValue(DEFAULT_CONFIG.style.minimal));
   setDeepValue(target, "style.showNameBackgrounds", false);
   setDeepValue(target, "style.showMessageBackgrounds", false);
   setDeepValue(target, "style.showAlertBackgrounds", false);
@@ -1326,12 +1361,42 @@ function applyStealthPresetTo(target) {
   setDeepValue(target, "style.showEmoteGlow", false);
   setDeepValue(target, "style.showColoredText", false);
   setDeepValue(target, "style.borderGlow", false);
-  setDeepValue(target, "style.minimalStyle", false);
   setDeepValue(target, "animation.enabled", false);
+  setDeepValue(target, "animation.preset", "none");
   setDeepValue(target, "behaviour.showPlatformIcons", false);
   setDeepValue(target, "behaviour.showBadges", false);
   setDeepValue(target, "layout.avatarSize", 30);
   setDeepValue(target, "layout.avatarGap", 12);
+  setDeepValue(target, "style.typeStyles.special.rainbow.messageGlowEnabled", false);
+}
+
+function applyMinimalPresetTo(target) {
+  setDeepValue(target, "style.stealthMode", false);
+  setDeepValue(target, "style.minimalStyle", true);
+  setDeepValue(target, "style.minimal", cloneConfigValue(DEFAULT_CONFIG.style.minimal));
+  setDeepValue(target, "style.showNameBackgrounds", true);
+  setDeepValue(target, "style.showMessageBackgrounds", true);
+  setDeepValue(target, "style.showAlertBackgrounds", true);
+  setDeepValue(target, "style.showGiftBackgrounds", true);
+  setDeepValue(target, "style.showMediaBackgrounds", true);
+  setDeepValue(target, "style.showAvatarGlow", true);
+  setDeepValue(target, "style.showEmoteGlow", true);
+  setDeepValue(target, "style.showColoredText", true);
+  setDeepValue(target, "style.borderGlow", true);
+  setDeepValue(target, "animation.enabled", true);
+  setDeepValue(target, "animation.preset", "normal");
+  setDeepValue(target, "behaviour.showPlatformIcons", true);
+  setDeepValue(target, "behaviour.showBadges", true);
+  setDeepValue(target, "layout.avatarSize", DEFAULT_CONFIG.layout.avatarSize);
+  setDeepValue(target, "layout.avatarGap", DEFAULT_CONFIG.layout.avatarGap);
+  setDeepValue(target, "style.typeStyles.special.rainbow.messageGlowEnabled", false);
+  setDeepValue(target, "style.showEmoteGlow", false);
+  setDeepValue(target, "style.showAvatarGlow", false);
+}
+
+function applyMinimalStylePreset() {
+  applyMinimalPresetTo(cfg);
+  applyConfigToDocument();
 }
 
 function applyDefaultStylePreset() {
@@ -1340,9 +1405,11 @@ function applyDefaultStylePreset() {
   });
 
   setDeepValue(cfg, "animation.enabled", true);
+  setDeepValue(cfg, "animation.preset", "normal");
   setDeepValue(cfg, "behaviour.showPlatformIcons", true);
   setDeepValue(cfg, "behaviour.showBadges", true);
-  setDeepValue(cfg, "layout.avatarSize", 52);
+  setDeepValue(cfg, "layout.avatarSize", DEFAULT_CONFIG.layout.avatarSize);
+  setDeepValue(cfg, "layout.avatarGap", DEFAULT_CONFIG.layout.avatarGap);
 
   applyConfigToDocument();
 }
@@ -1350,6 +1417,7 @@ function applyDefaultStylePreset() {
 window.applyChatStylePreset = function (preset) {
   if (preset === "stealth") applyStealthPreset();
   if (preset === "default") applyDefaultStylePreset();
+  if (preset === "minimal") applyMinimalStylePreset();
 };
 
 function isRainbowTypeStylePath(path) {
@@ -4320,6 +4388,7 @@ function addMessage(item) {
 
     <div class="bubble-stack">
       <div class="name-bubble">
+        <span class="bubble-glow title-glow-layer" aria-hidden="true"></span>
         ${renderTimestamp(item)}
         <span class="badges">${renderBadges(item.badges)}</span>
         <span class="name">${escapeHtml(item.user)}</span>
@@ -4405,6 +4474,7 @@ function createMessageBubble(item) {
   }
 
   bubble.innerHTML = `
+    <span class="bubble-glow message-glow-layer" aria-hidden="true"></span>
     ${contentHtml ? `<div class="text">${contentHtml}</div>` : ""}
     ${mediaEmbed ? renderMediaEmbed(mediaEmbed) : ""}
     ${linkPreview ? renderLinkPreview(linkPreview) : ""}
@@ -4619,13 +4689,16 @@ function addAlert(item) {
     </div>
 
     <div class="bubble-stack">
+      <span class="bubble-glow alert-glow-layer" aria-hidden="true"></span>
       <div class="name-bubble">
+        <span class="bubble-glow title-glow-layer" aria-hidden="true"></span>
         ${renderTimestamp(item)}
         <span class="name">${escapeHtml(item.title)}</span>
         ${platformIconHtml}
       </div>
 
       <div class="message-bubble">
+        <span class="bubble-glow message-glow-layer" aria-hidden="true"></span>
         <div class="text">${renderMessageContent({
     text: item.text || "",
     parts: item.parts || []
@@ -4763,6 +4836,7 @@ function renderTikTokGift(item, key) {
     </div>
 
     <div class="tiktok-gift-card">
+      <span class="bubble-glow gift-glow-layer" aria-hidden="true"></span>
       <div class="tiktok-gift-info">
         <div class="tiktok-gift-user">
           ${escapeHtml(item.user)}
@@ -5391,8 +5465,9 @@ function applyGlowVars(el, style, prefix, colorVar, gradientVar, fallbackColor, 
     return;
   }
 
-  applyTypeSolidColorVar(el, style, prefix, colorVar, fallbackColor, opacity);
-  applyTypeGradientVar(el, style, prefix, gradientVar, fallbackColor, opacity);
+  const color = toRgba(style[`${prefix}Color`] || style[`${prefix}Color2`] || fallbackColor, opacity);
+  el.style.setProperty(colorVar, color);
+  el.style.setProperty(gradientVar, `linear-gradient(90deg, ${color} 0%, ${color} 100%)`);
 }
 
 function getTypeGradientStyleKeys(prefix) {
@@ -7206,7 +7281,7 @@ function getUrlConfigOverrides() {
     tikfinityReconnect: "tikfinity.reconnectMs"
   };
 
-  let shouldApplyStealthPreset = false;
+  let requestedStylePreset = "";
   const entries = [];
 
   params.forEach((value, key) => {
@@ -7217,14 +7292,22 @@ function getUrlConfigOverrides() {
     const parsedValue = parseUrlConfigValue(value);
 
     if (path === "style.stealthMode" && parsedValue) {
-      shouldApplyStealthPreset = true;
+      requestedStylePreset = "stealth";
+      return;
+    }
+
+    if (path === "style.minimalStyle" && parsedValue) {
+      requestedStylePreset = "minimal";
+      return;
     }
 
     entries.push([path, parsedValue]);
   });
 
-  if (shouldApplyStealthPreset) {
+  if (requestedStylePreset === "stealth") {
     applyStealthPresetTo(overrides);
+  } else if (requestedStylePreset === "minimal") {
+    applyMinimalPresetTo(overrides);
   }
 
   entries.forEach(([path, parsedValue]) => {

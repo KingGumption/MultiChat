@@ -151,6 +151,15 @@ window.CHAT_CONFIG = {
     showAvatarGlow: true,
     showEmoteGlow: true,
     showColoredText: true,
+    minimal: {
+      nameBackgrounds: false,
+      messageBackgrounds: false,
+      alertBackgrounds: true,
+      giftBackgrounds: true,
+      glow: false,
+      shine: false,
+      animations: true
+    },
     stealth: {
       chatBackgrounds: false,
       nameBackgrounds: false,
