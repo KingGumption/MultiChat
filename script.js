@@ -5651,6 +5651,8 @@ function renderParts(parts) {
       part.text ||
       part.name ||
       part.value ||
+      part.emoji ||
+      part.alt ||
       "";
 
     const url =
@@ -5676,7 +5678,7 @@ function renderParts(parts) {
       return `<img class="emote" src="${escapeAttr(url)}" alt="${escapeAttr(text || "emote")}">`;
     }
 
-    return renderTextWithThirdPartyEmotes(text);
+    return renderTextWithThirdPartyEmotes(text || url);
   }).join("");
 }
 
@@ -5685,10 +5687,7 @@ function isRenderableEmoteImageUrl(value) {
 
   if (!text) return false;
   if (isTikTokEmoteUrl(text)) return true;
-
-  if (/^https?:\/\//i.test(text)) {
-    return /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(text);
-  }
+  if (/^(?:data:image\/|blob:|https?:\/\/|\/\/)/i.test(text)) return true;
 
   return /^(?:\.{0,2}\/)?[\w./-]+\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(text);
 }
