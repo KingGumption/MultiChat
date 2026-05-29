@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Multi Chat Overlay Settings</title>
   <base href="../">
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css?v=20260529-message-themes" />
   <style>
     html,
     body {
@@ -1197,7 +1197,7 @@
     </div>
   </main>
 
-  <script src="config.js"></script>
+  <script src="config.js?v=20260529-message-themes"></script>
   <script>
     window.CHAT_CONFIG.layout.maxMessages = 50;
     window.CHAT_CONFIG.scrollTest = {
@@ -1207,7 +1207,7 @@
       ...(window.CHAT_CONFIG.scrollTest || {})
     };
   </script>
-  <script src="script.js"></script>
+  <script src="script.js?v=20260529-message-themes"></script>
   <script>
     document
       .querySelector("[data-autoscroll-container]")
@@ -1525,7 +1525,7 @@
           }
         ]
       },
-            {
+      {
         title: "Presets",
         description: "Apply the default, stealth, or minimal visual mode, then tune each preset.",
         controls: [
@@ -1595,6 +1595,20 @@
               ["Avatar Distance", "layout.avatarGap", "range", { min: 0, max: 64, step: 1 }]
             ]
           }
+        ]
+      },
+      {
+        title: "Message Themes",
+        description: "Apply a complete visual look for chat bubbles, platform colours, glow, shape, and motion.",
+        actions: [
+          ["Neon", "theme-neon"],
+          ["Minimal", "theme-minimal"],
+          ["Cute", "theme-cute"],
+          ["Arcade", "theme-arcade"],
+          ["Glass", "theme-glass"],
+          ["Paper", "theme-paper"],
+          ["Cyber", "theme-cyber"],
+          ["Cozy", "theme-cozy"]
         ]
       },
       {
