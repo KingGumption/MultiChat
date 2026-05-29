@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Multi Chat Overlay Settings</title>
   <base href="../">
-  <link rel="stylesheet" href="style.css?v=20260529-message-themes" />
+  <link rel="stylesheet" href="style.css?v=20260529-global-type-style-v2" />
   <style>
     html,
     body {
@@ -17,6 +17,21 @@
       background: #101018;
       color: #ffffff;
       box-sizing: border-box;
+    }
+
+    .config-panel,
+    .config-panel *,
+    .type-style-modal-header,
+    .type-style-modal-header *,
+    .type-preview-tools,
+    .type-preview-tools *,
+    .type-style-modal-controls,
+    .type-style-modal-controls *,
+    .type-style-modal-close {
+      --font-family: 'Sora', Arial, sans-serif;
+      --accent-font-family: 'Sora', Arial, sans-serif;
+      --message-font-family: 'Sora', Arial, sans-serif;
+      font-family: 'Sora', Arial, sans-serif !important;
     }
 
     .config-page {
@@ -61,11 +76,16 @@
 
     .config-control {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(96px, 1fr) auto;
       gap: 10px;
       align-items: center;
       margin: 9px 0;
       font: 700 13px/1.2 var(--font-family);
+    }
+
+    .config-control > span:first-child {
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .config-control input,
@@ -87,6 +107,23 @@
       gap: 6px;
       align-items: center;
       min-width: min(240px, 100%);
+    }
+
+    .config-control-range {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    .config-control-range > span:first-child {
+      max-width: 100%;
+      overflow-wrap: normal;
+    }
+
+    .config-control-range .range-wrap {
+      width: 100%;
+      min-width: 0;
+      grid-template-columns: minmax(0, 1fr) 64px minmax(24px, auto);
     }
 
     .config-control .range-number {
@@ -1197,7 +1234,7 @@
     </div>
   </main>
 
-  <script src="config.js?v=20260529-message-themes"></script>
+  <script src="config.js?v=20260529-global-type-style-v2"></script>
   <script>
     window.CHAT_CONFIG.layout.maxMessages = 50;
     window.CHAT_CONFIG.scrollTest = {
@@ -1207,7 +1244,7 @@
       ...(window.CHAT_CONFIG.scrollTest || {})
     };
   </script>
-  <script src="script.js?v=20260529-message-themes"></script>
+  <script src="script.js?v=20260529-global-type-style-v2"></script>
   <script>
     document
       .querySelector("[data-autoscroll-container]")
@@ -1238,7 +1275,19 @@
       donationTypeOptions.map(([label, type]) => [type, label])
     );
 
+    const GLOBAL_TYPE_STYLE_GROUP = "global";
+    const GLOBAL_TYPE_STYLE_PROXY_GROUP = "twitch";
+    const GLOBAL_TYPE_STYLE_PROXY_TYPE = "chat";
+
     const typeStyleGroups = [
+      {
+        title: "Global Type Styling",
+        description: "One editor that updates every chat, alert, donation, gift, and special message type together.",
+        group: GLOBAL_TYPE_STYLE_GROUP,
+        types: [
+          ["All Chat & Alerts", "all"]
+        ]
+      },
       {
         title: "Twitch Type Styling",
         description: "Per Twitch chat/event control for avatar glow, title/name pill, message bubbles, and alert cards.",
@@ -1364,6 +1413,16 @@
     ];
 
     function getTypeStyleControls(group, type) {
+      if (group === GLOBAL_TYPE_STYLE_GROUP) {
+        return [
+          ...avatarTypeControls,
+          ...titleTypeControls,
+          ...messageTypeControls,
+          ...alertTypeControls,
+          ...giftTypeControls
+        ];
+      }
+
       if (group === "tiktok" && type === "gifts") {
         return [
           ...avatarTypeControls,
@@ -1385,12 +1444,18 @@
       ];
     }
 
+    function getTypeStyleControlPath(group, type, key) {
+      const targetGroup = group === GLOBAL_TYPE_STYLE_GROUP ? GLOBAL_TYPE_STYLE_PROXY_GROUP : group;
+      const targetType = group === GLOBAL_TYPE_STYLE_GROUP ? GLOBAL_TYPE_STYLE_PROXY_TYPE : type;
+      return `style.typeStyles.${targetGroup}.${targetType}.${key}`;
+    }
+
     function mapTypeStyleControl(control, group, type) {
       if (Array.isArray(control)) {
         const [controlLabel, key, inputType, options] = control;
         return [
           controlLabel,
-          `style.typeStyles.${group}.${type}.${key}`,
+          getTypeStyleControlPath(group, type, key),
           inputType,
           options
         ];
@@ -1399,7 +1464,7 @@
       if (control.kind === "gradient") {
         return {
           ...control,
-          pathPrefix: `style.typeStyles.${group}.${type}.${control.prefix}`
+          pathPrefix: getTypeStyleControlPath(group, type, control.prefix)
         };
       }
 
@@ -1608,7 +1673,24 @@
           ["Glass", "theme-glass"],
           ["Paper", "theme-paper"],
           ["Cyber", "theme-cyber"],
-          ["Cozy", "theme-cozy"]
+          ["Cozy", "theme-cozy"],
+          ["Blueprint", "theme-blueprint"],
+          ["Liminal", "theme-liminal"],
+          ["Noir", "theme-noir"],
+          ["Chromatic Pop", "theme-chromatic-void"],
+          ["Botanical", "theme-botanical"],
+          ["Plastic Pop", "theme-plastic-pop"],
+          ["Starlight", "theme-starlight"],
+          ["Aurora Luxe", "theme-aurora-luxe"]
+        ]
+      },
+      {
+        title: "Composition Presets",
+        description: "Change layout behaviour without replacing the current visual theme.",
+        actions: [
+          ["Left Stack", "composition-left-stack"],
+          ["Inline Feed", "composition-inline-feed"],
+          ["Vertical Stage", "composition-vertical-stage"]
         ]
       },
       {
@@ -2461,6 +2543,11 @@
     }
 
     function writeConfig(path, value, options = {}) {
+      if (typeStyleEditorState.group === GLOBAL_TYPE_STYLE_GROUP && isGlobalTypeStyleProxyPath(path)) {
+        writeConfigEntries([[path, value]], options);
+        return;
+      }
+
       window.setChatConfigValue?.(path, value, options);
 
       if (path === "behaviour.groupConsecutiveMessages") {
@@ -2477,16 +2564,63 @@
       updateUrlOutput();
     }
 
-    function writeConfigEntries(entries) {
+    function writeConfigEntries(entries, options = {}) {
+      const nextEntries =
+        typeStyleEditorState.group === GLOBAL_TYPE_STYLE_GROUP
+          ? expandGlobalTypeStyleEntries(entries)
+          : entries;
+
       if (window.setChatConfigValues) {
-        window.setChatConfigValues(entries);
+        window.setChatConfigValues(nextEntries, options);
       } else {
-        entries.forEach(([path, value]) => window.setChatConfigValue?.(path, value));
+        nextEntries.forEach(([path, value]) => window.setChatConfigValue?.(path, value, options));
+      }
+
+      if (options.deferUiSync) {
+        scheduleTypeStylePreviewRefresh();
+        return;
       }
 
       syncControls();
       refreshTypeStylePreview();
       updateUrlOutput();
+    }
+
+    function isGlobalTypeStyleProxyPath(path) {
+      return String(path || "").startsWith(
+        `style.typeStyles.${GLOBAL_TYPE_STYLE_PROXY_GROUP}.${GLOBAL_TYPE_STYLE_PROXY_TYPE}.`
+      );
+    }
+
+    function expandGlobalTypeStyleEntries(entries) {
+      const typeStyles = readConfig("style.typeStyles") || readDefaultConfig("style.typeStyles") || {};
+      const expanded = [];
+
+      entries.forEach(([path, value]) => {
+        const match = String(path || "").match(/^style\.typeStyles\.[^.]+\.[^.]+\.(.+)$/);
+        if (!match || !isGlobalTypeStyleProxyPath(path)) {
+          expanded.push([path, value]);
+          return;
+        }
+
+        const field = match[1];
+        Object.entries(typeStyles).forEach(([group, types]) => {
+          Object.keys(types || {}).forEach(type => {
+            const targetPath = `style.typeStyles.${group}.${type}.${field}`;
+            if (!initialValues.has(targetPath)) {
+              initialValues.set(targetPath, readConfig(targetPath));
+            }
+            expanded.push([targetPath, cloneForSettings(value)]);
+          });
+        });
+      });
+
+      return expanded;
+    }
+
+    function cloneForSettings(value) {
+      if (value === null || typeof value !== "object") return value;
+      return JSON.parse(JSON.stringify(value));
     }
 
     let previewRefreshFrame = 0;
@@ -2584,6 +2718,7 @@
     function createControl([label, path, type, options]) {
       const row = document.createElement("label");
       row.className = "config-control";
+      row.classList.add(`config-control-${type}`);
       row.dataset.path = path;
 
       const text = document.createElement("span");
@@ -2816,19 +2951,11 @@
         ]);
       }
 
-      if (window.setChatConfigValues) {
-        window.setChatConfigValues(entries, {
-          deferApply: false,
-          skipApply: !!options.deferUiSync
-        });
-      } else {
-        entries.forEach(([path, value]) => {
-          window.setChatConfigValue?.(path, value, {
-            deferApply: false,
-            skipApply: !!options.deferUiSync
-          });
-        });
-      }
+      writeConfigEntries(entries, {
+        deferApply: false,
+        skipApply: !!options.deferUiSync,
+        deferUiSync: !!options.deferUiSync
+      });
 
       if (options.deferUiSync) {
         scheduleTypeStylePreviewRefresh();
@@ -2927,14 +3054,11 @@
       const setAngle = (value, options = {}) => {
         const angleValue = Math.min(360, Math.max(0, Math.round(Number(value) || 0)));
 
-        window.setChatConfigValue?.(
-          `${pathPrefix}Angle`,
-          angleValue,
-          {
-            deferApply: false,
-            skipApply: !!options.deferUiSync
-          }
-        );
+        writeConfig(`${pathPrefix}Angle`, angleValue, {
+          deferApply: false,
+          skipApply: !!options.deferUiSync,
+          deferUiSync: !!options.deferUiSync
+        });
         angleInput.value = angleValue;
         angleDial.style.setProperty("--angle", `${angleValue}deg`);
         bar.style.background = getGradientCss(readGradientStops(pathPrefix));
@@ -3713,6 +3837,15 @@
     }
 
     function getTypeStylePreviewItem(group, type, label) {
+      if (group === GLOBAL_TYPE_STYLE_GROUP) {
+        return {
+          kind: "chat",
+          platform: "Twitch",
+          user: "GlobalStylePig",
+          text: "Global chat and alert styling preview"
+        };
+      }
+
       const platform = getTypeStylePreviewPlatform(group, type);
 
       if (type === "chat") {
@@ -3777,6 +3910,53 @@
       };
     }
 
+    function getGlobalTypeStylePreviewItems() {
+      return [
+        {
+          kind: "chat",
+          platform: "Twitch",
+          user: "TwitchPig",
+          text: "Global chat message preview"
+        },
+        {
+          kind: "chat",
+          platform: "YouTube",
+          user: "YouTubePig",
+          text: "YouTube chat uses the same global type style"
+        },
+        {
+          kind: "alert",
+          platform: "TikTok",
+          alertType: "tiktok.subscribers",
+          user: "TikTok Subscriber Pig",
+          text: "Global alert card preview"
+        },
+        {
+          kind: "tiktokGift",
+          platform: "TikTok",
+          alertType: "tiktok.gifts",
+          user: "GiftPig",
+          giftName: "Rose",
+          count: 7
+        },
+        {
+          kind: "alert",
+          platform: "Streamlabs",
+          alertType: "donations.streamlabs",
+          user: "StreamlabsDonor",
+          text: "Donation alert preview"
+        },
+        {
+          kind: "chat",
+          platform: "Twitch",
+          user: "RainbowPig",
+          text: "Special/rainbow message preview",
+          special: "highlight",
+          styleType: "rainbow"
+        }
+      ];
+    }
+
     function makePreviewAvatar() {
       const avatar = document.createElement("div");
       avatar.className = "avatar preview-avatar";
@@ -3815,18 +3995,7 @@
       return nameBubble;
     }
 
-    function buildTypeStylePreview() {
-      const preview = document.getElementById("typeStyleModalPreview");
-      if (!preview || !typeStyleEditorState.group) return;
-
-      const item = getTypeStylePreviewItem(
-        typeStyleEditorState.group,
-        typeStyleEditorState.type,
-        typeStyleEditorState.label
-      );
-
-      preview.replaceChildren();
-
+    function createTypeStylePreviewElement(item) {
       const el = document.createElement("div");
       el.className = `msg platform-${String(item.platform).toLowerCase()}`;
       el.dataset.kind = item.kind;
@@ -3909,11 +4078,33 @@
       }
 
       window.applyPreviewPlatformVariables?.(el, item.platform, item);
-      preview.appendChild(el);
+      return el;
+    }
+
+    function buildTypeStylePreview() {
+      const preview = document.getElementById("typeStyleModalPreview");
+      if (!preview || !typeStyleEditorState.group) return;
+
+      const items = typeStyleEditorState.group === GLOBAL_TYPE_STYLE_GROUP
+        ? getGlobalTypeStylePreviewItems()
+        : [
+            getTypeStylePreviewItem(
+              typeStyleEditorState.group,
+              typeStyleEditorState.type,
+              typeStyleEditorState.label
+            )
+          ];
+
+      preview.replaceChildren(...items.map(createTypeStylePreviewElement));
     }
 
     function refreshTypeStylePreview() {
       if (!typeStyleEditorState.group) return;
+
+      if (typeStyleEditorState.group === GLOBAL_TYPE_STYLE_GROUP) {
+        buildTypeStylePreview();
+        return;
+      }
 
       const preview = document.getElementById("typeStyleModalPreview");
       const el = preview?.querySelector(".msg");
@@ -3960,7 +4151,10 @@
       const title = document.getElementById("typeStyleModalTitle");
       const controls = document.getElementById("typeStyleModalControls");
 
-      title.textContent = `${sectionTitle}: ${label}`;
+      title.textContent =
+        group === GLOBAL_TYPE_STYLE_GROUP
+          ? "Global Type Styling"
+          : `${sectionTitle}: ${label}`;
       controls.replaceChildren();
 
       getTypeStyleControls(group, type)

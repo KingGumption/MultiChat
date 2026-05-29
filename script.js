@@ -796,6 +796,9 @@ const DEFAULT_STYLE_PRESET = {
 const MESSAGE_THEME_PRESETS = {
   "theme-neon": {
     style: {
+      fontFamily: "'Exo 2', sans-serif",
+      accentFontFamily: "'Orbitron', sans-serif",
+      messageFontFamily: "'Exo 2', sans-serif",
       accentColor: "#00f5ff",
       messageTextColor: "#ffffff",
       titleTextColor: "#ffffff",
@@ -810,38 +813,69 @@ const MESSAGE_THEME_PRESETS = {
       },
       bubbleRadius: 22,
       nameBubbleRadius: 22,
+      nameIconEdgeOverlap: 22,
+      nameIconEdgeRadius: 8,
+      titleFontSize: 12,
+      messageFontSize: 18,
       borderGlow: true,
       showAvatarGlow: true,
       showEmoteGlow: true
     },
     animation: "fast",
-    typeStyle: { bg: ["accent", "#08081a", "#03030b", "#050511"], alphas: [0.8, 0.98, 1, 1], glowOpacity: 0.34, borderOpacity: 0.95 }
+    typeStyle: { bg: ["accent", "#150026", "#020617", "#050012"], alphas: [0.92, 0.98, 1, 1], glowOpacity: 0.52, borderOpacity: 1, secondStop: 24 }
   },
   "theme-minimal": {
     style: {
-      accentColor: "#d6d6e0",
-      messageTextColor: "#f7f7fb",
-      titleTextColor: "#ffffff",
+      fontFamily: "'Inter', sans-serif",
+      accentFontFamily: "'Inter', sans-serif",
+      messageFontFamily: "'Inter', sans-serif",
+      accentColor: "#cfd3dc",
+      messageTextColor: "#f5f7fb",
+      titleTextColor: "#dfe4ec",
       colors: {
-        twitch: { chat: "#a78bfa", announcements: "#a78bfa", channelPointRedemptions: "#a78bfa", cheers: "#a78bfa", follows: "#a78bfa", subs: "#a78bfa", giftSubs: "#a78bfa", raids: "#a78bfa" },
-        youtube: { chat: "#fb7185", superChats: "#fb7185", superStickers: "#fb7185", members: "#fb7185" },
-        tiktok: { chat: "#67e8f9", follows: "#67e8f9", subscribers: "#67e8f9", gifts: "#67e8f9", likes: "#67e8f9", treasureBoxes: "#67e8f9" },
-        kick: { chat: "#86efac", follows: "#86efac", subs: "#86efac", giftSubs: "#86efac", rewardRedemptions: "#86efac" },
-        text: { twitchName: "#f5f3ff", youtubeName: "#fff1f2", tiktokName: "#ecfeff", kickName: "#f0fdf4", muted: "#d4d4dc", dark: "#0f1117", stealth: "#ffffff" },
-        surfaces: { pageBackground: "#000000", bubbleBase: "#101116", bubbleHighlight: "#ffffff", mediaBackground: "#08090d", badgeBackground: "#111217", avatarBorder: "#e5e7eb", avatarFill: "#ffffff" },
-        effects: { shadow: "#000000", emoteSparkle: "#ffffff", gigantifiedSparkle: "#e5e7eb", highlightGlow: "#d8b4fe", highlightWarmGlow: "#fde68a", tiktokRed: "#fb7185", tiktokBlue: "#67e8f9" }
+        twitch: { chat: "#8b919c", announcements: "#8b919c", channelPointRedemptions: "#a0a6b0", cheers: "#b4bac3", follows: "#8b919c", subs: "#c7ccd4", giftSubs: "#a0a6b0", raids: "#b4bac3" },
+        youtube: { chat: "#9da3ad", superChats: "#b4bac3", superStickers: "#a0a6b0", members: "#c7ccd4" },
+        tiktok: { chat: "#a7b0bd", follows: "#8b919c", subscribers: "#a0a6b0", gifts: "#c7ccd4", likes: "#b4bac3", treasureBoxes: "#9da3ad" },
+        kick: { chat: "#98a09a", follows: "#8b919c", subs: "#b4bac3", giftSubs: "#a0a6b0", rewardRedemptions: "#9da3ad" },
+        text: { twitchName: "#f5f7fb", youtubeName: "#f5f7fb", tiktokName: "#f5f7fb", kickName: "#f5f7fb", muted: "#9da3ad", dark: "#17191e", stealth: "#ffffff" },
+        surfaces: { pageBackground: "#000000", bubbleBase: "#111317", bubbleHighlight: "#ffffff", mediaBackground: "#08090c", badgeBackground: "#111317", avatarBorder: "#dfe4ec", avatarFill: "#ffffff" },
+        effects: { shadow: "#000000", emoteSparkle: "#ffffff", gigantifiedSparkle: "#dfe4ec", highlightGlow: "#cfd3dc", highlightWarmGlow: "#e5e7eb", tiktokRed: "#a0a6b0", tiktokBlue: "#b4bac3" }
       },
-      bubbleRadius: 10,
-      nameBubbleRadius: 10,
+      bubbleRadius: 6,
+      nameBubbleRadius: 6,
+      nameIconEdgeOverlap: 10,
+      nameIconEdgeRadius: 3,
+      titleFontSize: 10,
+      messageFontSize: 16,
       borderGlow: false,
       showAvatarGlow: false,
-      showEmoteGlow: false
+      showEmoteGlow: false,
+      showColoredText: false
     },
+    platformIcons: false,
+    badges: false,
+    avatarSize: 38,
+    avatarGap: 8,
     animation: "subtle",
-    typeStyle: { bg: ["#18191f", "#111217", "#0c0d12", "#0c0d12"], alphas: [0.95, 0.98, 1, 1], glowOpacity: 0.08, borderOpacity: 0.48 }
+    typeStyle: {
+      bg: ["#1a1d23", "#121419", "#0f1115", "#0f1115"],
+      titleBg: ["#24272f", "#171a20", "#171a20", "#171a20"],
+      alertBg: ["#1a1d23", "#121419", "#0f1115", "#0f1115"],
+      giftBg: ["#1a1d23", "#121419", "#0f1115", "#0f1115"],
+      alphas: [0.88, 0.94, 0.98, 0.98],
+      cardAlphas: [0.92, 0.96, 0.96, 0.96],
+      borderColor: "#5c6470",
+      glowColor: "#000000",
+      glowOpacity: 0,
+      borderOpacity: 0.28,
+      secondStop: 100
+    }
   },
   "theme-cute": {
     style: {
+      fontFamily: "'Fredoka', sans-serif",
+      accentFontFamily: "'Fredoka', sans-serif",
+      messageFontFamily: "'Fredoka', sans-serif",
       accentColor: "#ff7ab6",
       messageTextColor: "#fff7fb",
       titleTextColor: "#ffffff",
@@ -854,14 +888,21 @@ const MESSAGE_THEME_PRESETS = {
         surfaces: { pageBackground: "#130812", bubbleBase: "#22111f", bubbleHighlight: "#fff0fa", mediaBackground: "#160a15", badgeBackground: "#2a1426", avatarBorder: "#ffb3d9", avatarFill: "#fff7fb" },
         effects: { shadow: "#2b071b", emoteSparkle: "#ffb3d9", gigantifiedSparkle: "#fde68a", highlightGlow: "#ff7ab6", highlightWarmGlow: "#fde68a", tiktokRed: "#fb7185", tiktokBlue: "#67e8f9" }
       },
-      bubbleRadius: 24,
-      nameBubbleRadius: 24
+      bubbleRadius: 30,
+      nameBubbleRadius: 30,
+      nameIconEdgeOverlap: 24,
+      nameIconEdgeRadius: 24,
+      titleFontSize: 13,
+      messageFontSize: 18
     },
     animation: "normal",
-    typeStyle: { bg: ["accent", "#2a1426", "#160a15", "#1f1020"], alphas: [0.62, 0.97, 1, 1], glowOpacity: 0.25, borderOpacity: 0.82 }
+    typeStyle: { bg: ["accent", "#3a1730", "#1d0d1b", "#251126"], alphas: [0.74, 0.97, 1, 1], glowOpacity: 0.32, borderOpacity: 0.9, secondStop: 30 }
   },
   "theme-arcade": {
     style: {
+      fontFamily: "'Chakra Petch', sans-serif",
+      accentFontFamily: "'Black Ops One', sans-serif",
+      messageFontFamily: "'Chakra Petch', sans-serif",
       accentColor: "#ffe500",
       messageTextColor: "#ffffff",
       titleTextColor: "#061114",
@@ -877,14 +918,19 @@ const MESSAGE_THEME_PRESETS = {
       bubbleShape: "square",
       bubbleRadius: 4,
       nameBubbleRadius: 4,
-      titleFontSize: 13,
-      messageFontSize: 18
+      nameIconEdgeOverlap: 6,
+      nameIconEdgeRadius: 2,
+      titleFontSize: 14,
+      messageFontSize: 19
     },
     animation: "fast",
-    typeStyle: { bg: ["#202028", "#101018", "#06060a", "#06060a"], alphas: [1, 1, 1, 1], glowOpacity: 0.32, borderOpacity: 1 }
+    typeStyle: { bg: ["accent", "#151515", "#050505", "#050505"], alphas: [0.9, 1, 1, 1], glowOpacity: 0.26, borderOpacity: 1, secondStop: 18 }
   },
   "theme-glass": {
     style: {
+      fontFamily: "'Space Grotesk', sans-serif",
+      accentFontFamily: "'Space Grotesk', sans-serif",
+      messageFontFamily: "'Space Grotesk', sans-serif",
       accentColor: "#8bdcff",
       messageTextColor: "#f7fbff",
       titleTextColor: "#ffffff",
@@ -898,36 +944,62 @@ const MESSAGE_THEME_PRESETS = {
       },
       bubbleRadius: 18,
       nameBubbleRadius: 18,
+      nameIconEdgeOverlap: 20,
+      nameIconEdgeRadius: 14,
       showPageBackground: false
     },
     animation: "subtle",
-    typeStyle: { bg: ["#ffffff", "#102034", "#06101c", "#06101c"], alphas: [0.18, 0.62, 0.78, 0.82], glowOpacity: 0.18, borderOpacity: 0.64 }
+    typeStyle: { bg: ["#ffffff", "accent", "#071421", "#04101b"], alphas: [0.24, 0.3, 0.72, 0.78], glowOpacity: 0.2, borderOpacity: 0.72, secondStop: 18 }
   },
   "theme-paper": {
     style: {
-      accentColor: "#516a8a",
-      messageTextColor: "#2f3440",
-      titleTextColor: "#f8fafc",
+      fontFamily: "'Playfair Display', serif",
+      accentFontFamily: "'Cinzel', serif",
+      messageFontFamily: "'Playfair Display', serif",
+      accentColor: "#8f5d3d",
+      messageTextColor: "#2d2118",
+      titleTextColor: "#fff7e8",
       colors: {
-        twitch: { chat: "#7c5fb3", announcements: "#6376a3", channelPointRedemptions: "#b6688f", cheers: "#527ea3", follows: "#4f8a6f", subs: "#b4863e", giftSubs: "#b85f66", raids: "#54749f" },
-        youtube: { chat: "#b8505c", superChats: "#c57b42", superStickers: "#b6688f", members: "#b4863e" },
-        tiktok: { chat: "#3f91a3", follows: "#4f8a6f", subscribers: "#b8505c", gifts: "#b4863e", likes: "#b6688f", treasureBoxes: "#54749f" },
-        kick: { chat: "#4f8a55", follows: "#4f8a6f", subs: "#7f9652", giftSubs: "#5d8a4f", rewardRedemptions: "#3f91a3" },
-        text: { twitchName: "#fff2bd", youtubeName: "#ffe2e6", tiktokName: "#f0fdff", kickName: "#f2fff1", muted: "#687081", dark: "#2f3440", stealth: "#ffffff" },
-        surfaces: { pageBackground: "#f3eee2", bubbleBase: "#f7f1e6", bubbleHighlight: "#ffffff", mediaBackground: "#e8dfd1", badgeBackground: "#e2dacb", avatarBorder: "#f9f4ea", avatarFill: "#fffaf0" },
-        effects: { shadow: "#2f241a", emoteSparkle: "#f4d37b", gigantifiedSparkle: "#b4863e", highlightGlow: "#b6688f", highlightWarmGlow: "#c57b42", tiktokRed: "#b8505c", tiktokBlue: "#3f91a3" }
+        twitch: { chat: "#7b4d2e", announcements: "#6f6552", channelPointRedemptions: "#9f5f4a", cheers: "#b2803d", follows: "#65734a", subs: "#b2803d", giftSubs: "#9f5f4a", raids: "#5f6d7a" },
+        youtube: { chat: "#9f4f45", superChats: "#b2803d", superStickers: "#9f5f4a", members: "#a98b48" },
+        tiktok: { chat: "#527a7c", follows: "#65734a", subscribers: "#9f4f45", gifts: "#b2803d", likes: "#9f5f4a", treasureBoxes: "#5f6d7a" },
+        kick: { chat: "#647a43", follows: "#65734a", subs: "#8a8644", giftSubs: "#647a43", rewardRedemptions: "#527a7c" },
+        text: { twitchName: "#fff7e8", youtubeName: "#fff7e8", tiktokName: "#fff7e8", kickName: "#fff7e8", muted: "#7c6d5c", dark: "#2d2118", stealth: "#ffffff" },
+        surfaces: { pageBackground: "#efe4cc", bubbleBase: "#f5ecd8", bubbleHighlight: "#fffaf0", mediaBackground: "#dfd0b5", badgeBackground: "#d9c7a7", avatarBorder: "#f8edd6", avatarFill: "#fff7e8" },
+        effects: { shadow: "#3a2a1c", emoteSparkle: "#c79a4b", gigantifiedSparkle: "#b2803d", highlightGlow: "#a96f4b", highlightWarmGlow: "#b2803d", tiktokRed: "#9f4f45", tiktokBlue: "#527a7c" }
       },
-      bubbleRadius: 12,
-      nameBubbleRadius: 12,
+      bubbleRadius: 3,
+      nameBubbleRadius: 3,
+      nameIconEdgeOverlap: 8,
+      nameIconEdgeRadius: 2,
+      titleFontSize: 12,
+      messageFontSize: 18,
       borderGlow: false,
       showAvatarGlow: false,
       showEmoteGlow: false
     },
+    avatarSize: 48,
     animation: "subtle",
-    typeStyle: { bg: ["#fffaf0", "#f7f1e6", "#eee5d6", "#eee5d6"], alphas: [0.98, 0.98, 1, 1], glowOpacity: 0.04, borderOpacity: 0.62 }
+    typeStyle: {
+      bg: ["#fff8e6", "#f1e2c7", "#e7d3ad", "#e7d3ad"],
+      titleBg: ["#8f5d3d", "#62402b", "#62402b", "#62402b"],
+      titleIconBg: ["#3f3124", "#2d2118", "#2d2118", "#2d2118"],
+      alertBg: ["#fff8e6", "#f1e2c7", "#e7d3ad", "#e7d3ad"],
+      giftBg: ["#fff8e6", "#f1e2c7", "#e7d3ad", "#e7d3ad"],
+      alphas: [1, 1, 1, 1],
+      cardAlphas: [1, 1, 1, 1],
+      borderColor: "#8f5d3d",
+      glowColor: "#5a3a25",
+      glowOpacity: 0,
+      borderOpacity: 0.82,
+      secondStop: 100
+    }
   },
   "theme-cyber": {
     style: {
+      fontFamily: "'Chakra Petch', sans-serif",
+      accentFontFamily: "'Orbitron', sans-serif",
+      messageFontFamily: "'Chakra Petch', sans-serif",
       accentColor: "#00ff9d",
       messageTextColor: "#ecfff8",
       titleTextColor: "#03110c",
@@ -940,15 +1012,36 @@ const MESSAGE_THEME_PRESETS = {
         effects: { shadow: "#000000", emoteSparkle: "#00ff9d", gigantifiedSparkle: "#faff00", highlightGlow: "#00ff9d", highlightWarmGlow: "#faff00", tiktokRed: "#ff3864", tiktokBlue: "#00e5ff" },
         rainbow: { one: "#ff3864", two: "#ff7a00", three: "#faff00", four: "#00ff9d", five: "#00e5ff", six: "#7c3cff", seven: "#ff00aa" }
       },
-      bubbleShape: "slant",
-      bubbleRadius: 12,
-      nameBubbleRadius: 12
+      bubbleShape: "notch",
+      bubbleRadius: 8,
+      nameBubbleRadius: 8,
+      bubbleNotch: 10,
+      nameIconEdgeOverlap: 18,
+      nameIconEdgeRadius: 4,
+      titleFontSize: 12,
+      messageFontSize: 18
     },
     animation: "fast",
-    typeStyle: { bg: ["accent", "#041510", "#010806", "#020d0a"], alphas: [0.74, 0.98, 1, 1], glowOpacity: 0.36, borderOpacity: 1 }
+    typeStyle: {
+      bg: ["#001b12", "#00110b", "#000705", "#000705"],
+      titleBg: ["#00ff9d", "#00e5ff", "#00e5ff", "#00e5ff"],
+      titleIconBg: ["#000705", "#001b12", "#001b12", "#001b12"],
+      alertBg: ["#001b12", "#00110b", "#000705", "#000705"],
+      giftBg: ["#001b12", "#00110b", "#000705", "#000705"],
+      alphas: [1, 1, 1, 1],
+      cardAlphas: [0.95, 0.95, 0.95, 0.95],
+      borderColor: "#00ff9d",
+      glowColor: "#00ff9d",
+      glowOpacity: 0.46,
+      borderOpacity: 1,
+      secondStop: 42
+    }
   },
   "theme-cozy": {
     style: {
+      fontFamily: "'DM Sans', sans-serif",
+      accentFontFamily: "'Righteous', sans-serif",
+      messageFontFamily: "'DM Sans', sans-serif",
       accentColor: "#80d8c3",
       messageTextColor: "#fffdf7",
       titleTextColor: "#fffaf0",
@@ -961,10 +1054,472 @@ const MESSAGE_THEME_PRESETS = {
         effects: { shadow: "#000000", emoteSparkle: "#fff0c2", gigantifiedSparkle: "#e8c872", highlightGlow: "#80d8c3", highlightWarmGlow: "#e8c872", tiktokRed: "#d86f75", tiktokBlue: "#7dd3c7" }
       },
       bubbleRadius: 20,
-      nameBubbleRadius: 20
+      nameBubbleRadius: 20,
+      nameIconEdgeOverlap: 19,
+      nameIconEdgeRadius: 16,
+      titleFontSize: 12,
+      messageFontSize: 17
     },
     animation: "normal",
-    typeStyle: { bg: ["accent", "#17212b", "#0d131a", "#101820"], alphas: [0.38, 0.98, 1, 1], glowOpacity: 0.16, borderOpacity: 0.72 }
+    typeStyle: { bg: ["accent", "#1b2630", "#0f161d", "#111b24"], alphas: [0.36, 0.98, 1, 1], glowOpacity: 0.18, borderOpacity: 0.76, secondStop: 28 }
+  },
+  "theme-blueprint": {
+    style: {
+      fontFamily: "'Space Grotesk', sans-serif",
+      accentFontFamily: "'Teko', sans-serif",
+      messageFontFamily: "'Space Grotesk', sans-serif",
+      accentColor: "#7dd3fc",
+      messageTextColor: "#dff7ff",
+      titleTextColor: "#06131f",
+      colors: {
+        twitch: { chat: "#7dd3fc", announcements: "#7dd3fc", channelPointRedemptions: "#7dd3fc", cheers: "#7dd3fc", follows: "#7dd3fc", subs: "#7dd3fc", giftSubs: "#7dd3fc", raids: "#7dd3fc" },
+        youtube: { chat: "#7dd3fc", superChats: "#7dd3fc", superStickers: "#7dd3fc", members: "#7dd3fc" },
+        tiktok: { chat: "#7dd3fc", follows: "#7dd3fc", subscribers: "#7dd3fc", gifts: "#7dd3fc", likes: "#7dd3fc", treasureBoxes: "#7dd3fc" },
+        kick: { chat: "#7dd3fc", follows: "#7dd3fc", subs: "#7dd3fc", giftSubs: "#7dd3fc", rewardRedemptions: "#7dd3fc" },
+        text: { twitchName: "#06131f", youtubeName: "#06131f", tiktokName: "#06131f", kickName: "#06131f", muted: "#9fd7ee", dark: "#06131f", stealth: "#dff7ff" },
+        surfaces: { pageBackground: "#03101a", bubbleBase: "#061b2d", bubbleHighlight: "#dff7ff", mediaBackground: "#02101c", badgeBackground: "#0b2a45", avatarBorder: "#7dd3fc", avatarFill: "#dff7ff" },
+        effects: { shadow: "#000814", emoteSparkle: "#dff7ff", gigantifiedSparkle: "#7dd3fc", highlightGlow: "#7dd3fc", highlightWarmGlow: "#e0f2fe", tiktokRed: "#7dd3fc", tiktokBlue: "#7dd3fc" }
+      },
+      bubbleShape: "square",
+      bubbleRadius: 2,
+      nameBubbleRadius: 2,
+      nameIconEdgeOverlap: 4,
+      nameIconEdgeRadius: 1,
+      titleFontSize: 14,
+      messageFontSize: 17,
+      borderGlow: true
+    },
+    animation: "subtle",
+    typeStyle: {
+      bg: ["#0b2a45", "#061b2d", "#03101a", "#03101a"],
+      titleBg: ["#7dd3fc", "#bae6fd", "#bae6fd", "#bae6fd"],
+      titleIconBg: ["#03101a", "#0b2a45", "#0b2a45", "#0b2a45"],
+      alertBg: ["#0b2a45", "#061b2d", "#03101a", "#03101a"],
+      giftBg: ["#0b2a45", "#061b2d", "#03101a", "#03101a"],
+      alphas: [0.88, 0.96, 1, 1],
+      borderColor: "#7dd3fc",
+      glowColor: "#7dd3fc",
+      glowOpacity: 0.24,
+      borderOpacity: 0.92,
+      secondStop: 48
+    }
+  },
+  "theme-liminal": {
+    style: {
+      fontFamily: "'Work Sans', sans-serif",
+      accentFontFamily: "'Cinzel', serif",
+      messageFontFamily: "'Work Sans', sans-serif",
+      accentColor: "#d6ff6b",
+      messageTextColor: "#faffdf",
+      titleTextColor: "#11170a",
+      colors: {
+        twitch: { chat: "#d6ff6b", announcements: "#b8fff1", channelPointRedemptions: "#ff9df2", cheers: "#d6ff6b", follows: "#b8fff1", subs: "#fff3a3", giftSubs: "#ff9df2", raids: "#d6ff6b" },
+        youtube: { chat: "#ff9df2", superChats: "#fff3a3", superStickers: "#ff9df2", members: "#d6ff6b" },
+        tiktok: { chat: "#b8fff1", follows: "#d6ff6b", subscribers: "#ff9df2", gifts: "#fff3a3", likes: "#ff9df2", treasureBoxes: "#b8fff1" },
+        kick: { chat: "#d6ff6b", follows: "#b8fff1", subs: "#fff3a3", giftSubs: "#d6ff6b", rewardRedemptions: "#ff9df2" },
+        surfaces: { pageBackground: "#080914", bubbleBase: "#141826", bubbleHighlight: "#faffdf", mediaBackground: "#080914", badgeBackground: "#181d2e", avatarBorder: "#d6ff6b", avatarFill: "#faffdf" },
+        effects: { shadow: "#000000", emoteSparkle: "#d6ff6b", gigantifiedSparkle: "#fff3a3", highlightGlow: "#d6ff6b", highlightWarmGlow: "#ff9df2", tiktokRed: "#ff9df2", tiktokBlue: "#b8fff1" }
+      },
+      bubbleShape: "rounded",
+      bubbleRadius: 28,
+      nameBubbleRadius: 6,
+      nameIconEdgeOverlap: 28,
+      nameIconEdgeRadius: 2,
+      titleFontSize: 11,
+      messageFontSize: 17
+    },
+    animation: "slow",
+    typeStyle: {
+      bg: ["#d6ff6b", "#20283b", "#080914", "#141826"],
+      titleBg: ["#d6ff6b", "#b8fff1", "#b8fff1", "#b8fff1"],
+      titleIconBg: ["#ff9df2", "#20283b", "#20283b", "#20283b"],
+      alertBg: ["#ff9df2", "#20283b", "#080914", "#141826"],
+      giftBg: ["#fff3a3", "#20283b", "#080914", "#141826"],
+      alphas: [0.22, 0.88, 0.98, 1],
+      cardAlphas: [0.92, 0.84, 0.84, 0.84],
+      borderColor: "#d6ff6b",
+      glowColor: "#d6ff6b",
+      glowOpacity: 0.3,
+      borderOpacity: 0.86,
+      secondStop: 20
+    }
+  },
+  "theme-noir": {
+    style: {
+      fontFamily: "'Montserrat', sans-serif",
+      accentFontFamily: "'Playfair Display', serif",
+      messageFontFamily: "'Montserrat', sans-serif",
+      accentColor: "#f2f2e6",
+      messageTextColor: "#f7f7ef",
+      titleTextColor: "#050505",
+      colors: {
+        twitch: { chat: "#f2f2e6", announcements: "#d8d8c8", channelPointRedemptions: "#f2f2e6", cheers: "#ffffff", follows: "#d8d8c8", subs: "#ffffff", giftSubs: "#f2f2e6", raids: "#d8d8c8" },
+        youtube: { chat: "#f2f2e6", superChats: "#ffffff", superStickers: "#d8d8c8", members: "#ffffff" },
+        tiktok: { chat: "#f2f2e6", follows: "#d8d8c8", subscribers: "#ffffff", gifts: "#f2f2e6", likes: "#ffffff", treasureBoxes: "#d8d8c8" },
+        kick: { chat: "#f2f2e6", follows: "#d8d8c8", subs: "#ffffff", giftSubs: "#f2f2e6", rewardRedemptions: "#ffffff" },
+        surfaces: { pageBackground: "#050505", bubbleBase: "#090909", bubbleHighlight: "#ffffff", mediaBackground: "#050505", badgeBackground: "#111111", avatarBorder: "#f2f2e6", avatarFill: "#f7f7ef" },
+        effects: { shadow: "#000000", emoteSparkle: "#ffffff", gigantifiedSparkle: "#ffffff", highlightGlow: "#f2f2e6", highlightWarmGlow: "#ffffff", tiktokRed: "#f2f2e6", tiktokBlue: "#d8d8c8" }
+      },
+      bubbleShape: "square",
+      bubbleRadius: 2,
+      nameBubbleRadius: 2,
+      nameIconEdgeOverlap: 6,
+      nameIconEdgeRadius: 1,
+      titleFontSize: 12,
+      messageFontSize: 17,
+      borderGlow: false,
+      showAvatarGlow: false,
+      showEmoteGlow: false
+    },
+    animation: "subtle",
+    typeStyle: {
+      bg: ["#141414", "#090909", "#050505", "#050505"],
+      titleBg: ["#f2f2e6", "#d8d8c8", "#d8d8c8", "#d8d8c8"],
+      titleIconBg: ["#050505", "#141414", "#141414", "#141414"],
+      alertBg: ["#141414", "#090909", "#050505", "#050505"],
+      giftBg: ["#141414", "#090909", "#050505", "#050505"],
+      alphas: [1, 1, 1, 1],
+      borderColor: "#f2f2e6",
+      glowColor: "#000000",
+      glowOpacity: 0,
+      borderOpacity: 0.82,
+      secondStop: 100
+    }
+  },
+  "theme-chromatic-void": {
+    style: {
+      fontFamily: "'Exo 2', sans-serif",
+      accentFontFamily: "'Orbitron', sans-serif",
+      messageFontFamily: "'Space Grotesk', sans-serif",
+      accentColor: "#00f0ff",
+      messageTextColor: "#fff7ff",
+      titleTextColor: "#090014",
+      colors: {
+        twitch: { chat: "#00f0ff", announcements: "#ff0adf", channelPointRedemptions: "#7b2cff", cheers: "#fff200", follows: "#00ffa8", subs: "#fff200", giftSubs: "#ff0adf", raids: "#00f0ff" },
+        youtube: { chat: "#ff0adf", superChats: "#fff200", superStickers: "#00f0ff", members: "#00ffa8" },
+        tiktok: { chat: "#00f0ff", follows: "#00ffa8", subscribers: "#ff0adf", gifts: "#fff200", likes: "#ff0adf", treasureBoxes: "#7b2cff" },
+        kick: { chat: "#00ffa8", follows: "#00f0ff", subs: "#fff200", giftSubs: "#00ffa8", rewardRedemptions: "#ff0adf" },
+        text: { twitchName: "#090014", youtubeName: "#090014", tiktokName: "#090014", kickName: "#090014", muted: "#c7fbff", dark: "#090014", stealth: "#ffffff" },
+        surfaces: { pageBackground: "#020008", bubbleBase: "#090014", bubbleHighlight: "#ffffff", mediaBackground: "#020008", badgeBackground: "#190027", avatarBorder: "#00f0ff", avatarFill: "#fff7ff" },
+        effects: { shadow: "#000000", emoteSparkle: "#00f0ff", gigantifiedSparkle: "#fff200", highlightGlow: "#ff0adf", highlightWarmGlow: "#fff200", tiktokRed: "#ff0adf", tiktokBlue: "#00f0ff" },
+        rainbow: { one: "#00f0ff", two: "#00ffa8", three: "#fff200", four: "#ff8a00", five: "#ff0adf", six: "#7b2cff", seven: "#fff7ff" }
+      },
+      bubbleShape: "slant",
+      bubbleRadius: 8,
+      nameBubbleRadius: 4,
+      bubbleSlant: 12,
+      nameIconEdgeOverlap: 26,
+      nameIconEdgeRadius: 3,
+      titleFontSize: 11,
+      messageFontSize: 18,
+      borderGlow: true,
+      showAvatarGlow: true,
+      showEmoteGlow: true
+    },
+    avatarSize: 56,
+    animation: "fast",
+    typeStyle: {
+      bg: ["#ff0adf", "#270033", "#06000c", "#090014"],
+      titleBg: ["#00f0ff", "#00ffa8", "#fff200", "#ff0adf"],
+      titleIconBg: ["#090014", "#270033", "#7b2cff", "#ff0adf"],
+      alertBg: ["#ff0adf", "#270033", "#06000c", "#090014"],
+      giftBg: ["#fff200", "#ff0adf", "#270033", "#06000c"],
+      alphas: [0.76, 0.98, 1, 1],
+      cardAlphas: [0.98, 0.96, 0.96, 0.96],
+      borderColor: "#00f0ff",
+      glowColor: "#ff0adf",
+      glowOpacity: 0.5,
+      borderOpacity: 1,
+      secondStop: 26,
+      titleStops: [0, 32, 66, 100],
+      titleIconStops: [0, 35, 70, 100],
+      alertStops: [0, 32, 72, 100],
+      giftStops: [0, 28, 68, 100],
+      cardAngle: 105
+    }
+  },
+  "theme-botanical": {
+    style: {
+      fontFamily: "'Ubuntu', sans-serif",
+      accentFontFamily: "'Playfair Display', serif",
+      messageFontFamily: "'Ubuntu', sans-serif",
+      accentColor: "#b6f27a",
+      messageTextColor: "#f4ffe8",
+      titleTextColor: "#10200f",
+      colors: {
+        twitch: { chat: "#b6f27a", announcements: "#77d7a8", channelPointRedemptions: "#f0d38a", cheers: "#f0d38a", follows: "#77d7a8", subs: "#b6f27a", giftSubs: "#f0a6b2", raids: "#77d7a8" },
+        youtube: { chat: "#f0a6b2", superChats: "#f0d38a", superStickers: "#f0a6b2", members: "#b6f27a" },
+        tiktok: { chat: "#77d7a8", follows: "#b6f27a", subscribers: "#f0a6b2", gifts: "#f0d38a", likes: "#f0a6b2", treasureBoxes: "#77d7a8" },
+        kick: { chat: "#b6f27a", follows: "#77d7a8", subs: "#f0d38a", giftSubs: "#b6f27a", rewardRedemptions: "#77d7a8" },
+        surfaces: { pageBackground: "#071109", bubbleBase: "#10200f", bubbleHighlight: "#f4ffe8", mediaBackground: "#071109", badgeBackground: "#173019", avatarBorder: "#d8ffae", avatarFill: "#f4ffe8" },
+        effects: { shadow: "#000000", emoteSparkle: "#d8ffae", gigantifiedSparkle: "#f0d38a", highlightGlow: "#b6f27a", highlightWarmGlow: "#f0d38a", tiktokRed: "#f0a6b2", tiktokBlue: "#77d7a8" }
+      },
+      bubbleShape: "rounded",
+      bubbleRadius: 26,
+      nameBubbleRadius: 26,
+      nameIconEdgeOverlap: 26,
+      nameIconEdgeRadius: 22,
+      titleFontSize: 12,
+      messageFontSize: 17
+    },
+    animation: "slow",
+    typeStyle: {
+      bg: ["#b6f27a", "#18351c", "#071109", "#10200f"],
+      titleBg: ["#d8ffae", "#77d7a8", "#77d7a8", "#77d7a8"],
+      titleIconBg: ["#10200f", "#18351c", "#18351c", "#18351c"],
+      alertBg: ["#77d7a8", "#18351c", "#071109", "#10200f"],
+      giftBg: ["#f0d38a", "#18351c", "#071109", "#10200f"],
+      alphas: [0.28, 0.92, 0.98, 1],
+      cardAlphas: [0.96, 0.92, 0.92, 0.92],
+      borderColor: "#b6f27a",
+      glowColor: "#77d7a8",
+      glowOpacity: 0.2,
+      borderOpacity: 0.78,
+      secondStop: 24
+    }
+  },
+  "theme-plastic-pop": {
+    style: {
+      fontFamily: "'Poppins', sans-serif",
+      accentFontFamily: "'Fredoka', sans-serif",
+      messageFontFamily: "'Poppins', sans-serif",
+      accentColor: "#ff4fd8",
+      messageTextColor: "#ffffff",
+      titleTextColor: "#251100",
+      colors: {
+        twitch: { chat: "#ff4fd8", announcements: "#47d7ff", channelPointRedemptions: "#fff200", cheers: "#fff200", follows: "#5dff8c", subs: "#ff8a00", giftSubs: "#ff4fd8", raids: "#47d7ff" },
+        youtube: { chat: "#ff4fd8", superChats: "#ff8a00", superStickers: "#47d7ff", members: "#fff200" },
+        tiktok: { chat: "#47d7ff", follows: "#5dff8c", subscribers: "#ff4fd8", gifts: "#fff200", likes: "#ff4fd8", treasureBoxes: "#47d7ff" },
+        kick: { chat: "#5dff8c", follows: "#47d7ff", subs: "#fff200", giftSubs: "#5dff8c", rewardRedemptions: "#ff4fd8" },
+        surfaces: { pageBackground: "#120018", bubbleBase: "#2a0732", bubbleHighlight: "#ffffff", mediaBackground: "#120018", badgeBackground: "#3a0b44", avatarBorder: "#fff200", avatarFill: "#ffffff" },
+        effects: { shadow: "#000000", emoteSparkle: "#fff200", gigantifiedSparkle: "#fff200", highlightGlow: "#ff4fd8", highlightWarmGlow: "#fff200", tiktokRed: "#ff4fd8", tiktokBlue: "#47d7ff" }
+      },
+      bubbleShape: "rounded",
+      bubbleRadius: 8,
+      nameBubbleRadius: 999,
+      nameIconEdgeOverlap: 34,
+      nameIconEdgeRadius: 999,
+      titleFontSize: 12,
+      messageFontSize: 18
+    },
+    animation: "fast",
+    typeStyle: {
+      bg: ["#ff4fd8", "#2a0732", "#120018", "#2a0732"],
+      titleBg: ["#fff200", "#ff8a00", "#ff8a00", "#ff8a00"],
+      titleIconBg: ["#47d7ff", "#ff4fd8", "#ff4fd8", "#ff4fd8"],
+      alertBg: ["#47d7ff", "#2a0732", "#120018", "#2a0732"],
+      giftBg: ["#fff200", "#ff4fd8", "#2a0732", "#120018"],
+      alphas: [0.8, 0.98, 1, 1],
+      cardAlphas: [1, 1, 1, 1],
+      borderColor: "#ffffff",
+      glowColor: "#ff4fd8",
+      glowOpacity: 0.36,
+      borderOpacity: 1,
+      secondStop: 28
+    }
+  },
+  "theme-starlight": {
+    style: {
+      fontFamily: "'Sora', sans-serif",
+      accentFontFamily: "'Righteous', sans-serif",
+      messageFontFamily: "'Sora', sans-serif",
+      accentColor: "#f7f7ff",
+      messageTextColor: "#f7f7ff",
+      titleTextColor: "#071024",
+      colors: {
+        twitch: { chat: "#f7f7ff", announcements: "#8db4ff", channelPointRedemptions: "#d8b4fe", cheers: "#fff6a8", follows: "#b6fff1", subs: "#fff6a8", giftSubs: "#d8b4fe", raids: "#8db4ff" },
+        youtube: { chat: "#d8b4fe", superChats: "#fff6a8", superStickers: "#f7f7ff", members: "#b6fff1" },
+        tiktok: { chat: "#b6fff1", follows: "#f7f7ff", subscribers: "#d8b4fe", gifts: "#fff6a8", likes: "#d8b4fe", treasureBoxes: "#8db4ff" },
+        kick: { chat: "#b6fff1", follows: "#f7f7ff", subs: "#fff6a8", giftSubs: "#b6fff1", rewardRedemptions: "#d8b4fe" },
+        surfaces: { pageBackground: "#020617", bubbleBase: "#071024", bubbleHighlight: "#ffffff", mediaBackground: "#020617", badgeBackground: "#0c1730", avatarBorder: "#f7f7ff", avatarFill: "#ffffff" },
+        effects: { shadow: "#000000", emoteSparkle: "#ffffff", gigantifiedSparkle: "#fff6a8", highlightGlow: "#f7f7ff", highlightWarmGlow: "#fff6a8", tiktokRed: "#d8b4fe", tiktokBlue: "#b6fff1" }
+      },
+      bubbleShape: "rounded",
+      bubbleRadius: 18,
+      nameBubbleRadius: 4,
+      nameIconEdgeOverlap: 32,
+      nameIconEdgeRadius: 4,
+      titleFontSize: 11,
+      messageFontSize: 17,
+      showPageBackground: false
+    },
+    avatarSize: 54,
+    animation: "subtle",
+    typeStyle: {
+      bg: ["#f7f7ff", "#16234a", "#020617", "#071024"],
+      titleBg: ["#f7f7ff", "#8db4ff", "#8db4ff", "#8db4ff"],
+      titleIconBg: ["#071024", "#16234a", "#16234a", "#16234a"],
+      alertBg: ["#d8b4fe", "#16234a", "#020617", "#071024"],
+      giftBg: ["#fff6a8", "#16234a", "#020617", "#071024"],
+      alphas: [0.2, 0.92, 1, 1],
+      cardAlphas: [0.96, 0.88, 0.88, 0.88],
+      borderColor: "#f7f7ff",
+      glowColor: "#f7f7ff",
+      glowOpacity: 0.42,
+      borderOpacity: 0.84,
+      secondStop: 22
+    }
+  },
+  "theme-aurora-luxe": {
+    style: {
+      fontFamily: "'Space Grotesk', sans-serif",
+      accentFontFamily: "'Cinzel', serif",
+      messageFontFamily: "'Space Grotesk', sans-serif",
+      accentColor: "#7df9ff",
+      messageTextColor: "#f8fbff",
+      titleTextColor: "#081016",
+      colors: {
+        twitch: { chat: "#7df9ff", announcements: "#c084fc", channelPointRedemptions: "#ff6ec7", cheers: "#ffe66d", follows: "#8cffb5", subs: "#ffe66d", giftSubs: "#ff6ec7", raids: "#7df9ff" },
+        youtube: { chat: "#ff6ec7", superChats: "#ffe66d", superStickers: "#7df9ff", members: "#8cffb5" },
+        tiktok: { chat: "#7df9ff", follows: "#8cffb5", subscribers: "#ff6ec7", gifts: "#ffe66d", likes: "#ff6ec7", treasureBoxes: "#c084fc" },
+        kick: { chat: "#8cffb5", follows: "#7df9ff", subs: "#ffe66d", giftSubs: "#8cffb5", rewardRedemptions: "#ff6ec7" },
+        text: { twitchName: "#081016", youtubeName: "#081016", tiktokName: "#081016", kickName: "#081016", muted: "#b8c7d9", dark: "#081016", stealth: "#ffffff" },
+        surfaces: { pageBackground: "#02040c", bubbleBase: "#060b18", bubbleHighlight: "#ffffff", mediaBackground: "#02040c", badgeBackground: "#081426", avatarBorder: "#f8fbff", avatarFill: "#ffffff" },
+        effects: { shadow: "#000000", emoteSparkle: "#7df9ff", gigantifiedSparkle: "#ffe66d", highlightGlow: "#7df9ff", highlightWarmGlow: "#ff6ec7", tiktokRed: "#ff6ec7", tiktokBlue: "#7df9ff" },
+        rainbow: { one: "#7df9ff", two: "#8cffb5", three: "#ffe66d", four: "#ff9f6e", five: "#ff6ec7", six: "#c084fc", seven: "#f8fbff" }
+      },
+      bubbleShape: "rounded",
+      bubbleRadius: 24,
+      nameBubbleRadius: 999,
+      nameIconEdgeOverlap: 36,
+      nameIconEdgeRadius: 999,
+      titleFontSize: 12,
+      messageFontSize: 18,
+      messageLineHeight: 1.32,
+      borderGlow: true,
+      showAvatarGlow: true,
+      showEmoteGlow: true,
+      showPageBackground: false
+    },
+    avatarSize: 60,
+    avatarGap: 12,
+    animation: "normal",
+    typeStyle: {
+      bg: ["#7df9ff", "#16213e", "#050816", "#090d1f"],
+      titleBg: ["#f8fbff", "#7df9ff", "#8cffb5", "#ffe66d"],
+      titleIconBg: ["#081016", "#16213e", "#c084fc", "#ff6ec7"],
+      alertBg: ["#ff6ec7", "#16213e", "#050816", "#090d1f"],
+      giftBg: ["#ffe66d", "#ff6ec7", "#16213e", "#050816"],
+      alphas: [0.34, 0.92, 1, 1],
+      cardAlphas: [0.98, 0.92, 0.92, 0.92],
+      borderColor: "#f8fbff",
+      glowColor: "#7df9ff",
+      glowOpacity: 0.5,
+      borderOpacity: 0.96,
+      secondStop: 18,
+      titleStops: [0, 34, 68, 100],
+      titleIconStops: [0, 38, 72, 100],
+      alertStops: [0, 28, 72, 100],
+      giftStops: [0, 26, 62, 100],
+      cardAngle: 115
+    }
+  }
+};
+
+const COMPOSITION_PRESETS = {
+  "composition-left-stack": {
+    style: {
+      nameIconPosition: "left",
+      nameIconEdgeOverlap: 18,
+      nameIconEdgeRadius: 16,
+      showNameBackgrounds: true,
+      showMessageBackgrounds: true,
+      showAlertBackgrounds: true,
+      showGiftBackgrounds: true,
+      showMediaBackgrounds: true,
+      borderGlow: true,
+      showAvatarGlow: true,
+      showEmoteGlow: true
+    },
+    layout: {
+      chatWidth: "clamp(320px, 78vw, 720px)",
+      maxMessageWidth: "min(600px, var(--chat-content-width))",
+      rowGap: 14,
+      groupedMessageGap: 4,
+      avatarGap: 10,
+      avatarSize: 52,
+      fitToScreen: false
+    },
+    behaviour: {
+      inlineChat: false,
+      groupConsecutiveMessages: true,
+      showAvatars: true,
+      showBadges: true,
+      showPlatformIcons: true,
+      showTimestamps: false,
+      monitorMode: false,
+      scrollDirection: "up"
+    }
+  },
+  "composition-inline-feed": {
+    style: {
+      nameIconPosition: "left",
+      nameIconEdgeOverlap: 0,
+      nameIconEdgeRadius: 0,
+      showNameBackgrounds: false,
+      showMessageBackgrounds: false,
+      showAlertBackgrounds: false,
+      showGiftBackgrounds: false,
+      showMediaBackgrounds: false,
+      borderGlow: false,
+      showAvatarGlow: false,
+      showEmoteGlow: false,
+      titleFontSize: 14,
+      messageFontSize: 16
+    },
+    layout: {
+      chatWidth: "clamp(360px, 58vw, 640px)",
+      maxMessageWidth: "var(--chat-content-width)",
+      rowGap: 16,
+      groupedMessageGap: 6,
+      avatarGap: 10,
+      avatarSize: 28,
+      fitToScreen: false
+    },
+    behaviour: {
+      inlineChat: true,
+      groupConsecutiveMessages: false,
+      showAvatars: true,
+      showBadges: false,
+      showPlatformIcons: true,
+      showTimestamps: false,
+      monitorMode: false,
+      scrollDirection: "up"
+    }
+  },
+  "composition-vertical-stage": {
+    style: {
+      nameIconPosition: "right",
+      nameIconEdgeOverlap: 22,
+      nameIconEdgeRadius: 20,
+      showNameBackgrounds: true,
+      showMessageBackgrounds: true,
+      showAlertBackgrounds: true,
+      showGiftBackgrounds: true,
+      showMediaBackgrounds: true,
+      borderGlow: true,
+      showAvatarGlow: true,
+      showEmoteGlow: true
+    },
+    layout: {
+      chatWidth: "clamp(300px, 42vw, 460px)",
+      maxMessageWidth: "min(380px, var(--chat-content-width))",
+      rowGap: 14,
+      groupedMessageGap: 6,
+      avatarGap: 10,
+      avatarSize: 46,
+      fitToScreen: false
+    },
+    behaviour: {
+      inlineChat: false,
+      groupConsecutiveMessages: true,
+      showAvatars: true,
+      showBadges: true,
+      showPlatformIcons: true,
+      showTimestamps: false,
+      monitorMode: false,
+      scrollDirection: "up"
+    }
   }
 };
 
@@ -1600,12 +2155,18 @@ function applyMessageThemePreset(presetName) {
   nextStyle.stealthMode = false;
   nextStyle.minimalStyle = false;
   nextStyle.minimal = cloneConfigValue(DEFAULT_CONFIG.style.minimal);
-  nextStyle.showNameBackgrounds = true;
-  nextStyle.showMessageBackgrounds = true;
-  nextStyle.showAlertBackgrounds = true;
-  nextStyle.showGiftBackgrounds = true;
-  nextStyle.showMediaBackgrounds = true;
-  nextStyle.showColoredText = true;
+  [
+    "showNameBackgrounds",
+    "showMessageBackgrounds",
+    "showAlertBackgrounds",
+    "showGiftBackgrounds",
+    "showMediaBackgrounds",
+    "showColoredText"
+  ].forEach(key => {
+    if (typeof preset.style?.[key] === "undefined") {
+      nextStyle[key] = true;
+    }
+  });
   nextStyle.typeStyles = buildDefaultTypeStyles(nextStyle);
   applyMessageThemeTypeStyle(nextStyle.typeStyles, preset.typeStyle || {});
 
@@ -1615,10 +2176,30 @@ function applyMessageThemePreset(presetName) {
 
   setDeepValue(cfg, "animation.enabled", true);
   setDeepValue(cfg, "animation.preset", preset.animation || "normal");
-  setDeepValue(cfg, "behaviour.showPlatformIcons", true);
-  setDeepValue(cfg, "behaviour.showBadges", true);
+  setDeepValue(cfg, "behaviour.showPlatformIcons", preset.platformIcons ?? true);
+  setDeepValue(cfg, "behaviour.showBadges", preset.badges ?? true);
   setDeepValue(cfg, "layout.avatarSize", preset.avatarSize ?? DEFAULT_CONFIG.layout.avatarSize);
   setDeepValue(cfg, "layout.avatarGap", preset.avatarGap ?? DEFAULT_CONFIG.layout.avatarGap);
+
+  applyConfigToDocument();
+}
+
+function applyCompositionPreset(presetName) {
+  const preset = COMPOSITION_PRESETS[presetName];
+
+  if (!preset) return;
+
+  Object.entries(preset.style || {}).forEach(([key, value]) => {
+    setDeepValue(cfg, `style.${key}`, cloneConfigValue(value));
+  });
+
+  Object.entries(preset.layout || {}).forEach(([key, value]) => {
+    setDeepValue(cfg, `layout.${key}`, cloneConfigValue(value));
+  });
+
+  Object.entries(preset.behaviour || {}).forEach(([key, value]) => {
+    setDeepValue(cfg, `behaviour.${key}`, cloneConfigValue(value));
+  });
 
   applyConfigToDocument();
 }
@@ -1629,15 +2210,56 @@ function applyMessageThemeTypeStyle(typeStyles, options) {
   groups.forEach(types => {
     Object.values(types || {}).forEach(style => {
       const accent = style.messageBorderColor || style.titleBgColor || "#9146ff";
-      const bgColors = (options.bg || ["accent", "#10121e", "#06060c", "#08080f"])
-        .map(color => color === "accent" ? accent : color);
+      const resolveColors = colors =>
+        (colors || ["accent", "#10121e", "#06060c", "#08080f"])
+          .map(color => color === "accent" ? accent : color);
+      const bgColors = resolveColors(options.bg);
+      const titleColors = resolveColors(options.titleBg || options.bg);
+      const iconColors = resolveColors(options.titleIconBg || options.titleBg || options.bg);
+      const alertColors = resolveColors(options.alertBg || options.bg);
+      const giftColors = resolveColors(options.giftBg || options.alertBg || options.bg);
       const alphas = options.alphas || [0.13, 0.98, 1, 1];
+      const cardAlphas = options.cardAlphas || alphas;
+      const borderColor = options.borderColor || accent;
+      const glowColor = options.glowColor || accent;
 
       applyGradientDefaults(style, "messageBg", bgColors, [0, options.secondStop ?? 36, 78, 100], {
         mode: options.bgMode || "radial",
         angle: options.bgAngle ?? 135,
         opacity: 1,
         alphas
+      });
+      applyGradientDefaults(style, "titleBg", titleColors, options.titleStops || [0, 100, 100, 100], {
+        mode: options.cardMode || "linear",
+        angle: options.cardAngle ?? 135,
+        opacity: 1,
+        alphas: cardAlphas
+      });
+      applyGradientDefaults(style, "titleIconBg", iconColors, options.titleIconStops || options.titleStops || [0, 100, 100, 100], {
+        mode: options.cardMode || "linear",
+        angle: options.cardAngle ?? 135,
+        opacity: 1,
+        alphas: cardAlphas
+      });
+      applyGradientDefaults(style, "alertBg", alertColors, options.alertStops || [0, 100, 100, 100], {
+        mode: options.cardMode || "linear",
+        angle: options.cardAngle ?? 135,
+        opacity: 1,
+        alphas: cardAlphas
+      });
+      applyGradientDefaults(style, "giftBg", giftColors, options.giftStops || options.alertStops || [0, 100, 100, 100], {
+        mode: options.cardMode || "linear",
+        angle: options.cardAngle ?? 135,
+        opacity: 1,
+        alphas: cardAlphas
+      });
+      ["avatarBorder", "titleBorder", "messageBorder", "alertBorder", "giftBorder"].forEach(prefix => {
+        style[`${prefix}Color`] = borderColor;
+        applySolidGradientDefault(style, prefix, borderColor, { opacity: style[`${prefix}Opacity`] });
+      });
+      ["avatarGlow", "titleGlow", "messageGlow", "alertGlow", "giftGlow"].forEach(prefix => {
+        style[`${prefix}Color`] = glowColor;
+        applySolidGradientDefault(style, prefix, glowColor, { opacity: style[`${prefix}Opacity`] });
       });
 
       if (typeof options.glowOpacity !== "undefined") {
@@ -1646,6 +2268,9 @@ function applyMessageThemeTypeStyle(typeStyles, options) {
         style.messageGlowOpacity = options.glowOpacity;
         style.alertGlowOpacity = options.glowOpacity;
         style.giftGlowOpacity = options.glowOpacity;
+        ["avatarGlow", "titleGlow", "messageGlow", "alertGlow", "giftGlow"].forEach(prefix => {
+          applySolidGradientDefault(style, prefix, style[`${prefix}Color`] || glowColor, { opacity: options.glowOpacity });
+        });
       }
 
       if (typeof options.borderOpacity !== "undefined") {
@@ -1654,6 +2279,9 @@ function applyMessageThemeTypeStyle(typeStyles, options) {
         style.messageBorderOpacity = options.borderOpacity;
         style.alertBorderOpacity = options.borderOpacity;
         style.giftBorderOpacity = options.borderOpacity;
+        ["avatarBorder", "titleBorder", "messageBorder", "alertBorder", "giftBorder"].forEach(prefix => {
+          applySolidGradientDefault(style, prefix, style[`${prefix}Color`] || borderColor, { opacity: options.borderOpacity });
+        });
       }
     });
   });
@@ -1662,6 +2290,11 @@ function applyMessageThemeTypeStyle(typeStyles, options) {
 window.applyChatStylePreset = function (preset) {
   if (MESSAGE_THEME_PRESETS[preset]) {
     applyMessageThemePreset(preset);
+    return;
+  }
+
+  if (COMPOSITION_PRESETS[preset]) {
+    applyCompositionPreset(preset);
     return;
   }
 

@@ -31,6 +31,8 @@
   --alert-bubble-max-width: 340px;
   --alert-bubble-min-width: 280px;
   --tiktok-gift-card-width: fit-content;
+  --message-bubble-min-width: 0px;
+  --gift-card-min-width: min(280px, var(--chat-content-width));
 
   --message-font-size: 18px;
   --title-font-size: 14px;
@@ -695,23 +697,20 @@ body.stealth-mode.stealth-emote-glow .msg.gigantified .emote {
 body.bubble-shape-slant .name-bubble,
 body.bubble-shape-slant .message-bubble,
 body.bubble-shape-slant .alert .bubble-stack,
-body.bubble-shape-slant .tiktok-gift-card,
-body.bubble-shape-slant .link-preview,
-body.bubble-shape-slant .embed,
-body.bubble-shape-slant .media-embed-tenor {
+body.bubble-shape-slant .tiktok-gift-card {
+  --shape-cut: clamp(8px, var(--bubble-slant), 14px);
   border-radius: max(4px, calc(var(--bubble-radius) * 0.35));
-  clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%);
+  transform: skewX(-10deg) translateZ(0);
+  clip-path: none;
 }
 
 body.bubble-shape-notch .name-bubble,
 body.bubble-shape-notch .message-bubble,
 body.bubble-shape-notch .alert .bubble-stack,
-body.bubble-shape-notch .tiktok-gift-card,
-body.bubble-shape-notch .link-preview,
-body.bubble-shape-notch .embed,
-body.bubble-shape-notch .media-embed-tenor {
+body.bubble-shape-notch .tiktok-gift-card {
+  --shape-cut: clamp(6px, var(--bubble-notch), 12px);
   border-radius: max(4px, calc(var(--bubble-radius) * 0.45));
-  clip-path: polygon(0 0, calc(100% - var(--bubble-notch)) 0, 100% var(--bubble-notch), 100% 100%, var(--bubble-notch) 100%, 0 calc(100% - var(--bubble-notch)));
+  clip-path: polygon(var(--shape-cut) 0, 100% 0, 100% calc(100% - var(--shape-cut)), calc(100% - var(--shape-cut)) 100%, 0 100%, 0 var(--shape-cut));
 }
 
 body.bubble-shape-square .name-bubble,
@@ -960,6 +959,7 @@ body.name-icon-left .name-bubble .badges:empty + .name {
   display: inline-block;
   width: var(--message-bubble-width);
   max-width: min(var(--max-message-width), var(--chat-content-width));
+  min-width: var(--message-bubble-min-width);
   overflow-wrap: anywhere;
   min-height: 30px;
   box-sizing: border-box;
@@ -1181,6 +1181,55 @@ body.inline-chat .message-bubble {
   min-height: 0;
   padding-top: 8px;
   padding-bottom: 8px;
+}
+
+body.inline-chat.hide-name-backgrounds.hide-message-backgrounds .msg {
+  grid-template-columns: var(--avatar-size) minmax(0, var(--chat-content-width));
+}
+
+body.inline-chat.hide-name-backgrounds.hide-message-backgrounds .bubble-stack {
+  align-items: baseline;
+  column-gap: 5px;
+  row-gap: 7px;
+}
+
+body.inline-chat.hide-name-backgrounds .name-bubble {
+  display: inline-flex;
+  width: auto;
+  max-width: var(--chat-content-width);
+  gap: 6px;
+  align-items: center;
+}
+
+body.inline-chat.hide-name-backgrounds .name-bubble .platform-icon {
+  order: 0;
+  width: 14px;
+  height: 14px;
+}
+
+body.inline-chat.hide-name-backgrounds .name {
+  color: #ffd44d;
+  font-weight: 900;
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+body.inline-chat.hide-name-backgrounds .name::after {
+  content: " :";
+  color: #ffffff;
+}
+
+body.inline-chat.hide-message-backgrounds .message-bubble {
+  max-width: var(--chat-content-width);
+}
+
+body.inline-chat.hide-message-backgrounds .text {
+  display: inline;
+  font-size: var(--message-font-size);
+  line-height: 1.42;
+  text-shadow:
+    0 2px 3px rgba(0,0,0,0.92),
+    0 0 8px rgba(0,0,0,0.72);
 }
 
 /* Badges */
@@ -1427,11 +1476,14 @@ body.inline-chat .message-bubble {
 
 .alert .name-bubble,
 .alert .message-bubble {
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
   animation: none;
+  clip-path: none;
+  transform: none;
   overflow: visible;
 }
 
@@ -1439,7 +1491,8 @@ body.inline-chat .message-bubble {
 .alert .name-bubble::after,
 .alert .message-bubble::before,
 .alert .message-bubble::after {
-  display: none;
+  display: none !important;
+  content: none !important;
 }
 
 .alert .alert-glow-layer,
@@ -1477,12 +1530,22 @@ body.name-icon-left .alert .name {
   color: #ffffff;
   font-size: var(--alert-title-font-size);
   line-height: 1.16;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .alert .text {
   color: #ffffff;
   font-size: var(--alert-message-font-size);
   line-height: 1.28;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .compact-alert .bubble-stack {
@@ -1508,6 +1571,7 @@ body.name-icon-left .alert .name {
 
   min-width: 0;
   max-width: var(--chat-content-width);
+  min-inline-size: var(--gift-card-min-width);
   width: var(--tiktok-gift-card-width);
   box-sizing: border-box;
   padding: 13px 20px;
@@ -2496,6 +2560,25 @@ body.stealth-mode:not(.stealth-message-backgrounds) .msg.gigantified .message-bu
   overflow: visible;
 }
 
+/* Alert cards own the frame; alert text/name wrappers should never draw mini-bubbles. */
+.alert .name-bubble,
+.alert .message-bubble,
+.alert .name,
+.alert .text {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.alert .name-bubble::before,
+.alert .name-bubble::after,
+.alert .message-bubble::before,
+.alert .message-bubble::after {
+  display: none !important;
+  content: none !important;
+}
+
 body.hide-message-backgrounds .msg.gigantified .message-bubble {
   box-shadow: none !important;
 }
@@ -2586,21 +2669,18 @@ body.stealth-mode:not(.stealth-message-backgrounds) .msg.special-highlight:not(.
 body.bubble-shape-slant:not(.hide-name-backgrounds) .name-bubble,
 body.bubble-shape-slant:not(.hide-message-backgrounds) .message-bubble,
 body.bubble-shape-slant:not(.hide-alert-backgrounds) .alert .bubble-stack,
-body.bubble-shape-slant:not(.hide-gift-backgrounds) .tiktok-gift-card,
-body.bubble-shape-slant:not(.hide-media-backgrounds) .link-preview,
-body.bubble-shape-slant:not(.hide-media-backgrounds) .embed,
-body.bubble-shape-slant:not(.hide-media-backgrounds) .media-embed-tenor {
-  clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%);
+body.bubble-shape-slant:not(.hide-gift-backgrounds) .tiktok-gift-card {
+  --shape-cut: clamp(8px, var(--bubble-slant), 14px);
+  transform: skewX(-10deg) translateZ(0);
+  clip-path: none;
 }
 
 body.bubble-shape-notch:not(.hide-name-backgrounds) .name-bubble,
 body.bubble-shape-notch:not(.hide-message-backgrounds) .message-bubble,
 body.bubble-shape-notch:not(.hide-alert-backgrounds) .alert .bubble-stack,
-body.bubble-shape-notch:not(.hide-gift-backgrounds) .tiktok-gift-card,
-body.bubble-shape-notch:not(.hide-media-backgrounds) .link-preview,
-body.bubble-shape-notch:not(.hide-media-backgrounds) .embed,
-body.bubble-shape-notch:not(.hide-media-backgrounds) .media-embed-tenor {
-  clip-path: polygon(var(--bubble-notch) 0, 100% 0, 100% calc(100% - var(--bubble-notch)), calc(100% - var(--bubble-notch)) 100%, 0 100%, 0 var(--bubble-notch));
+body.bubble-shape-notch:not(.hide-gift-backgrounds) .tiktok-gift-card {
+  --shape-cut: clamp(6px, var(--bubble-notch), 12px);
+  clip-path: polygon(var(--shape-cut) 0, 100% 0, 100% calc(100% - var(--shape-cut)), calc(100% - var(--shape-cut)) 100%, 0 100%, 0 var(--shape-cut));
 }
 
 body.bubble-shape-square:not(.hide-name-backgrounds) .name-bubble,
@@ -2617,27 +2697,94 @@ body.bubble-shape-square:not(.hide-media-backgrounds) .media-embed-tenor {
 body.bubble-shape-slant .name-bubble,
 body.bubble-shape-slant .message-bubble,
 body.bubble-shape-slant .alert .bubble-stack,
-body.bubble-shape-slant .tiktok-gift-card,
-body.bubble-shape-slant .link-preview,
-body.bubble-shape-slant .embed,
-body.bubble-shape-slant .media-embed-tenor {
+body.bubble-shape-slant .tiktok-gift-card {
+  --shape-cut: clamp(8px, var(--bubble-slant), 14px);
   border-radius: max(2px, calc(var(--bubble-radius) * 0.25)) !important;
-  -webkit-clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%) !important;
-  clip-path: polygon(var(--bubble-slant) 0, 100% 0, calc(100% - var(--bubble-slant)) 100%, 0 100%) !important;
+  -webkit-clip-path: none !important;
+  clip-path: none !important;
+  transform: skewX(-10deg) translateZ(0) !important;
   overflow: hidden !important;
 }
 
 body.bubble-shape-notch .name-bubble,
 body.bubble-shape-notch .message-bubble,
 body.bubble-shape-notch .alert .bubble-stack,
-body.bubble-shape-notch .tiktok-gift-card,
-body.bubble-shape-notch .link-preview,
-body.bubble-shape-notch .embed,
-body.bubble-shape-notch .media-embed-tenor {
+body.bubble-shape-notch .tiktok-gift-card {
+  --shape-cut: clamp(6px, var(--bubble-notch), 12px);
   border-radius: max(2px, calc(var(--bubble-radius) * 0.3)) !important;
-  -webkit-clip-path: polygon(0 0, calc(100% - var(--bubble-notch)) 0, 100% var(--bubble-notch), 100% 100%, var(--bubble-notch) 100%, 0 calc(100% - var(--bubble-notch))) !important;
-  clip-path: polygon(0 0, calc(100% - var(--bubble-notch)) 0, 100% var(--bubble-notch), 100% 100%, var(--bubble-notch) 100%, 0 calc(100% - var(--bubble-notch))) !important;
+  -webkit-clip-path: polygon(var(--shape-cut) 0, 100% 0, 100% calc(100% - var(--shape-cut)), calc(100% - var(--shape-cut)) 100%, 0 100%, 0 var(--shape-cut)) !important;
+  clip-path: polygon(var(--shape-cut) 0, 100% 0, 100% calc(100% - var(--shape-cut)), calc(100% - var(--shape-cut)) 100%, 0 100%, 0 var(--shape-cut)) !important;
   overflow: hidden !important;
+}
+
+body.bubble-shape-slant .name-bubble {
+  padding-left: calc(16px + var(--shape-cut, 12px)) !important;
+  padding-right: calc(13px + var(--shape-cut, 12px)) !important;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+body.bubble-shape-slant .message-bubble {
+  padding-left: calc(22px + var(--shape-cut, 12px)) !important;
+  padding-right: calc(22px + var(--shape-cut, 12px)) !important;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+body.bubble-shape-slant .alert .bubble-stack,
+body.bubble-shape-slant .tiktok-gift-card {
+  padding-left: calc(18px + var(--shape-cut, 12px)) !important;
+  padding-right: calc(18px + var(--shape-cut, 12px)) !important;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+body.bubble-shape-slant .name-bubble > :not(.bubble-glow),
+body.bubble-shape-slant .message-bubble > :not(.bubble-glow),
+body.bubble-shape-slant .alert .bubble-stack > :not(.bubble-glow),
+body.bubble-shape-slant .tiktok-gift-card > :not(.bubble-glow) {
+  transform: skewX(10deg);
+}
+
+body.bubble-shape-slant .bubble-glow,
+body.bubble-shape-slant .name-bubble::before,
+body.bubble-shape-slant .name-bubble::after,
+body.bubble-shape-slant .message-bubble::before,
+body.bubble-shape-slant .message-bubble::after,
+body.bubble-shape-slant .alert .bubble-stack::before,
+body.bubble-shape-slant .alert .bubble-stack::after,
+body.bubble-shape-slant .tiktok-gift-card::before,
+body.bubble-shape-slant .tiktok-gift-card::after {
+  transform: none !important;
+}
+
+body.bubble-shape-slant .message-bubble > .text ~ .embed,
+body.bubble-shape-slant .message-bubble > .text ~ .link-preview,
+body.bubble-shape-slant .message-bubble > .text ~ .media-embed-tenor {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.bubble-shape-notch .name-bubble {
+  padding-left: calc(16px + var(--shape-cut, 10px)) !important;
+  padding-right: calc(13px + var(--shape-cut, 10px)) !important;
+}
+
+body.bubble-shape-notch .message-bubble {
+  padding-left: calc(22px + var(--shape-cut, 10px)) !important;
+  padding-right: calc(22px + var(--shape-cut, 10px)) !important;
+}
+
+body.bubble-shape-notch .alert .bubble-stack,
+body.bubble-shape-notch .tiktok-gift-card {
+  padding-left: calc(18px + var(--shape-cut, 10px)) !important;
+  padding-right: calc(18px + var(--shape-cut, 10px)) !important;
+}
+
+body.name-icon-left.bubble-shape-slant .name-bubble,
+body.name-icon-left.bubble-shape-notch .name-bubble {
+  padding-left: calc(13px + var(--shape-cut, 12px)) !important;
+  padding-right: calc(16px + var(--shape-cut, 12px)) !important;
 }
 
 body.bubble-shape-square .name-bubble,
