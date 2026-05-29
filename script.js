@@ -3217,7 +3217,9 @@ function handleTikFinityEvent(payload) {
       getLocalTikTokEmote(emoteName);
 
     const finalImageUrl =
-      imageUrl || localEmoteUrl;
+      isRenderableEmoteImageUrl(imageUrl)
+        ? imageUrl
+        : localEmoteUrl;
 
     addMessage({
       kind: "chat",
@@ -3277,9 +3279,9 @@ function handleTikFinityEvent(payload) {
       const parts = tiktokEmotes.map(emote => ({
         type: "emote",
 
-        imageUrl:
-          emote.emoteImageUrl ||
-          getLocalTikTokEmote(emote.emoteId),
+        imageUrl: isRenderableEmoteImageUrl(emote.emoteImageUrl)
+          ? emote.emoteImageUrl
+          : getLocalTikTokEmote(emote.emoteId),
 
         text:
           emote.emoteId ||
@@ -4482,6 +4484,8 @@ function createMessageBubble(item) {
     ${linkPreview ? renderLinkPreview(linkPreview) : ""}
   `;
 
+  hydrateEmoteImageFallbacks(bubble);
+
   const previewCard = bubble.querySelector("[data-youtube-preview]");
   if (previewCard && linkPreview) {
     hydrateYouTubePreview(previewCard, linkPreview);
@@ -4708,6 +4712,8 @@ function addAlert(item) {
       </div>
     </div>
   `;
+
+  hydrateEmoteImageFallbacks(el);
 
   chat.appendChild(el);
 
@@ -5643,6 +5649,22 @@ function renderMessageContent(item) {
   return renderTextWithThirdPartyEmotes(item.text || "");
 }
 
+function hydrateEmoteImageFallbacks(root) {
+  root.querySelectorAll("img.emote").forEach(img => {
+    img.addEventListener("error", () => {
+      const fallback = img.alt || "";
+
+      if (!fallback) {
+        img.remove();
+        return;
+      }
+
+      img.replaceWith(document.createTextNode(fallback));
+      maybeAutoScrollToBottom();
+    }, { once: true });
+  });
+}
+
 function renderParts(parts) {
   return parts.map(part => {
     const type = String(part.type || "").toLowerCase();
@@ -6108,7 +6130,7 @@ function buildPartsFromEmotes(text, emotes) {
       emote.emoteURL ||
       "";
 
-    if (imageUrl) {
+    if (isRenderableEmoteImageUrl(imageUrl)) {
       parts.push({
         type: "emote",
         imageUrl,
