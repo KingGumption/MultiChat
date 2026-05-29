@@ -783,7 +783,7 @@ body.bubble-shape-square .media-embed-tenor {
   position: relative;
 
   display: inline-grid;
-  grid-template-columns: auto minmax(0, auto) 23px;
+  grid-template-columns: max-content minmax(0, 1fr) 23px;
   align-items: center;
 
   column-gap: 7px;
@@ -898,7 +898,7 @@ body.bubble-shape-square .media-embed-tenor {
 }
 
 body.name-icon-left .name-bubble {
-  grid-template-columns: 23px auto minmax(0, auto);
+  grid-template-columns: 23px max-content minmax(0, 1fr);
   padding: 7px 16px 7px 13px;
 }
 
@@ -1042,16 +1042,13 @@ body.name-icon-left .name-bubble .badges:empty + .name {
     0 2px 4px rgba(0,0,0,0.56),
     0 0 8px rgba(255,255,255,0.14);
 
+  min-width: 0;
   white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
+  overflow-wrap: break-word;
+  word-break: normal;
   line-height: 1.05;
 
-  max-width: calc(
-    var(--chat-width) -
-    var(--avatar-size) -
-    140px
-  );
+  max-width: 100%;
 }
 
 .platform-twitch .name {
@@ -1344,8 +1341,8 @@ body.inline-chat.hide-message-backgrounds .text {
 }
 
 .link-preview {
-  display: grid;
-  grid-template-columns: minmax(92px, 128px) minmax(0, 1fr);
+  display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   align-items: center;
   width: 100%;
@@ -1366,7 +1363,8 @@ body.inline-chat.hide-message-backgrounds .text {
 }
 
 .link-preview-thumb {
-  width: 100%;
+  flex: 0 1 128px;
+  width: min(128px, 100%);
   aspect-ratio: 16 / 9;
   border-radius: 6px;
   object-fit: cover;
@@ -1375,6 +1373,7 @@ body.inline-chat.hide-message-backgrounds .text {
 
 .link-preview-copy {
   min-width: 0;
+  flex: 1 1 180px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -1382,7 +1381,8 @@ body.inline-chat.hide-message-backgrounds .text {
 
 .link-preview-title,
 .link-preview-author {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 
 .link-preview-title {
