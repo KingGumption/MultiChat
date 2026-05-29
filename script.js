@@ -5664,7 +5664,7 @@ function renderParts(parts) {
       "";
 
     if (
-      url &&
+      isRenderableEmoteImageUrl(url) &&
       (
         type.includes("emote") ||
         type.includes("emoji") ||
@@ -5678,6 +5678,19 @@ function renderParts(parts) {
 
     return renderTextWithThirdPartyEmotes(text);
   }).join("");
+}
+
+function isRenderableEmoteImageUrl(value) {
+  const text = String(value || "").trim();
+
+  if (!text) return false;
+  if (isTikTokEmoteUrl(text)) return true;
+
+  if (/^https?:\/\//i.test(text)) {
+    return /\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(text);
+  }
+
+  return /^(?:\.{0,2}\/)?[\w./-]+\.(?:avif|gif|jpe?g|png|svg|webp)(?:[?#].*)?$/i.test(text);
 }
 
 function renderTextWithThirdPartyEmotes(text) {
