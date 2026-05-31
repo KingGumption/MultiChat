@@ -1124,7 +1124,40 @@ body.show-timestamps .name-bubble .platform-icon {
 }
 
 body.show-timestamps .name-bubble .badges:empty + .name {
-  grid-column: 2 / 4;
+  grid-column: 3;
+}
+
+body.show-timestamps.name-icon-left .name-bubble {
+  grid-template-columns: 23px auto auto minmax(0, auto);
+}
+
+body.show-timestamps.name-icon-left .timestamp {
+  grid-column: 2;
+}
+
+body.show-timestamps.name-icon-left .msg:not(.alert) .timestamp {
+  padding-left: 5px;
+}
+
+body.show-timestamps.name-icon-left .name-bubble .badges {
+  grid-column: 3;
+}
+
+body.show-timestamps.name-icon-left .msg:not(.alert) .name-bubble .badges:not(:empty) {
+  padding-left: 0;
+}
+
+body.show-timestamps.name-icon-left .name-bubble .name {
+  grid-column: 4;
+}
+
+body.show-timestamps.name-icon-left .name-bubble .platform-icon {
+  grid-column: 1;
+}
+
+body.show-timestamps.name-icon-left .name-bubble .badges:empty + .name {
+  grid-column: 3;
+  padding-left: 0;
 }
 
 body.show-timestamps.hide-platform-icons .name-bubble,
@@ -1144,7 +1177,7 @@ body.show-timestamps .msg.no-platform-icon .name-bubble .name {
 
 body.show-timestamps.hide-platform-icons .name-bubble .badges:empty + .name,
 body.show-timestamps .msg.no-platform-icon .name-bubble .badges:empty + .name {
-  grid-column: 2 / 4;
+  grid-column: 3;
 }
 
 .shared-chat-label {

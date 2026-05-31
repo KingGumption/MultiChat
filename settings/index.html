@@ -1917,7 +1917,7 @@
         title: "Sizing",
         description: "Tune dimensions and text size for the overlay.",
         controls: [
-          ["Max Messages", "layout.maxMessages", "number", { min: 1, max: 500, step: 1 }],
+          ["Max Messages", "layout.maxMessages", "number", { min: 0, max: 500, step: 1 }],
           ["Chat Width", "layout.chatWidth", "sizingPreset", "chatWidth"],
           ["Message Width", "layout.maxMessageWidth", "sizingPreset", "messageWidth"],
           ["Avatar Size", "layout.avatarSize", "range", { min: 0, max: 120, step: 1 }],
@@ -4230,7 +4230,19 @@
       output.className = "url-output";
       output.type = "text";
       output.readOnly = true;
+      output.addEventListener("click", () => copyUrlOutput(output, status));
       outputLabel.appendChild(output);
+
+      const dockOutputLabel = document.createElement("label");
+      dockOutputLabel.textContent = "OBS Dock URL";
+
+      const dockOutput = document.createElement("input");
+      dockOutput.id = "obsDockUrlOutput";
+      dockOutput.className = "url-output";
+      dockOutput.type = "text";
+      dockOutput.readOnly = true;
+      dockOutput.addEventListener("click", () => copyUrlOutput(dockOutput, status));
+      dockOutputLabel.appendChild(dockOutput);
 
       const importLabel = document.createElement("label");
       importLabel.textContent = "Paste URL";
@@ -4271,7 +4283,7 @@
 
       importRow.append(importInput, importButton);
       importLabel.appendChild(importRow);
-      tools.append(outputLabel, importLabel, status);
+      tools.append(outputLabel, dockOutputLabel, importLabel, status);
       controls.appendChild(tools);
       details.append(summary, controls);
 
@@ -4293,7 +4305,19 @@
       output.className = "url-output";
       output.type = "text";
       output.readOnly = true;
+      output.addEventListener("click", () => copyUrlOutput(output, status));
       outputLabel.appendChild(output);
+
+      const dockOutputLabel = document.createElement("label");
+      dockOutputLabel.textContent = "OBS Dock URL";
+
+      const dockOutput = document.createElement("input");
+      dockOutput.id = "obsDockUrlOutput";
+      dockOutput.className = "url-output";
+      dockOutput.type = "text";
+      dockOutput.readOnly = true;
+      dockOutput.addEventListener("click", () => copyUrlOutput(dockOutput, status));
+      dockOutputLabel.appendChild(dockOutput);
 
       const importLabel = document.createElement("label");
       importLabel.textContent = "Paste URL";
@@ -4334,8 +4358,34 @@
 
       importRow.append(importInput, importButton);
       importLabel.appendChild(importRow);
-      tools.append(outputLabel, importLabel, status);
+      tools.append(outputLabel, dockOutputLabel, importLabel, status);
       root.appendChild(tools);
+    }
+
+    async function copyUrlOutput(input, statusEl = null) {
+      const value = String(input?.value || "");
+      if (!value) return;
+
+      input.focus();
+      input.select();
+
+      try {
+        if (navigator.clipboard?.writeText && window.isSecureContext) {
+          await navigator.clipboard.writeText(value);
+        } else {
+          document.execCommand("copy");
+        }
+
+        if (statusEl) {
+          statusEl.textContent = "Copied URL to clipboard.";
+          statusEl.classList.remove("error");
+        }
+      } catch {
+        if (statusEl) {
+          statusEl.textContent = "Could not copy automatically. The URL is selected.";
+          statusEl.classList.add("error");
+        }
+      }
     }
 
     function buildPanel() {
@@ -4410,14 +4460,32 @@
         params.set(getUrlParamName(path), current);
       });
 
-      const query = params.toString();
       const url = getOverlayUrl();
-      url.search = query;
+      url.search = params.toString();
       url.hash = "";
-      const output = document.getElementById("urlOutput");
-      if (output) {
+      document.querySelectorAll("#urlOutput").forEach(output => {
         output.value = serializeOverlayUrl(url);
-      }
+      });
+
+      const dockUrl = getObsDockUrl(params);
+      document.querySelectorAll("#obsDockUrlOutput").forEach(output => {
+        output.value = serializeOverlayUrl(dockUrl);
+      });
+    }
+
+    function getObsDockUrl(baseParams) {
+      const params = new URLSearchParams(baseParams);
+
+      params.set("dock", "true");
+      params.set("autoScroll", "true");
+      params.set("removeAfter", "0");
+      params.set("max", "0");
+
+      const url = getOverlayUrl();
+      url.search = params.toString();
+      url.hash = "";
+
+      return url;
     }
 
     function shouldOmitGeneratedUrlParam(path, changedValues) {

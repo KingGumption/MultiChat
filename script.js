@@ -1970,6 +1970,20 @@ function applyConfigAfterWrite(options = {}) {
   applyConfigToDocument();
 }
 
+function isDemoItem(item = {}) {
+  return item.raw?.__demo === true;
+}
+
+function clearDemoMessagesForTimestampToggle() {
+  const demoMessages = [...chat.querySelectorAll(".msg[data-demo='true']")];
+  if (demoMessages.length === 0) return false;
+
+  demoMessages.forEach(el => el.remove());
+  currentGroup = null;
+
+  return true;
+}
+
 window.applyChatConfigToDocument = function () {
   if (pendingConfigApplyFrame) {
     cancelAnimationFrame(pendingConfigApplyFrame);
@@ -1980,6 +1994,7 @@ window.applyChatConfigToDocument = function () {
 };
 
 window.setChatConfigValue = function (path, value, options = {}) {
+  const timestampsWereEnabled = !!cfg.behaviour.showTimestamps;
   const shouldSyncRainbowTypeStyle =
     isRainbowTypeDefaultSourcePath(path) &&
     !hasRainbowTypeStyleManualOverrides(cfg.style);
@@ -2037,9 +2052,19 @@ window.setChatConfigValue = function (path, value, options = {}) {
     pruneHiddenMessages();
     restartActiveScrollTestMessages();
   }
+
+  if (
+    path === "behaviour.showTimestamps" &&
+    value &&
+    !timestampsWereEnabled &&
+    clearDemoMessagesForTimestampToggle()
+  ) {
+    restartActiveScrollTestMessages({ sendImmediately: true });
+  }
 };
 
 window.setChatConfigValues = function (entries, options = {}) {
+  const timestampsWereEnabled = !!cfg.behaviour.showTimestamps;
   const shouldSyncRainbowTypeStyle =
     entries.some(([path]) => isRainbowTypeDefaultSourcePath(path)) &&
     !entries.some(([path]) => isRainbowTypeStylePath(path)) &&
@@ -2058,6 +2083,15 @@ window.setChatConfigValues = function (entries, options = {}) {
   repairRainbowTypeStyle(cfg);
 
   applyConfigAfterWrite(options);
+
+  if (
+    !timestampsWereEnabled &&
+    !!cfg.behaviour.showTimestamps &&
+    entries.some(([path]) => path === "behaviour.showTimestamps") &&
+    clearDemoMessagesForTimestampToggle()
+  ) {
+    restartActiveScrollTestMessages({ sendImmediately: true });
+  }
 };
 
 function applyStealthPreset() {
@@ -3381,7 +3415,7 @@ function stopScrollTestMessages(reason = "Real message received") {
   console.log(`Scroll test messages stopped: ${reason}`);
 }
 
-function restartActiveScrollTestMessages() {
+function restartActiveScrollTestMessages(options = {}) {
   if (!cfg.scrollTest?.enabled || scrollTestStopped) return;
 
   if (scrollTestTimer) {
@@ -3389,7 +3423,7 @@ function restartActiveScrollTestMessages() {
     scrollTestTimer = null;
   }
 
-  startScrollTestMessages({ sendImmediately: false });
+  startScrollTestMessages({ sendImmediately: options.sendImmediately === true });
 }
 
 function isScrollTestFilterConfigPath(path) {
@@ -5247,6 +5281,7 @@ function addMessage(item) {
   el.dataset.platform = item.platform || "";
   el.dataset.alertType = item.alertType || "";
   el.dataset.styleType = item.styleType || "";
+  if (isDemoItem(item)) el.dataset.demo = "true";
 
   applyPlatformVariables(el, item.platform, item);
 
@@ -5551,6 +5586,7 @@ function addAlert(item) {
   el.dataset.kind = item.kind || "alert";
   el.dataset.platform = item.platform || "";
   el.dataset.alertType = item.alertType || "";
+  if (isDemoItem(item)) el.dataset.demo = "true";
 
   applyPlatformVariables(el, item.platform, item);
 
@@ -5713,6 +5749,7 @@ function renderTikTokGift(item, key) {
   el.dataset.kind = item.kind || "tiktokGift";
   el.dataset.platform = item.platform || "TikTok";
   el.dataset.alertType = item.alertType || "";
+  if (isDemoItem(item)) el.dataset.demo = "true";
 
   applyPlatformVariables(el, "TikTok", item);
 
@@ -7510,6 +7547,8 @@ function isTikTokEmoteUrl(value) {
 }
 
 function trimMessages() {
+  if (Number(maxMessages) <= 0) return;
+
   while (chat.children.length > maxMessages) {
     chat.removeChild(cfg.behaviour.scrollDirection === "down" ? chat.lastChild : chat.firstChild);
   }
