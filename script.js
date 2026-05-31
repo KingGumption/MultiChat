@@ -2519,6 +2519,9 @@ function handleAutoScrollManualInput() {
 window.handleAutoScrollContainerScroll = handleAutoScrollContainerScroll;
 window.handleAutoScrollManualInput = handleAutoScrollManualInput;
 window.addEventListener("scroll", handleAutoScrollContainerScroll, { passive: true });
+["wheel", "touchstart", "pointerdown"].forEach(eventName => {
+  window.addEventListener(eventName, handleAutoScrollManualInput, { passive: true });
+});
 
 function connect() {
   showConnectionToast(
