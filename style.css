@@ -140,10 +140,15 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html.monitor-mode {
+  overflow: auto;
+  background: #000000;
+}
+
 body.monitor-mode {
   min-height: 100vh;
   background: #000000;
-  overflow: auto;
+  overflow: visible;
 }
 
 #chat {

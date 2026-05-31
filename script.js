@@ -1846,6 +1846,7 @@ function applyConfigToDocument() {
   document.body.classList.toggle("inline-chat", !!cfg.behaviour.inlineChat);
   document.body.classList.toggle("show-timestamps", !!cfg.behaviour.showTimestamps);
   document.body.classList.toggle("monitor-mode", !!cfg.behaviour.monitorMode);
+  document.documentElement.classList.toggle("monitor-mode", !!cfg.behaviour.monitorMode);
   document.body.classList.toggle("minimal-style", !!cfg.style.minimalStyle);
   document.body.classList.toggle("minimal-name-backgrounds", !!cfg.style.minimal?.nameBackgrounds);
   document.body.classList.toggle("minimal-message-backgrounds", !!cfg.style.minimal?.messageBackgrounds);
