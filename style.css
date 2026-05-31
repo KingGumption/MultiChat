@@ -209,8 +209,8 @@ body.scroll-down #chat {
 }
 
 body.monitor-mode .autoscroll-resume {
-  top: 12px;
-  bottom: auto;
+  top: auto;
+  bottom: 14px;
 }
 
 .msg {
