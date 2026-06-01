@@ -13,6 +13,7 @@
 
   --avatar-size: 52px;
   --avatar-size-gigantified: 64px;
+  --avatar-y-offset: 5px;
   --chat-column-gap: 10px;
   --chat-content-width: calc(
     var(--chat-width) -
@@ -228,7 +229,7 @@ body.monitor-mode .autoscroll-resume {
   align-items: flex-start;
   gap: var(--chat-column-gap);
   color: white;
-  animation: popIn var(--pop-duration) ease-out;
+  animation: var(--message-entry-animation, popIn) var(--pop-duration) ease-out;
   transform: translateZ(0);
   will-change: transform;
   width: 100%;
@@ -348,7 +349,7 @@ body.custom-accent .msg {
   width: var(--avatar-size);
   height: var(--avatar-size);
   flex: 0 0 var(--avatar-size);
-  margin-top: 0;
+  margin-top: var(--avatar-y-offset);
   border-radius: 50%;
   isolation: isolate;
 }
@@ -499,6 +500,19 @@ body.no-animations *::after {
   transition: none !important;
 }
 
+body.no-message-animations .msg,
+body.no-message-animations .message-bubble {
+  animation: none !important;
+}
+
+body.no-alert-animations .alert .bubble-stack {
+  animation: none !important;
+}
+
+body.no-gift-animations .tiktok-gift-card {
+  animation: none !important;
+}
+
 body.anim-subtle {
   --pop-duration: 0.16s;
   --emote-bounce-duration: 1.7s;
@@ -512,6 +526,34 @@ body.anim-fast {
 body.anim-slow {
   --pop-duration: 0.42s;
   --emote-bounce-duration: 1.8s;
+}
+
+body.anim-type-default {
+  --message-entry-animation: popIn;
+  --bubble-entry-animation: bubbleIn;
+  --alert-entry-animation: popIn;
+  --gift-entry-animation: popIn;
+}
+
+body.anim-type-slide {
+  --message-entry-animation: slideIn;
+  --bubble-entry-animation: slideIn;
+  --alert-entry-animation: slideIn;
+  --gift-entry-animation: slideIn;
+}
+
+body.anim-type-dissolve {
+  --message-entry-animation: dissolveIn;
+  --bubble-entry-animation: dissolveIn;
+  --alert-entry-animation: dissolveIn;
+  --gift-entry-animation: dissolveIn;
+}
+
+body.anim-type-bounce {
+  --message-entry-animation: bounceIn;
+  --bubble-entry-animation: bounceIn;
+  --alert-entry-animation: bounceIn;
+  --gift-entry-animation: bounceIn;
 }
 
 body.no-emote-bounce .emote,
@@ -1040,7 +1082,7 @@ body.name-icon-left .name-bubble .badges:empty + .name-stack {
     inset 0 -1px 0 rgba(0,0,0,0.28),
     0 12px 28px rgba(0,0,0,0.42);
 
-  animation: bubbleIn var(--pop-duration) ease-out;
+  animation: var(--bubble-entry-animation, bubbleIn) var(--pop-duration) ease-out;
 }
 
 .message-bubble::before {
@@ -1282,10 +1324,10 @@ body.show-timestamps .msg.no-platform-icon .name-bubble .badges:empty + .name-st
 
 body.inline-chat .bubble-stack {
   flex-direction: row;
-  align-items: center;
+  align-items: baseline;
   flex-wrap: wrap;
   column-gap: 8px;
-  row-gap: var(--grouped-message-gap);
+  row-gap: 0;
 }
 
 body.inline-chat .name-bubble + .message-bubble,
@@ -1306,10 +1348,11 @@ body.inline-chat.hide-name-backgrounds.hide-message-backgrounds .msg {
 body.inline-chat.hide-name-backgrounds.hide-message-backgrounds .bubble-stack {
   align-items: baseline;
   column-gap: 5px;
-  row-gap: 7px;
+  row-gap: 0;
 }
 
 body.inline-chat.hide-name-backgrounds .name-bubble {
+  flex: 0 0 auto;
   display: inline-flex;
   width: auto;
   max-width: var(--chat-content-width);
@@ -1318,16 +1361,48 @@ body.inline-chat.hide-name-backgrounds .name-bubble {
 }
 
 body.inline-chat.hide-name-backgrounds .name-bubble .platform-icon {
-  order: 0;
+  order: 3;
   width: 14px;
   height: 14px;
 }
 
+body.inline-chat.hide-name-backgrounds.name-icon-left .name-bubble .platform-icon {
+  order: 0;
+}
+
+body.inline-chat.hide-name-backgrounds .name-bubble .badges {
+  order: 1;
+}
+
+body.inline-chat.hide-name-backgrounds .name-bubble .name,
+body.inline-chat.hide-name-backgrounds .name-bubble .name-stack {
+  order: 2;
+  padding-right: 0;
+  padding-left: 0;
+}
+
 body.inline-chat.hide-name-backgrounds .name {
-  color: #ffd44d;
+  order: 1;
   font-weight: 900;
   font-size: 14px;
   line-height: 1.25;
+  white-space: nowrap;
+}
+
+body.inline-chat.hide-name-backgrounds .platform-twitch .name {
+  color: var(--twitch-name-text-color);
+}
+
+body.inline-chat.hide-name-backgrounds .platform-youtube .name {
+  color: var(--youtube-name-text-color);
+}
+
+body.inline-chat.hide-name-backgrounds .platform-tiktok .name {
+  color: var(--tiktok-name-text-color);
+}
+
+body.inline-chat.hide-name-backgrounds .platform-kick .name {
+  color: var(--kick-name-text-color);
 }
 
 body.inline-chat.hide-name-backgrounds .name::after {
@@ -1335,7 +1410,22 @@ body.inline-chat.hide-name-backgrounds .name::after {
   color: #ffffff;
 }
 
+body.inline-chat.hide-name-backgrounds .name-stack {
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 4px;
+}
+
+body.inline-chat.hide-name-backgrounds .shared-chat-label {
+  order: 2;
+  font-size: 12px;
+  line-height: 1.1;
+}
+
 body.inline-chat.hide-message-backgrounds .message-bubble {
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: var(--chat-content-width);
 }
 
@@ -1346,6 +1436,89 @@ body.inline-chat.hide-message-backgrounds .text {
   text-shadow:
     0 2px 3px rgba(0,0,0,0.92),
     0 0 8px rgba(0,0,0,0.72);
+}
+
+body.inline-chat .alert .bubble-stack {
+  min-width: 0;
+  min-height: 0;
+  gap: 5px;
+  align-items: baseline;
+}
+
+body.inline-chat .alert .name-bubble,
+body.inline-chat .alert .message-bubble {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+body.inline-chat .alert .name,
+body.inline-chat .alert .text {
+  line-height: 1.25;
+}
+
+body.inline-chat .alert.platform-streamlabs .text,
+body.inline-chat .alert.platform-streamelements .text,
+body.inline-chat .alert.platform-kofi .text,
+body.inline-chat .alert.platform-ko-fi .text,
+body.inline-chat .alert.platform-tipeeestream .text,
+body.inline-chat .alert.platform-tipeee-stream .text,
+body.inline-chat .alert.platform-fourthwall .text,
+body.inline-chat .alert.platform-patreon .text,
+body.inline-chat .alert.platform-donordrive .text {
+  margin-top: 0;
+}
+
+body.inline-chat.hide-gift-backgrounds .tiktok-gift-card {
+  min-inline-size: 0;
+  width: auto;
+  max-width: var(--chat-content-width);
+  gap: 6px;
+  align-items: baseline;
+}
+
+body.inline-chat.hide-gift-backgrounds .tiktok-gift-info {
+  flex: 0 1 auto;
+  min-width: 0;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 4px;
+}
+
+body.inline-chat.hide-gift-backgrounds .tiktok-gift-image {
+  width: 24px;
+  height: 24px;
+}
+
+body.inline-chat.hide-gift-backgrounds .tiktok-gift-user,
+body.inline-chat.hide-gift-backgrounds .tiktok-gift-text,
+body.inline-chat.hide-gift-backgrounds .tiktok-gift-count {
+  line-height: 1.2;
+}
+
+body.inline-chat.fit-to-screen .msg > .bubble-stack {
+  flex: 1 1 auto;
+  align-self: auto;
+  width: auto;
+  max-width: var(--chat-content-width);
+}
+
+body.inline-chat.fit-to-screen .bubble-stack > .name-bubble,
+body.inline-chat.fit-to-screen .bubble-stack > .message-bubble {
+  width: auto;
+  max-width: var(--chat-content-width);
+}
+
+body.inline-chat.fit-to-screen .message-bubble {
+  max-width: var(--chat-content-width);
+}
+
+body.inline-chat.fit-to-screen.hide-name-backgrounds.hide-message-backgrounds .bubble-stack {
+  display: flex;
+  min-width: 0;
+}
+
+body.inline-chat.fit-to-screen.hide-name-backgrounds.hide-message-backgrounds .message-bubble {
+  max-width: 100%;
 }
 
 body.bubble-layout-overlapped .msg:not(.alert):not(.tiktok-gift) .bubble-stack {
@@ -1605,6 +1778,7 @@ body.bubble-layout-overlapped.overlapped-random-tilt .msg:nth-child(even):not(.a
   background: var(--alert-fill-gradient);
   isolation: isolate;
   overflow: hidden;
+  animation: var(--alert-entry-animation, popIn) var(--pop-duration) ease-out;
   box-shadow:
     0 0 20px 8px var(--alert-glow-color),
     0 0 29px 4px color-mix(in srgb, var(--alert-glow-color) 58%, transparent),
@@ -1747,6 +1921,7 @@ body.name-icon-left .alert .name {
      inset 0 1px 0 rgba(255,255,255,0.12),
      0 12px 28px rgba(0,0,0,0.42);
 
+  animation: var(--gift-entry-animation, popIn) var(--pop-duration) ease-out;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -1839,7 +2014,7 @@ body.fit-to-screen .message-bubble {
 
 .tiktok-gift .avatar-wrap {
   display: block;
-  margin-top: 0;
+  margin-top: var(--avatar-y-offset);
 }
 
 body.hide-avatars .tiktok-gift .avatar-wrap {
@@ -1939,6 +2114,42 @@ body.hide-avatars .tiktok-gift .avatar-wrap {
   to {
     opacity: 1;
     transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes dissolveIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.92);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.02);
+  }
+  100% {
+    transform: translateY(0) scale(1);
   }
 }
 

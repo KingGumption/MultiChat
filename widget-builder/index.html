@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Widget Builder — OBS-ready</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>Widget Builder (vanilla JS)</h1>
+      <p>Use the controls to configure the widget and click "Export Widget" to download a self-contained HTML file suitable for OBS Browser Source.</p>
+    </header>
+
+    <section class="controls">
+      <div class="control-row">
+        <label>Speed</label>
+        <select id="animation-preset">
+          <option value="normal">normal</option>
+          <option value="subtle">subtle</option>
+          <option value="fast">fast</option>
+          <option value="slow">slow</option>
+          <option value="none">none</option>
+        </select>
+      </div>
+
+      <div class="control-row">
+        <label>Style</label>
+        <select id="animation-type">
+          <option value="default">Pop (default)</option>
+          <option value="slide">Slide</option>
+          <option value="dissolve">Dissolve</option>
+          <option value="bounce">Bounce</option>
+        </select>
+      </div>
+
+      <div class="control-row checkbox">
+        <label><input type="checkbox" id="animate-messages" checked> Animate Messages</label>
+      </div>
+      <div class="control-row checkbox">
+        <label><input type="checkbox" id="animate-alerts" checked> Animate Alerts</label>
+      </div>
+      <div class="control-row checkbox">
+        <label><input type="checkbox" id="animate-gifts" checked> Animate Gifts</label>
+      </div>
+
+      <div class="actions">
+        <button id="add-message">Add Message</button>
+        <button id="add-alert">Add Alert</button>
+        <button id="add-gift">Add Gift</button>
+        <button id="clear">Clear</button>
+        <button id="export">Export Widget</button>
+      </div>
+    </section>
+
+    <section class="preview">
+      <h2>Preview</h2>
+      <div id="preview-area" class="preview-area">
+        <!-- messages appear here -->
+      </div>
+    </section>
+
+    <footer>
+      <small>Exported widget is a single HTML file; load with OBS Browser Source (file:// or via HTTP).</small>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

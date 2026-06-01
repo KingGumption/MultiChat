@@ -359,7 +359,11 @@ window.CHAT_DEFAULT_CONFIG = {
 
   animation: {
     enabled: true,
-    preset: "normal"
+    preset: "normal",
+    type: "default",
+    messages: true,
+    alerts: true,
+    gifts: true
   },
 
   platforms: {

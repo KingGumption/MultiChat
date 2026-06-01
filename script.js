@@ -1196,7 +1196,9 @@ const COMPOSITION_PRESETS = {
       showMediaBackgrounds: true,
       borderGlow: true,
       showAvatarGlow: true,
-      showEmoteGlow: true
+      showEmoteGlow: true,
+      titleFontSize: 12,
+      messageFontSize: 17
     },
     layout: {
       chatWidth: "clamp(320px, 78vw, 720px)",
@@ -1237,7 +1239,7 @@ const COMPOSITION_PRESETS = {
     layout: {
       chatWidth: "clamp(360px, 58vw, 640px)",
       maxMessageWidth: "var(--chat-content-width)",
-      rowGap: 16,
+      rowGap: 10,
       groupedMessageGap: 6,
       avatarGap: 10,
       avatarSize: 28,
@@ -1266,7 +1268,9 @@ const COMPOSITION_PRESETS = {
       showMediaBackgrounds: true,
       borderGlow: true,
       showAvatarGlow: true,
-      showEmoteGlow: true
+      showEmoteGlow: true,
+      titleFontSize: 12,
+      messageFontSize: 17
     },
     layout: {
       chatWidth: "clamp(300px, 42vw, 460px)",
@@ -1743,6 +1747,12 @@ function applyConfigToDocument() {
   document.body.classList.add(`anim-${cfg.animation.preset || "normal"}`);
 
   [...document.body.classList]
+    .filter(name => name.startsWith("anim-type-"))
+    .forEach(name => document.body.classList.remove(name));
+
+  document.body.classList.add(`anim-type-${cfg.animation.type || "default"}`);
+
+  [...document.body.classList]
     .filter(name => name.startsWith("bubble-shape-"))
     .forEach(name => document.body.classList.remove(name));
 
@@ -1776,6 +1786,9 @@ function applyConfigToDocument() {
   document.body.classList.toggle("hide-alert-backgrounds", !cfg.style.showAlertBackgrounds);
   document.body.classList.toggle("hide-gift-backgrounds", !cfg.style.showGiftBackgrounds);
   document.body.classList.toggle("hide-media-backgrounds", !cfg.style.showMediaBackgrounds);
+  document.body.classList.toggle("no-message-animations", cfg.animation.messages === false);
+  document.body.classList.toggle("no-alert-animations", cfg.animation.alerts === false);
+  document.body.classList.toggle("no-gift-animations", cfg.animation.gifts === false);
   document.body.classList.toggle("hide-avatar-glow", !cfg.style.showAvatarGlow);
   document.body.classList.toggle("hide-emote-glow", !cfg.style.showEmoteGlow);
   document.body.classList.toggle("hide-colored-text", !cfg.style.showColoredText);

@@ -1,0 +1,27 @@
+:root{--bg:#071127;--panel:#0f1724;--accent:#9146ff;--text:#fff;--pop-duration:0.24s}
+*{box-sizing:border-box}
+body{font-family:Inter, Arial, sans-serif;margin:0;background:linear-gradient(180deg,#05060a,#0b1220);color:var(--text);min-height:100vh}
+.app{max-width:980px;margin:28px auto;padding:20px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border-radius:12px}
+header h1{margin:0 0 6px;font-size:20px}
+.controls{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.control-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.02);padding:8px;border-radius:8px}
+.control-row select{padding:6px}
+.control-row.checkbox{padding:8px 12px}
+.actions{display:flex;gap:8px;align-items:center;margin-left:8px}
+button{background:var(--accent);border:0;color:#fff;padding:8px 10px;border-radius:8px;cursor:pointer}
+.preview{margin-top:16px}
+.preview-area{min-height:220px;background:rgba(0,0,0,0.12);padding:14px;border-radius:10px;display:flex;flex-direction:column;gap:10px}
+.msg{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 6px 18px rgba(0,0,0,0.5)}
+.alert{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.03));border-radius:12px;padding:14px}
+.gift{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.04));padding:12px;border-radius:10px}
+.small{font-size:13px;opacity:0.9}
+/* animation hooks */
+@keyframes popIn{from{opacity:0;transform:translateY(12px) scale(.98}}to{opacity:1;transform:none}}
+@keyframes slideIn{from{opacity:0;transform:translateX(-20px) scale(.98}}to{opacity:1;transform:none}}
+@keyframes dissolveIn{from{opacity:0;transform:scale(.99)}to{opacity:1;transform:none}}
+@keyframes bounceIn{0%{opacity:0;transform:translateY(22px) scale(.95)}60%{opacity:1;transform:translateY(-6px) scale(1.02)}100%{transform:none}}
+.anim-pop{animation:popIn var(--pop-duration) ease-out}
+.anim-slide{animation:slideIn var(--pop-duration) ease-out}
+.anim-dissolve{animation:dissolveIn var(--pop-duration) ease-out}
+.anim-bounce{animation:bounceIn var(--pop-duration) cubic-bezier(.17,.89,.32,1.28)}
+.hidden{display:none}

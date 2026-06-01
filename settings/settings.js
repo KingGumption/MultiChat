@@ -779,7 +779,11 @@ const controlSections = [
     description: "Controls motion effects and enlarged emote behavior.",
     controls: [
       ["Animations", "animation.enabled", "checkbox"],
-      ["Preset", "animation.preset", "select", ["normal", "subtle", "fast", "slow", "none"]],
+      ["Speed", "animation.preset", "select", ["normal", "subtle", "fast", "slow", "none"]],
+      ["Style", "animation.type", "select", [["Pop (default)", "default"], ["Slide", "slide"], ["Dissolve", "dissolve"], ["Bounce", "bounce"]]],
+      ["Animate Messages", "animation.messages", "checkbox"],
+      ["Animate Alerts", "animation.alerts", "checkbox"],
+      ["Animate Gifts", "animation.gifts", "checkbox"],
       ["Emote Bounce", "gigantified.bounceEmotes", "checkbox"],
       ["Gigantified", "gigantified.enabled", "checkbox"]
     ]
@@ -1499,6 +1503,7 @@ function createFontPicker(path, value) {
 }
 
 const initialValues = new Map();
+let activeStylePresetMode = null;
 
 function readConfig(path) {
   return window.getChatConfigValue?.(path);
@@ -1509,12 +1514,28 @@ function readDefaultConfig(path) {
 }
 
 function getActiveStylePreset() {
+  if (activeStylePresetMode === "none") return null;
+  if (activeStylePresetMode) return activeStylePresetMode;
   if (readConfig("style.stealthMode")) return "stealth";
   if (readConfig("style.minimalStyle")) return "minimal";
   return "default";
 }
 
+function resetActiveStylePresetMode() {
+  activeStylePresetMode = null;
+}
+
+function setActiveStylePresetMode(preset) {
+  activeStylePresetMode = preset || "none";
+}
+
 function applyStylePreset(preset) {
+  if (preset === "default" || preset === "stealth" || preset === "minimal") {
+    activeStylePresetMode = preset;
+  } else {
+    activeStylePresetMode = "none";
+  }
+
   window.applyChatStylePreset?.(preset);
   syncControls();
   refreshTypeStylePreview();
@@ -1522,6 +1543,10 @@ function applyStylePreset(preset) {
 }
 
 function writeConfig(path, value, options = {}) {
+  if (path === "style.stealthMode" || path === "style.minimalStyle") {
+    resetActiveStylePresetMode();
+  }
+
   if (typeStyleEditorState.group === GLOBAL_TYPE_STYLE_GROUP && isGlobalTypeStyleProxyPath(path)) {
     writeConfigEntries([[path, value]], options);
     return;
@@ -1544,6 +1569,10 @@ function writeConfig(path, value, options = {}) {
 }
 
 function writeConfigEntries(entries, options = {}) {
+  if (entries.some(([path]) => path === "style.stealthMode" || path === "style.minimalStyle")) {
+    resetActiveStylePresetMode();
+  }
+
   const nextEntries =
     typeStyleEditorState.group === GLOBAL_TYPE_STYLE_GROUP
       ? expandGlobalTypeStyleEntries(entries)
@@ -1799,15 +1828,29 @@ function createControl([label, path, type, options]) {
     return row;
   }
 
+  const getInputValue = () =>
+    type === "list"
+      ? parseListConfigValue(input.value)
+      : type === "checkbox"
+      ? input.checked
+      : type === "number"
+        ? Number(input.value)
+        : input.value;
+
+  if (type === "color") {
+    input.addEventListener("input", () => {
+      writeConfig(path, getInputValue(), { deferApply: true, deferUiSync: true });
+    });
+    input.addEventListener("change", () => {
+      writeConfig(path, getInputValue());
+    });
+    row.appendChild(input);
+    return row;
+  }
+
   const handleInputChange = () => {
     const nextValue =
-      type === "list"
-        ? parseListConfigValue(input.value)
-        : type === "checkbox"
-        ? input.checked
-        : type === "number"
-          ? Number(input.value)
-          : input.value;
+      getInputValue();
 
     writeConfig(path, nextValue);
   };
