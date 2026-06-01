@@ -7,347 +7,7 @@ const YOUTUBE_BADGE_ICONS = {
   verified: "icons/badges/youtube-verified.svg"
 };
 
-const DEFAULT_CONFIG = {
-  streamerbot: {
-    host: "127.0.0.1",
-    port: 8080,
-    reconnectMs: 2000
-  },
-
-  donations: {
-    defaultCurrency: "USD"
-  },
-
-  tikfinity: {
-    enabled: true,
-    host: "127.0.0.1",
-    port: 21213,
-    reconnectMs: 2000
-  },
-
-  scrollTest: {
-    enabled: false,
-    intervalMs: 1300,
-    autoScroll: false
-  },
-
-  layout: {
-    maxMessages: 50,
-    chatWidth: 820,
-    left: 32,
-    bottom: 32,
-    rowGap: 14,
-    groupedMessageGap: 6,
-    avatarGap: 10,
-    avatarSize: 52,
-    avatarSizeGigantified: 64,
-    maxMessageWidth: 680,
-    fitToScreen: false
-  },
-
-  style: {
-    fontFamily: "'Sora', sans-serif",
-    accentFontFamily: "'Sora', sans-serif",
-    messageFontFamily: "'Sora', sans-serif",
-    titleFontSize: 12,
-    messageTextColor: "#ffffff",
-    titleTextColor: "#ffffff",
-    accentColor: "#9146ff",
-    useCustomAccentColor: false,
-    colors: {
-      twitch: {
-        chat: "#9146ff",
-        announcements: "#9146ff",
-        channelPointRedemptions: "#9146ff",
-        cheers: "#9146ff",
-        follows: "#9146ff",
-        subs: "#9146ff",
-        giftSubs: "#9146ff",
-        raids: "#9146ff"
-      },
-      special: {
-        rainbow: "#ff00d4"
-      },
-      youtube: {
-        chat: "#ff0033",
-        superChats: "#ff0033",
-        superStickers: "#ff0033",
-        members: "#ff0033"
-      },
-      tiktok: {
-        chat: "#25f4ee",
-        follows: "#25f4ee",
-        subscribers: "#25f4ee",
-        gifts: "#25f4ee",
-        likes: "#25f4ee",
-        treasureBoxes: "#25f4ee"
-      },
-      kick: {
-        chat: "#53fc18",
-        follows: "#53fc18",
-        subs: "#53fc18",
-        giftSubs: "#53fc18",
-        rewardRedemptions: "#53fc18"
-      },
-      donations: {
-        streamlabs: "#80f5d2",
-        streamelements: "#00d9ff",
-        kofi: "#ff6b4a",
-        tipeeestream: "#f5a623",
-        fourthwall: "#9ca3af",
-        patreon: "#ff424d",
-        donordrive: "#4da3ff"
-      },
-      text: {
-        twitchName: "#ffe45f",
-        youtubeName: "#ffd6dc",
-        tiktokName: "#061114",
-        kickName: "#ecffe8",
-        muted: "#d6d6e0",
-        dark: "#061114",
-        stealth: "#ffffff"
-      },
-      surfaces: {
-        pageBackground: "#000000",
-        bubbleBase: "#050510",
-        bubbleHighlight: "#ffffff",
-        mediaBackground: "#000000",
-        linkPreviewText: "#ffffff",
-        linkPreviewMeta: "#d6d6e0",
-        badgeBackground: "#000000",
-        avatarBorder: "#ffffff",
-        avatarFill: "#ffffff"
-      },
-      effects: {
-        shadow: "#000000",
-        emoteSparkle: "#ffffff",
-        gigantifiedSparkle: "#ffd65a",
-        highlightGlow: "#ff00c8",
-        highlightWarmGlow: "#ffb400",
-        tiktokRed: "#fe2c55",
-        tiktokBlue: "#25f4ee"
-      },
-      rainbow: {
-        one: "#ff004c",
-        two: "#ff8a00",
-        three: "#fff700",
-        four: "#00ff85",
-        five: "#00c8ff",
-        six: "#7a5cff",
-        seven: "#ff00d4"
-      }
-    },
-    bubbleShape: "rounded",
-    bubbleSlant: 26,
-    bubbleNotch: 23,
-    nameIconPosition: "right",
-    nameIconEdgeOverlap: 16,
-    nameIconEdgeRadius: 19,
-    useTwitchChatNameColor: false,
-    borderGlow: true,
-    stealthMode: false,
-    showNameBackgrounds: true,
-    showMessageBackgrounds: true,
-    showAlertBackgrounds: true,
-    showGiftBackgrounds: true,
-    showMediaBackgrounds: true,
-    showPageBackground: false,
-    showAvatarGlow: true,
-    showEmoteGlow: true,
-    showColoredText: true,
-    minimal: {
-      nameBackgrounds: false,
-      messageBackgrounds: false,
-      alertBackgrounds: true,
-      giftBackgrounds: true,
-      glow: false,
-      shine: false,
-      animations: true
-    },
-    stealth: {
-      chatBackgrounds: false,
-      nameBackgrounds: false,
-      messageBackgrounds: false,
-      alertBackgrounds: false,
-      giftBackgrounds: false,
-      mediaBackgrounds: false,
-      emoteGlow: false,
-      avatarGlow: false,
-      coloredText: false,
-      badges: true,
-      platformIcons: true
-    },
-
-    messageFontSize: 17,
-    titleLineHeight: 1.05,
-    messageLineHeight: 1.28,
-    emoteOnlyFontSize: 30,
-    gigantifiedFontSize: 44,
-    bubbleRadius: 21,
-    nameBubbleRadius: 20,
-    minimalStyle: false
-  },
-
-  behaviour: {
-    removeMessagesAfterMs: 0,
-    groupConsecutiveMessages: true,
-    groupWindowMs: 30000,
-    showTimestamps: false,
-    timestampFormat: "time",
-    inlineChat: false,
-    highlightMentions: false,
-    monitorMode: false,
-    autoScroll: true,
-    scrollDirection: "up",
-    hideAfterFade: true,
-    showAlerts: true,
-    compactAlerts: true,
-    showImageEmbeds: true,
-    showLinkPreviews: true,
-    showPlatformIcons: true,
-    imageEmbeds: {
-      twitch: {
-        enabled: true,
-        everyone: false,
-        broadcaster: true,
-        moderators: true,
-        vips: true,
-        subscribers: true
-      },
-      youtube: {
-        enabled: true,
-        everyone: false,
-        owner: true,
-        moderators: true,
-        members: true
-      },
-      tiktok: {
-        enabled: true,
-        everyone: false
-      },
-      kick: {
-        enabled: true,
-        everyone: false,
-        broadcaster: true,
-        moderators: true,
-        vips: true,
-        subscribers: true
-      }
-    },
-    showBadges: true,
-    showAvatars: true,
-    twitchAvatarsViaDecApi: true,
-    sources: {
-      twitch: true,
-      youtube: true,
-      tiktok: true,
-      kick: true
-    },
-    chat: {
-      twitch: true,
-      youtube: true,
-      tiktok: true,
-      kick: true
-    },
-    alerts: {
-      twitch: {
-        enabled: true,
-        announcements: true,
-        channelPointRedemptions: true,
-        cheers: true,
-        follows: true,
-        subs: true,
-        giftSubs: true,
-        raids: true
-      },
-      youtube: {
-        enabled: true,
-        superChats: true,
-        superStickers: true,
-        members: true
-      },
-      tiktok: {
-        enabled: true,
-        follows: true,
-        subscribers: true,
-        gifts: true,
-        likes: true,
-        treasureBoxes: true
-      },
-      kick: {
-        enabled: true,
-        follows: true,
-        subs: true,
-        giftSubs: true,
-        rewardRedemptions: true
-      },
-      donations: {
-        enabled: true,
-        streamlabs: true,
-        streamelements: true,
-        kofi: true,
-        tipeeestream: true,
-        fourthwall: true,
-        patreon: true,
-        donordrive: true
-      }
-    },
-    ignoredUsers: []
-  },
-
-  animation: {
-    enabled: true,
-    preset: "normal"
-  },
-
-  platforms: {
-    twitch: {
-      color: "#9146ff",
-      glow: "rgba(145, 70, 255, 0.55)"
-    },
-
-    youtube: {
-      color: "#ff0033",
-      glow: "rgba(255, 0, 51, 0.52)"
-    },
-
-    tiktok: {
-      color: "#25f4ee",
-      glow: "rgba(37, 244, 238, 0.48)"
-    },
-    kick: {
-      color: "#53fc18",
-      glow: "rgba(83, 252, 24, 0.48)"
-    }
-  },
-
-  highlight: {
-    enabled: true
-  },
-
-  gigantified: {
-    enabled: true,
-    bounceEmotes: true
-  },
-
-  thirdPartyEmotes: {
-    enabled: true,
-
-    seventv: {
-      enabled: true
-    },
-
-    bttv: {
-      enabled: true,
-      twitchUserId: ""
-    },
-
-    ffz: {
-      enabled: true,
-      twitchChannelName: ""
-    }
-  }
-};
+const DEFAULT_CONFIG = window.CHAT_DEFAULT_CONFIG || {};
 
 const baseConfig = mergeConfig(DEFAULT_CONFIG, CONFIG);
 
@@ -398,25 +58,54 @@ const ALERT_GROUP_TYPES = {
     "follows",
     "subs",
     "giftSubs",
-    "raids"
+    "raids",
+    "watchStreaks",
+    "upgrades",
+    "hype",
+    "hypeTrain",
+    "charity",
+    "goals",
+    "polls",
+    "predictions",
+    "sharedChat",
+    "shoutouts",
+    "stream",
+    "moderation",
+    "system"
   ],
   youtube: [
     "superChats",
     "superStickers",
-    "members"
+    "members",
+    "gifts",
+    "polls",
+    "stream",
+    "moderation",
+    "system"
   ],
   tiktok: [
     "follows",
     "subscribers",
     "gifts",
     "likes",
-    "treasureBoxes"
+    "treasureBoxes",
+    "shares",
+    "joins",
+    "questions",
+    "goals",
+    "polls",
+    "battles",
+    "stream",
+    "system"
   ],
   kick: [
     "follows",
     "subs",
     "giftSubs",
-    "rewardRedemptions"
+    "rewardRedemptions",
+    "stream",
+    "moderation",
+    "system"
   ]
 };
 
@@ -435,11 +124,24 @@ const STYLE_TYPE_GROUPS = {
     "follows",
     "subs",
     "giftSubs",
-    "raids"
+    "raids",
+    "watchStreaks",
+    "upgrades",
+    "hype",
+    "hypeTrain",
+    "charity",
+    "goals",
+    "polls",
+    "predictions",
+    "sharedChat",
+    "shoutouts",
+    "stream",
+    "moderation",
+    "system"
   ],
-  youtube: ["chat", "superChats", "superStickers", "members"],
-  tiktok: ["chat", "follows", "subscribers", "gifts", "likes", "treasureBoxes"],
-  kick: ["chat", "follows", "subs", "giftSubs", "rewardRedemptions"],
+  youtube: ["chat", "superChats", "superStickers", "members", "gifts", "polls", "stream", "moderation", "system"],
+  tiktok: ["chat", "follows", "subscribers", "gifts", "likes", "treasureBoxes", "shares", "joins", "questions", "goals", "polls", "battles", "stream", "system"],
+  kick: ["chat", "follows", "subs", "giftSubs", "rewardRedemptions", "stream", "moderation", "system"],
   special: ["rainbow"],
   donations: ["streamlabs", "streamelements", "kofi", "tipeeestream", "fourthwall", "patreon", "donordrive"]
 };
@@ -459,7 +161,20 @@ const STYLE_TYPE_DEFAULT_COLORS = {
     follows: "#9146ff",
     subs: "#9146ff",
     giftSubs: "#9146ff",
-    raids: "#9146ff"
+    raids: "#9146ff",
+    watchStreaks: "#9146ff",
+    upgrades: "#9146ff",
+    hype: "#9146ff",
+    hypeTrain: "#9146ff",
+    charity: "#9146ff",
+    goals: "#9146ff",
+    polls: "#9146ff",
+    predictions: "#9146ff",
+    sharedChat: "#9146ff",
+    shoutouts: "#9146ff",
+    stream: "#9146ff",
+    moderation: "#9146ff",
+    system: "#9146ff"
   },
   special: {
     rainbow: "#ff00d4"
@@ -468,7 +183,12 @@ const STYLE_TYPE_DEFAULT_COLORS = {
     chat: "#ff0033",
     superChats: "#ff0033",
     superStickers: "#ff0033",
-    members: "#ff0033"
+    members: "#ff0033",
+    gifts: "#ff0033",
+    polls: "#ff0033",
+    stream: "#ff0033",
+    moderation: "#ff0033",
+    system: "#ff0033"
   },
   tiktok: {
     chat: "#25f4ee",
@@ -476,14 +196,25 @@ const STYLE_TYPE_DEFAULT_COLORS = {
     subscribers: "#25f4ee",
     gifts: "#25f4ee",
     likes: "#25f4ee",
-    treasureBoxes: "#25f4ee"
+    treasureBoxes: "#25f4ee",
+    shares: "#25f4ee",
+    joins: "#25f4ee",
+    questions: "#25f4ee",
+    goals: "#25f4ee",
+    polls: "#25f4ee",
+    battles: "#25f4ee",
+    stream: "#25f4ee",
+    system: "#25f4ee"
   },
   kick: {
     chat: "#53fc18",
     follows: "#53fc18",
     subs: "#53fc18",
     giftSubs: "#53fc18",
-    rewardRedemptions: "#53fc18"
+    rewardRedemptions: "#53fc18",
+    stream: "#53fc18",
+    moderation: "#53fc18",
+    system: "#53fc18"
   },
   donations: {
     streamlabs: "#80f5d2",
@@ -686,13 +417,31 @@ const DEFAULT_STYLE_PRESET = {
       follows: "#9146ff",
       subs: "#9146ff",
       giftSubs: "#9146ff",
-      raids: "#9146ff"
+      raids: "#9146ff",
+      watchStreaks: "#9146ff",
+      upgrades: "#9146ff",
+      hype: "#9146ff",
+      hypeTrain: "#9146ff",
+      charity: "#9146ff",
+      goals: "#9146ff",
+      polls: "#9146ff",
+      predictions: "#9146ff",
+      sharedChat: "#9146ff",
+      shoutouts: "#9146ff",
+      stream: "#9146ff",
+      moderation: "#9146ff",
+      system: "#9146ff"
     },
     youtube: {
       chat: "#ff0033",
       superChats: "#ff0033",
       superStickers: "#ff0033",
-      members: "#ff0033"
+      members: "#ff0033",
+      gifts: "#ff0033",
+      polls: "#ff0033",
+      stream: "#ff0033",
+      moderation: "#ff0033",
+      system: "#ff0033"
     },
     tiktok: {
       chat: "#25f4ee",
@@ -700,14 +449,25 @@ const DEFAULT_STYLE_PRESET = {
       subscribers: "#25f4ee",
       gifts: "#25f4ee",
       likes: "#25f4ee",
-      treasureBoxes: "#25f4ee"
+      treasureBoxes: "#25f4ee",
+      shares: "#25f4ee",
+      joins: "#25f4ee",
+      questions: "#25f4ee",
+      goals: "#25f4ee",
+      polls: "#25f4ee",
+      battles: "#25f4ee",
+      stream: "#25f4ee",
+      system: "#25f4ee"
     },
     kick: {
       chat: "#53fc18",
       follows: "#53fc18",
       subs: "#53fc18",
       giftSubs: "#53fc18",
-      rewardRedemptions: "#53fc18"
+      rewardRedemptions: "#53fc18",
+      stream: "#53fc18",
+      moderation: "#53fc18",
+      system: "#53fc18"
     },
     donations: {
       streamlabs: "#80f5d2",
@@ -762,6 +522,13 @@ const DEFAULT_STYLE_PRESET = {
   },
   typeStyles: buildDefaultTypeStyles(DEFAULT_CONFIG.style),
   bubbleShape: "rounded",
+  bubbleLayout: "stacked",
+  nameTagOffsetX: 10,
+  nameTagOverlapY: 8,
+  overlappedMessageTopPadding: 17,
+  overlappedCardShadow: true,
+  overlappedRandomTilt: false,
+  overlappedTiltAmount: 3,
   bubbleRadius: 21,
   nameBubbleRadius: 20,
   bubbleSlant: 26,
@@ -1570,55 +1337,208 @@ function showConnectionToast(id, text, color = "#ff3355", autoHideMs = 0) {
 
 const SUBSCRIPTIONS = {
   Twitch: [
-    "ChatMessage",
-    "Message",
-    "Chat",
-    "Cheer",
-
-    "Follow",
-    "Sub",
-    "ReSub",
-    "GiftSub",
-    "GiftBomb",
-    "Raid",
-
+    "AdRun",
     "Announcement",
-
+    "AutomaticRewardRedemption",
+    "AutoModMessageHeld",
+    "AutoModMessageUpdate",
+    "BetterTTVEmoteAdded",
+    "BetterTTVEmoteRemoved",
+    "BitsBadgeTier",
+    "BlockedTermsAdded",
+    "BlockedTermsDeleted",
+    "BotEventSubConnected",
+    "BotEventSubDisconnected",
+    "BotWhisper",
+    "BroadcasterAuthenticated",
+    "BroadcasterChatConnected",
+    "BroadcasterChatDisconnected",
+    "BroadcasterEventSubConnected",
+    "BroadcasterEventSubDisconnected",
+    "BroadcastUpdate",
+    "CharityCompleted",
+    "CharityDonation",
+    "CharityProgress",
+    "CharityStarted",
+    "ChatCleared",
+    "ChatEmoteModeOff",
+    "ChatEmoteModeOn",
+    "ChatFollowerModeChanged",
+    "ChatFollowerModeOff",
+    "ChatFollowerModeOn",
+    "ChatMessage",
+    "ChatMessageDeleted",
+    "ChatSlowModeChanged",
+    "ChatSlowModeOff",
+    "ChatSlowModeOn",
+    "ChatSubscriberModeOff",
+    "ChatSubscriberModeOn",
+    "ChatUniqueModeOff",
+    "ChatUniqueModeOn",
+    "Cheer",
+    "CoinCheer",
+    "CommunityGoalContribution",
+    "CommunityGoalEnded",
+    "CustomPowerUpRedemption",
+    "FirstWord",
+    "Follow",
+    "GiftBomb",
+    "GiftPaidUpgrade",
+    "GiftSub",
+    "GoalBegin",
+    "GoalEnd",
+    "GoalProgress",
+    "GuestStarGuestUpdate",
+    "GuestStarSessionBegin",
+    "GuestStarSessionEnd",
+    "GuestStarSettingsUpdate",
+    "GuestStarSlotUpdate",
+    "HypeChat",
+    "HypeChatLevel",
+    "HypeTrainEnd",
+    "HypeTrainLevelUp",
+    "HypeTrainStart",
+    "HypeTrainUpdate",
+    "ModeratorAdded",
+    "ModeratorRemoved",
+    "PayItForward",
+    "PermittedTermsAdded",
+    "PermittedTermsDeleted",
+    "PollArchived",
+    "PollCompleted",
+    "PollCreated",
+    "PollTerminated",
+    "PollUpdated",
+    "PowerUp",
+    "PredictionCanceled",
+    "PredictionCompleted",
+    "PredictionCreated",
+    "PredictionLocked",
+    "PredictionUpdated",
+    "PresentViewers",
+    "PrimePaidUpgrade",
+    "PyramidBroken",
+    "PyramidSuccess",
+    "Raid",
+    "RaidCancelled",
+    "RaidSend",
+    "RaidStart",
+    "ReSub",
+    "RewardCreated",
+    "RewardDeleted",
     "RewardRedemption",
     "RewardRedemptionUpdated",
-
-    "AutomaticRewardRedemption",
-    "PowerUp",
-    "CustomPowerUpRedemption",
-
-    "SharedChatMessage",
-
-    "MessageDeleted",
-    "ChatMessageDeleted",
-
+    "RewardUpdated",
+    "SevenTVEmoteAdded",
+    "SevenTVEmoteRemoved",
+    "SharedChatAnnouncement",
+    "SharedChatCommunitySubGift",
+    "SharedChatGiftPaidUpgrade",
+    "SharedChatMessageDeleted",
+    "SharedChatPayItForward",
+    "SharedChatPrimePaidUpgrade",
+    "SharedChatRaid",
+    "SharedChatResub",
+    "SharedChatSessionBegin",
+    "SharedChatSessionEnd",
+    "SharedChatSessionUpdate",
+    "SharedChatSub",
+    "SharedChatSubGift",
+    "SharedChatUserBanned",
+    "SharedChatUserTimedout",
+    "SharedChatUserUnbanned",
+    "SharedChatUserUntimedout",
+    "ShieldModeBegin",
+    "ShieldModeEnd",
+    "ShoutoutCreated",
+    "ShoutoutReceived",
+    "StreamOffline",
+    "StreamOnline",
+    "StreamUpdate",
+    "StreamUpdateGameOnConnect",
+    "Sub",
+    "SubCounterRollover",
+    "SuspiciousUserMessage",
+    "SuspiciousUserUpdate",
+    "UnbanRequestApproved",
+    "UnbanRequestCreated",
+    "UnbanRequestDenied",
+    "UpcomingAd",
     "UserBanned",
     "UserTimedOut",
+    "UserUnbanned",
+    "UserUntimedOut",
+    "ViewerCountUpdate",
+    "VipAdded",
+    "VipRemoved",
+    "WarnedUser",
+    "WarningAcknowledged",
+    "WatchStreak",
+    "Whisper",
+
+    "Message",
+    "Chat",
+    "SharedChatMessage",
+    "MessageDeleted",
     "ClearChat"
   ],
 
   YouTube: [
+    "BetterTTVEmoteAdded",
+    "BetterTTVEmoteRemoved",
+    "BroadcastAdded",
+    "BroadcastEnded",
+    "BroadcastMonitoringEnded",
+    "BroadcastMonitoringStarted",
+    "BroadcastRemoved",
+    "BroadcastStarted",
+    "BroadcastUpdated",
+    "FirstWords",
+    "GiftMembershipReceived",
+    "JewelsGifted",
+    "MemberMileStone",
+    "MembershipGift",
     "Message",
+    "MessageDeleted",
+    "NewSponsor",
+    "NewSponsorOnlyEnded",
+    "NewSponsorOnlyStarted",
+    "NewSubscriber",
+    "PollClosed",
+    "PollStarted",
+    "PollUpdated",
+    "PresentViewers",
+    "SevenTVEmoteAdded",
+    "SevenTVEmoteRemoved",
+    "StatisticsUpdated",
     "SuperChat",
     "SuperSticker",
-    "NewSponsor",
-    "MemberMileStone",
-    "GiftMembershipReceived"
+    "UserBanned",
+    "UserTimedout"
   ],
 
   Kick: [
+    "BroadcasterAuthenticated",
+    "BroadcasterChatConnected",
+    "BroadcasterChatDisconnected",
+    "ChannelUpdate",
     "ChatMessage",
     "FirstWords",
     "Follow",
-    "Subscription",
-    "Resubscription",
     "GiftSubscription",
     "MassGiftSubscription",
-    "RewardRedemption"
+    "PresentViewers",
+    "Resubscription",
+    "RewardRedemption",
+    "SevenTVEmoteAdded",
+    "SevenTVEmoteRemoved",
+    "sGifted",
+    "StreamOffline",
+    "StreamOnline",
+    "Subscription",
+    "UserBanned",
+    "UserTimedOut",
+    "ViewerCountUpdate"
   ],
 
   streamlabs: [
@@ -1799,6 +1719,12 @@ function applyConfigToDocument() {
 
   root.style.setProperty("--bubble-radius", px(cfg.style.bubbleRadius));
   root.style.setProperty("--name-bubble-radius", px(cfg.style.nameBubbleRadius));
+  root.style.setProperty("--name-tag-offset-x", px(cfg.style.nameTagOffsetX ?? 10));
+  root.style.setProperty("--name-tag-overlap-y", px(cfg.style.nameTagOverlapY ?? 8));
+  root.style.setProperty("--overlapped-message-top-padding", px(cfg.style.overlappedMessageTopPadding ?? 17));
+  const overlappedTiltAmount = Number(cfg.style.overlappedTiltAmount ?? 3);
+  root.style.setProperty("--overlapped-tilt-amount", `${overlappedTiltAmount}deg`);
+  root.style.setProperty("--overlapped-tilt-amount-negative", `${overlappedTiltAmount * -1}deg`);
   root.style.setProperty("--name-bubble-layer-overlap", px(cfg.style.nameIconEdgeOverlap ?? 16));
   root.style.setProperty("--name-bubble-seam-curve", px(cfg.style.nameIconEdgeRadius ?? 19));
   root.style.setProperty("--message-text-color", cfg.style.messageTextColor || "#ffffff");
@@ -1821,6 +1747,16 @@ function applyConfigToDocument() {
     .forEach(name => document.body.classList.remove(name));
 
   document.body.classList.add(`bubble-shape-${cfg.style.bubbleShape || "rounded"}`);
+  [...document.body.classList]
+    .filter(name => name.startsWith("bubble-layout-"))
+    .forEach(name => document.body.classList.remove(name));
+
+  const requestedBubbleLayout = String(cfg.style.bubbleLayout || "").toLowerCase();
+  const bubbleLayout =
+    ["stacked", "inline", "overlapped"].includes(requestedBubbleLayout)
+      ? requestedBubbleLayout
+      : (cfg.behaviour.inlineChat ? "inline" : "stacked");
+  document.body.classList.add(`bubble-layout-${bubbleLayout}`);
   document.body.classList.toggle("name-icon-left", cfg.style.nameIconPosition === "left");
   document.body.classList.toggle("use-twitch-name-colors", !!cfg.style.useTwitchChatNameColor);
 
@@ -1843,7 +1779,12 @@ function applyConfigToDocument() {
   document.body.classList.toggle("hide-avatar-glow", !cfg.style.showAvatarGlow);
   document.body.classList.toggle("hide-emote-glow", !cfg.style.showEmoteGlow);
   document.body.classList.toggle("hide-colored-text", !cfg.style.showColoredText);
-  document.body.classList.toggle("inline-chat", !!cfg.behaviour.inlineChat);
+  document.body.classList.toggle(
+    "inline-chat",
+    bubbleLayout === "inline" || (!!cfg.behaviour.inlineChat && bubbleLayout !== "overlapped")
+  );
+  document.body.classList.toggle("overlapped-card-shadow", !!cfg.style.overlappedCardShadow);
+  document.body.classList.toggle("overlapped-random-tilt", !!cfg.style.overlappedRandomTilt);
   document.body.classList.toggle("show-timestamps", !!cfg.behaviour.showTimestamps);
   document.body.classList.toggle("monitor-mode", !!cfg.behaviour.monitorMode);
   document.documentElement.classList.toggle("monitor-mode", !!cfg.behaviour.monitorMode);
@@ -2748,6 +2689,17 @@ function createScrollTestFixtures() {
       isSubscriber: true,
       badges: [twitchBadges[3], twitchBadges[4]]
     }),
+    sb("Twitch", "SharedChatMessage", {
+      userName: "NeighborPig",
+      login: "neighborpig",
+      displayName: "NeighborPig",
+      message: "Shared chat message should say which chat it came from",
+      profileImageUrl: twitchAvatar,
+      sourceRoom: {
+        displayName: "CozyChannel"
+      },
+      badges: [twitchBadges[2]]
+    }),
     burst(
       sb("Twitch", "ChatMessage", {
         userName: "StackedTwitchPig",
@@ -2850,6 +2802,29 @@ function createScrollTestFixtures() {
       displayName: "RaidPig",
       viewers: 42
     }),
+    sb("Twitch", "WatchStreak", {
+      userName: "StreakPig",
+      displayName: "StreakPig",
+      streak_count: 5,
+      systemMessage: "StreakPig watched 5 consecutive streams this month and sparked a watch streak!"
+    }),
+    sb("Twitch", "HypeTrainStart", {
+      userName: "HypePig",
+      displayName: "HypePig",
+      level: 1,
+      systemMessage: "A hype train started"
+    }),
+    sb("Twitch", "CharityDonation", {
+      userName: "CharityPig",
+      displayName: "CharityPig",
+      charity: {
+        amount: {
+          value: "10.00",
+          currency: "GBP"
+        }
+      },
+      systemMessage: "CharityPig donated to the campaign"
+    }),
     sb("Twitch", "GiftBomb", {
       userName: "GiftBombPig",
       displayName: "GiftBombPig",
@@ -2887,6 +2862,17 @@ function createScrollTestFixtures() {
     }),
     sb("YouTube", "NewSponsor", {
       displayName: "MemberPig",
+      profileImageUrl: youtubeAvatar
+    }),
+    sb("YouTube", "PollStarted", {
+      displayName: "Poll Pig",
+      title: "What should we play next?",
+      question: "What should we play next?",
+      profileImageUrl: youtubeAvatar
+    }),
+    sb("YouTube", "BroadcastStarted", {
+      displayName: "Channel Pig",
+      title: "YouTube stream is live",
       profileImageUrl: youtubeAvatar
     }),
     sb("Kick", "ChatMessage", {
@@ -3027,6 +3013,15 @@ function createScrollTestFixtures() {
       input: "Kick reward redemption preview",
       timestamp: new Date().toISOString()
     }),
+    sb("Kick", "StreamOnline", {
+      user: {
+        name: "Kick Live Pig",
+        login: "kicklivepig",
+        profilePicture: kickAvatar
+      },
+      title: "Kick stream is online",
+      timestamp: new Date().toISOString()
+    }),
     sb("Streamlabs", "Donation", {
       username: "StreamlabsDonor",
       amount: 12.34,
@@ -3154,6 +3149,24 @@ function createScrollTestFixtures() {
       profilePictureUrl: tiktokAvatar,
       coins: 20
     }),
+    tik("share", {
+      nickname: "Share Pig",
+      uniqueId: "sharepig",
+      profilePictureUrl: tiktokAvatar,
+      message: "shared the LIVE"
+    }),
+    tik("member", {
+      nickname: "Join Pig",
+      uniqueId: "joinpig",
+      profilePictureUrl: tiktokAvatar,
+      action: "joined"
+    }),
+    tik("questionNew", {
+      nickname: "Question Pig",
+      uniqueId: "questionpig",
+      profilePictureUrl: tiktokAvatar,
+      question: "Can we see the score?"
+    }),
     tik("chat", {
       nickname: "LongNamePigWithAnExtremelyLongTikTokUsername",
       uniqueId: "longnamepig",
@@ -3257,6 +3270,62 @@ function getScrollTestTikFinityItem(event) {
     };
   }
 
+  if (type.includes("share")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.shares"
+    };
+  }
+
+  if (type.includes("member") || type.includes("join")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.joins"
+    };
+  }
+
+  if (type.includes("question")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.questions"
+    };
+  }
+
+  if (type.includes("goal")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.goals"
+    };
+  }
+
+  if (type.includes("poll")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.polls"
+    };
+  }
+
+  if (type.includes("battle") || type.includes("linkmic")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.battles"
+    };
+  }
+
+  if (type.includes("streamend") || type.includes("liveintro") || type.includes("roommessage")) {
+    return {
+      kind: "alert",
+      platform: "TikTok",
+      alertType: "tiktok.stream"
+    };
+  }
+
   return null;
 }
 
@@ -3289,6 +3358,11 @@ function getScrollTestAlertType(source, type) {
     if (typeKey === "sub" || typeKey === "resub") return "twitch.subs";
     if (typeKey === "giftsub" || typeKey === "giftbomb") return "twitch.giftSubs";
     if (typeKey === "raid") return "twitch.raids";
+    if (typeKey === "watchstreak") {
+      return cfg.behaviour.alerts?.twitch?.watchStreaks === false
+        ? ""
+        : getTwitchWatchStreakAlertType();
+    }
     return "";
   }
 
@@ -3298,10 +3372,21 @@ function getScrollTestAlertType(source, type) {
     if (
       typeKey === "newsponsor" ||
       typeKey === "membermilestone" ||
+      typeKey === "membershipgift" ||
       typeKey === "giftmembershipreceived"
     ) {
       return "youtube.members";
     }
+    if (typeKey === "jewelsgifted") return "youtube.gifts";
+    if (typeKey === "pollstarted" || typeKey === "pollupdated" || typeKey === "pollclosed") return "youtube.polls";
+    if (
+      typeKey.includes("broadcast") ||
+      typeKey === "presentviewers" ||
+      typeKey === "statisticsupdated"
+    ) {
+      return "youtube.stream";
+    }
+    if (typeKey === "userbanned" || typeKey === "usertimedout" || typeKey.includes("sponsoronly")) return "youtube.moderation";
     return "";
   }
 
@@ -3310,6 +3395,8 @@ function getScrollTestAlertType(source, type) {
     if (typeKey === "subscription" || typeKey === "resubscription") return "kick.subs";
     if (typeKey === "giftsubscription" || typeKey === "massgiftsubscription") return "kick.giftSubs";
     if (typeKey === "rewardredemption") return "kick.rewardRedemptions";
+    if (typeKey.includes("stream") || typeKey.includes("channel") || typeKey === "viewercountupdate" || typeKey === "presentviewers") return "kick.stream";
+    if (typeKey === "userbanned" || typeKey === "usertimedout") return "kick.moderation";
     return "";
   }
 
@@ -3562,6 +3649,16 @@ window.testAll = function () {
       userName: "RaidPig",
       displayName: "RaidPig",
       viewers: 42
+    }
+  });
+
+  handleStreamerBotEvent({
+    event: { source: "Twitch", type: "WatchStreak" },
+    data: {
+      userName: "StreakPig",
+      displayName: "StreakPig",
+      streak_count: 5,
+      systemMessage: "StreakPig watched 5 consecutive streams this month and sparked a watch streak!"
     }
   });
 
@@ -4072,17 +4169,20 @@ function handleTikFinityEvent(payload) {
     });
 
     deletedUserIds.forEach(userId => {
-      const ids = tiktokUserMessageIndex.get(String(userId));
-
-      if (!ids) return;
-
-      ids.forEach(id => {
-        deleteMessageById(String(id));
-      });
-
-      tiktokUserMessageIndex.delete(String(userId));
+      deleteTikTokMessagesByUserKey(userId);
     });
 
+    return;
+  }
+
+  if (
+    type.includes("ban") ||
+    type.includes("block") ||
+    type.includes("timeout") ||
+    type.includes("mute")
+  ) {
+    getTikTokUserKeys(data).forEach(key => deleteTikTokMessagesByUserKey(key));
+    deleteMessagesByUser(getUser(data));
     return;
   }
 
@@ -4095,12 +4195,7 @@ function handleTikFinityEvent(payload) {
   }
 
   if (type.includes("emote")) {
-    const user =
-      data.nickname ||
-      data.uniqueId ||
-      data.userName ||
-      data.displayName ||
-      "TikTok Pig";
+    const user = getUser(data);
 
     const emote =
       data.emoteList?.[0] ||
@@ -4174,12 +4269,7 @@ function handleTikFinityEvent(payload) {
   }
 
   if (type.includes("chat") || type.includes("comment")) {
-    const user =
-      data.nickname ||
-      data.uniqueId ||
-      data.userName ||
-      data.displayName ||
-      "TikTok Pig";
+    const user = getUser(data);
 
     const text =
       data.comment ||
@@ -4252,10 +4342,7 @@ function handleTikFinityEvent(payload) {
   if (type === "envelope") {
     logTreasureEvent(payload);
 
-    const user =
-      data.nickname ||
-      data.uniqueId ||
-      "TikTok Pig";
+    const user = getUser(data);
 
     if (shouldIgnoreUser(user)) return;
 
@@ -4290,11 +4377,7 @@ function handleTikFinityEvent(payload) {
   }
 
   if (type.includes("like")) {
-    const user =
-      data.nickname ||
-      data.uniqueId ||
-      data.userName ||
-      "TikTok viewer";
+    const user = getUser(data);
 
     if (shouldIgnoreUser(user)) return;
 
@@ -4314,13 +4397,7 @@ function handleTikFinityEvent(payload) {
 
 
   if (type.includes("follow")) {
-    const user =
-      data.nickname ||
-      data.uniqueId ||
-      data.userName ||
-      data.username ||
-      data.name ||
-      "New follower";
+    const user = getUser(data);
 
     if (shouldIgnoreUser(user)) return;
 
@@ -4345,11 +4422,7 @@ function handleTikFinityEvent(payload) {
   }
 
   if (type.includes("subscribe") || type.includes("sub")) {
-    const user =
-      data.nickname ||
-      data.uniqueId ||
-      data.userName ||
-      "Subscribed";
+    const user = getUser(data);
 
     if (shouldIgnoreUser(user)) return;
 
@@ -4365,11 +4438,13 @@ function handleTikFinityEvent(payload) {
     return;
   }
 
-  if (
-    type.includes("roomuser") ||
-    type.includes("viewer") ||
-    type.includes("member")
-  ) {
+  const normalized = normaliseTikTok(type, data);
+
+  if (normalized) {
+    if (shouldIgnoreUser(normalized.user)) return;
+    if (normalized.kind === "chat") addMessage(normalized);
+    if (normalized.kind === "alert") addAlert(normalized);
+    if (normalized.kind === "tiktokGift") addTikTokGift(normalized);
     return;
   }
 
@@ -4387,7 +4462,18 @@ function isTikFinityContentEvent(type) {
     "subscribe",
     "sub",
     "envelope",
-    "treasure"
+    "treasure",
+    "share",
+    "member",
+    "join",
+    "question",
+    "goal",
+    "poll",
+    "battle",
+    "linkmic",
+    "streamend",
+    "liveintro",
+    "roommessage"
   ].some(value => type.includes(value));
 }
 
@@ -4534,7 +4620,98 @@ function normaliseKick(type, data) {
     };
   }
 
-  return null;
+  if (lowerType.includes("stream") || lowerType.includes("channelupdate") || lowerType.includes("viewer") || lowerType.includes("presentviewers")) {
+    return createGenericPlatformAlert("Kick", type, data, "kick.stream");
+  }
+
+  if (lowerType.includes("ban") || lowerType.includes("timeout")) {
+    return createGenericPlatformAlert("Kick", type, data, "kick.moderation");
+  }
+
+  return createGenericPlatformAlert("Kick", type, data, "kick.system");
+}
+
+function createGenericPlatformAlert(platform, type, data, alertType) {
+  const user = getUser(data);
+
+  return {
+    kind: "alert",
+    platform,
+    alertType,
+    title: getPlatformEventTitle(platform, type),
+    text: getPlatformEventText(type, data, user),
+    amount: getPlatformAmountText(data),
+    avatar: getAvatar(data, platform, user),
+    login: data.user?.login || data.user_login || data.login || user,
+    raw: data
+  };
+}
+
+function getPlatformEventTitle(platform, type) {
+  const title = String(type || "event")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return `${platform} ${title || "event"}`;
+}
+
+function getPlatformEventText(type, data = {}, user = "Unknown User") {
+  const explicit =
+    data.systemMessage ||
+    data.message?.systemMessage ||
+    data.message?.text ||
+    (typeof data.message === "string" ? data.message : "") ||
+    data.comment ||
+    data.text ||
+    data.content ||
+    data.title ||
+    data.description ||
+    data.poll?.title ||
+    data.pollBasicInfo?.title ||
+    data.goal?.description ||
+    data.details?.questionText ||
+    data.questionText ||
+    "";
+
+  if (explicit) return String(explicit);
+
+  const target =
+    data.targetUserName ||
+    data.targetUser?.name ||
+    data.targetUser?.displayName ||
+    data.recipientUserName ||
+    data.recipient?.name ||
+    data.recipient?.displayName ||
+    "";
+
+  const amount = getPlatformAmountText(data);
+  return [user, target && target !== user ? `to ${target}` : "", amount ? `(${amount})` : ""]
+    .filter(Boolean)
+    .join(" ") || getPlatformEventTitle("", type).trim();
+}
+
+function getPlatformAmountText(data = {}) {
+  const amount =
+    data.amount ||
+    data.displayString ||
+    data.amountDisplayString ||
+    data.viewerCount ||
+    data.viewers ||
+    data.memberCount ||
+    data.likeCount ||
+    data.likes ||
+    data.total ||
+    data.count ||
+    data.repeatCount ||
+    data.contributeCount ||
+    data.contributeScore ||
+    data.diamondCount ||
+    data.envelopeInfo?.diamondCount ||
+    "";
+
+  return amount ? String(amount) : "";
 }
 
 function getKickUserName(user = {}, fallback = "Kick Viewer") {
@@ -4581,6 +4758,7 @@ function normaliseTwitch(type, data) {
     case "ChatMessage":
     case "Message":
     case "Chat":
+    case "FirstWord":
     case "SharedChatMessage": {
       const mentioned = cfg.behaviour.highlightMentions !== false && hasTwitchMention(text, data);
       const highlighted =
@@ -4607,7 +4785,7 @@ function normaliseTwitch(type, data) {
         color: data.user?.color || data.color || null,
         special: highlighted ? "highlight" : null,
         styleType: highlighted ? "rainbow" : null,
-        sharedChannel: getSharedChatChannel(data),
+        sharedChannel: getSharedChatChannel(data, type),
         gigantified,
         emoteOnly: isEmoteMessage,
         raw: data
@@ -4807,6 +4985,17 @@ function normaliseTwitch(type, data) {
       };
     }
 
+    case "CoinCheer":
+    case "HypeChat":
+    case "HypeChatLevel":
+      return createTwitchAlert(type, data, { alertType: "twitch.hype" });
+
+    case "HypeTrainStart":
+    case "HypeTrainUpdate":
+    case "HypeTrainLevelUp":
+    case "HypeTrainEnd":
+      return createTwitchAlert(type, data, { alertType: "twitch.hypeTrain" });
+
     case "Follow":
       return {
         kind: "alert",
@@ -4828,6 +5017,11 @@ function normaliseTwitch(type, data) {
         raw: data
       };
 
+    case "GiftPaidUpgrade":
+    case "PrimePaidUpgrade":
+    case "PayItForward":
+      return createTwitchAlert(type, data, { alertType: "twitch.upgrades" });
+
     case "GiftSub":
     case "GiftBomb":
       return {
@@ -4840,18 +5034,302 @@ function normaliseTwitch(type, data) {
       };
 
     case "Raid":
+    case "RaidStart":
+    case "RaidSend":
+    case "RaidCancelled":
       return {
         kind: "alert",
         platform: "Twitch",
         alertType: "twitch.raids",
-        title: "Raid",
-        text: `${user} raided with ${data.viewers || 0} viewers`,
+        title: getTwitchEventTitle(type),
+        text: type === "Raid"
+          ? `${user} raided with ${data.viewers || 0} viewers`
+          : getTwitchEventText(type, data, user),
         raw: data
       };
 
+    case "WatchStreak": {
+      if (cfg.behaviour.alerts?.twitch?.watchStreaks === false) {
+        return null;
+      }
+
+      const count =
+        data.streak_count ||
+        data.streakCount ||
+        data.count ||
+        data.months ||
+        0;
+
+      const systemMessage =
+        data.systemMessage ||
+        data.message?.systemMessage ||
+        "";
+
+      return {
+        kind: "alert",
+        platform: "Twitch",
+        alertType: getTwitchWatchStreakAlertType(),
+        title: "Watch streak",
+        text: systemMessage || `${user} shared a ${count || "new"} stream watch streak`,
+        amount: count ? `${count}` : "",
+        avatar: data.user?.profileImageUrl || fallbackAvatar("Twitch", user),
+        login: data.user?.login || data.user_login || user,
+        badges: getBadges(data),
+        raw: data
+      };
+    }
+
+    case "CharityStarted":
+    case "CharityDonation":
+    case "CharityProgress":
+    case "CharityCompleted":
+      return createTwitchAlert(type, data, { alertType: "twitch.charity" });
+
+    case "GoalBegin":
+    case "GoalProgress":
+    case "GoalEnd":
+    case "CommunityGoalContribution":
+    case "CommunityGoalEnded":
+      return createTwitchAlert(type, data, { alertType: "twitch.goals" });
+
+    case "PollCreated":
+    case "PollUpdated":
+    case "PollCompleted":
+    case "PollArchived":
+    case "PollTerminated":
+      return createTwitchAlert(type, data, { alertType: "twitch.polls" });
+
+    case "PredictionCreated":
+    case "PredictionUpdated":
+    case "PredictionLocked":
+    case "PredictionCompleted":
+    case "PredictionCanceled":
+      return createTwitchAlert(type, data, { alertType: "twitch.predictions" });
+
+    case "SharedChatAnnouncement":
+    case "SharedChatCommunitySubGift":
+    case "SharedChatGiftPaidUpgrade":
+    case "SharedChatPayItForward":
+    case "SharedChatPrimePaidUpgrade":
+    case "SharedChatRaid":
+    case "SharedChatResub":
+    case "SharedChatSessionBegin":
+    case "SharedChatSessionEnd":
+    case "SharedChatSessionUpdate":
+    case "SharedChatSub":
+    case "SharedChatSubGift":
+    case "SharedChatUserBanned":
+    case "SharedChatUserTimedout":
+    case "SharedChatUserUnbanned":
+    case "SharedChatUserUntimedout":
+      return createTwitchAlert(type, data, {
+        alertType: "twitch.sharedChat",
+        sharedChannel: getSharedChatChannel(data, type)
+      });
+
+    case "ShoutoutCreated":
+    case "ShoutoutReceived":
+      return createTwitchAlert(type, data, { alertType: "twitch.shoutouts" });
+
+    case "StreamOnline":
+    case "StreamOffline":
+    case "StreamUpdate":
+    case "StreamUpdateGameOnConnect":
+    case "BroadcastUpdate":
+    case "UpcomingAd":
+    case "AdRun":
+    case "ViewerCountUpdate":
+      return createTwitchAlert(type, data, { alertType: "twitch.stream" });
+
+    case "ChatCleared":
+    case "ChatEmoteModeOff":
+    case "ChatEmoteModeOn":
+    case "ChatFollowerModeChanged":
+    case "ChatFollowerModeOff":
+    case "ChatFollowerModeOn":
+    case "ChatSlowModeChanged":
+    case "ChatSlowModeOff":
+    case "ChatSlowModeOn":
+    case "ChatSubscriberModeOff":
+    case "ChatSubscriberModeOn":
+    case "ChatUniqueModeOff":
+    case "ChatUniqueModeOn":
+    case "ModeratorAdded":
+    case "ModeratorRemoved":
+    case "ShieldModeBegin":
+    case "ShieldModeEnd":
+    case "SuspiciousUserMessage":
+    case "SuspiciousUserUpdate":
+    case "UnbanRequestApproved":
+    case "UnbanRequestCreated":
+    case "UnbanRequestDenied":
+    case "UserUnbanned":
+    case "UserUntimedOut":
+    case "VipAdded":
+    case "VipRemoved":
+    case "WarnedUser":
+    case "WarningAcknowledged":
+      return createTwitchAlert(type, data, { alertType: "twitch.moderation" });
+
     default:
-      return null;
+      return createTwitchAlert(type, data, { alertType: getTwitchAlertTypeForEvent(type) });
   }
+}
+
+function getTwitchWatchStreakAlertType() {
+  const fallback = "watchStreaks";
+  const route = String(cfg.behaviour.alertRoutes?.twitch?.watchStreaks || fallback);
+  const allowed = [
+    "watchStreaks",
+    "announcements",
+    "channelPointRedemptions",
+    "cheers",
+    "follows",
+    "subs",
+    "giftSubs",
+    "raids",
+    "upgrades",
+    "hype",
+    "hypeTrain",
+    "charity",
+    "goals",
+    "polls",
+    "predictions",
+    "sharedChat",
+    "shoutouts",
+    "stream",
+    "moderation",
+    "system"
+  ];
+
+  return `twitch.${allowed.includes(route) ? route : fallback}`;
+}
+
+function createTwitchAlert(type, data, options = {}) {
+  const user = getUser(data);
+
+  return {
+    kind: "alert",
+    platform: "Twitch",
+    alertType: options.alertType || getTwitchAlertTypeForEvent(type),
+    title: options.title || getTwitchEventTitle(type),
+    text: options.text || getTwitchEventText(type, data, user),
+    amount: options.amount || getTwitchAmountText(data),
+    avatar: getAvatar(data, "Twitch", user),
+    login: data.user?.login || data.user_login || data.login || user,
+    badges: getBadges(data),
+    sharedChannel: options.sharedChannel || getSharedChatChannel(data, type),
+    raw: data
+  };
+}
+
+function getTwitchAlertTypeForEvent(type) {
+  const key = String(type || "").toLowerCase();
+
+  if (key.includes("hypechat") || key.includes("coincheer")) return "twitch.hype";
+  if (key.includes("hypetrain")) return "twitch.hypeTrain";
+  if (key.includes("charity")) return "twitch.charity";
+  if (key.includes("goal")) return "twitch.goals";
+  if (key.includes("poll")) return "twitch.polls";
+  if (key.includes("prediction")) return "twitch.predictions";
+  if (key.includes("sharedchat")) return "twitch.sharedChat";
+  if (key.includes("shoutout")) return "twitch.shoutouts";
+  if (key.includes("stream") || key.includes("broadcast") || key.includes("ad") || key.includes("viewer")) return "twitch.stream";
+  if (key.includes("upgrade") || key.includes("payitforward")) return "twitch.upgrades";
+  if (
+    key.includes("mod") ||
+    key.includes("ban") ||
+    key.includes("timeout") ||
+    key.includes("warn") ||
+    key.includes("shield") ||
+    key.includes("suspicious") ||
+    key.includes("permitted") ||
+    key.includes("blockedterms") ||
+    key.includes("automod") ||
+    key.includes("chat")
+  ) {
+    return "twitch.moderation";
+  }
+
+  return "twitch.system";
+}
+
+function getTwitchEventTitle(type) {
+  const words = String(type || "Twitch event")
+    .replace(/^SharedChat/, "Shared Chat ")
+    .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  return words || "Twitch event";
+}
+
+function getTwitchEventText(type, data = {}, user = "Unknown Pig") {
+  const explicit =
+    data.systemMessage ||
+    data.message?.systemMessage ||
+    data.message?.text ||
+    (typeof data.message === "string" ? data.message : "") ||
+    data.text ||
+    data.status ||
+    data.title ||
+    data.reward?.title ||
+    data.poll?.title ||
+    data.prediction?.title ||
+    data.goal?.description ||
+    "";
+
+  if (explicit) return String(explicit);
+
+  const target =
+    data.targetUserName ||
+    data.targetUser?.displayName ||
+    data.targetUser?.name ||
+    data.recipientUserName ||
+    data.recipient?.displayName ||
+    data.recipient?.name ||
+    "";
+
+  const amount = getTwitchAmountText(data);
+  const channel = getSharedChatChannel(data, type);
+  const pieces = [user];
+
+  if (target && target !== user) pieces.push(`to ${target}`);
+  if (amount) pieces.push(`(${amount})`);
+  if (channel) pieces.push(`from ${channel}`);
+
+  return pieces.join(" ") || getTwitchEventTitle(type);
+}
+
+function getTwitchAmountText(data = {}) {
+  const rawAmount =
+    data.amount ||
+    data.bits ||
+    data.viewers ||
+    data.viewerCount ||
+    data.total ||
+    data.count ||
+    data.months ||
+    data.level ||
+    data.streak_count ||
+    data.streakCount ||
+    data.charity?.amount ||
+    data.contribution?.amount ||
+    "";
+
+  const amount =
+    rawAmount && typeof rawAmount === "object"
+      ? rawAmount.value || rawAmount.amount || rawAmount.valueInCents || ""
+      : rawAmount;
+
+  const currency =
+    data.currency ||
+    data.charity?.amount?.currency ||
+    data.amount?.currency ||
+    "";
+
+  if (!amount) return "";
+  return currency ? `${amount} ${currency}` : String(amount);
 }
 
 function hasTwitchMention(text, data = {}) {
@@ -4860,18 +5338,43 @@ function hasTwitchMention(text, data = {}) {
   return /(^|\s)@[a-z0-9_]{2,25}\b/i.test(String(text || ""));
 }
 
-function getSharedChatChannel(data = {}) {
+function getSharedChatChannel(data = {}, type = "") {
   const channel =
-    data.sourceRoom?.name ||
     data.sourceRoom?.displayName ||
+    data.sourceRoom?.name ||
+    data.sourceRoom?.login ||
+    data.sourceRoom?.userName ||
+    data.sourceRoom?.userLogin ||
+    data.sourceRoom?.broadcasterUserName ||
+    data.sourceRoom?.broadcasterUserLogin ||
+    data.sourceRoom?.broadcasterDisplayName ||
+    data.sourceRoom?.channelName ||
+    data.sourceRoom?.channelLogin ||
+    data.sourceRoom?.channelDisplayName ||
+    data.sourceRoom?.id ||
+    data.room?.displayName ||
+    data.room?.name ||
+    data.room?.login ||
     data.sharedChat?.channelName ||
+    data.sharedChat?.channelDisplayName ||
+    data.sharedChat?.sourceChannelName ||
+    data.sharedChat?.sourceChannelDisplayName ||
     data.sharedChat?.viewerChannel ||
+    data.sharedChat?.sourceRoom?.displayName ||
+    data.sharedChat?.sourceRoom?.name ||
     data.sourceChannel ||
     data.sourceChannelName ||
-    data.tags?.["source-room-name"] ||
-    data.tags?.["source-badge-info"];
+    data.sourceChannelDisplayName ||
+    data.sourceBroadcasterUserName ||
+    data.sourceBroadcasterUserLogin ||
+    data.sourceBroadcasterDisplayName ||
+    data.source_broadcaster_user_name ||
+    data.source_broadcaster_user_login ||
+    data.source_broadcaster_user_id ||
+    data.tags?.["source-room-name"];
 
-  return channel ? String(channel) : "";
+  if (channel) return String(channel);
+  return String(type || "").startsWith("SharedChat") ? "shared chat" : "";
 }
 
 function normaliseYouTube(type, data) {
@@ -4882,6 +5385,7 @@ function normaliseYouTube(type, data) {
 
   switch (type) {
     case "Message":
+    case "FirstWords":
       return {
         kind: "chat",
         platform: "YouTube",
@@ -4921,6 +5425,8 @@ function normaliseYouTube(type, data) {
     case "NewSponsor":
     case "MemberMileStone":
     case "GiftMembershipReceived":
+    case "MembershipGift":
+    case "NewSubscriber":
       return {
         kind: "alert",
         platform: "YouTube",
@@ -4930,8 +5436,33 @@ function normaliseYouTube(type, data) {
         raw: data
       };
 
+    case "JewelsGifted":
+      return createGenericPlatformAlert("YouTube", type, data, "youtube.gifts");
+
+    case "PollStarted":
+    case "PollUpdated":
+    case "PollClosed":
+      return createGenericPlatformAlert("YouTube", type, data, "youtube.polls");
+
+    case "BroadcastAdded":
+    case "BroadcastEnded":
+    case "BroadcastMonitoringEnded":
+    case "BroadcastMonitoringStarted":
+    case "BroadcastRemoved":
+    case "BroadcastStarted":
+    case "BroadcastUpdated":
+    case "PresentViewers":
+    case "StatisticsUpdated":
+      return createGenericPlatformAlert("YouTube", type, data, "youtube.stream");
+
+    case "NewSponsorOnlyEnded":
+    case "NewSponsorOnlyStarted":
+    case "UserBanned":
+    case "UserTimedout":
+      return createGenericPlatformAlert("YouTube", type, data, "youtube.moderation");
+
     default:
-      return null;
+      return createGenericPlatformAlert("YouTube", type, data, "youtube.system");
   }
 }
 
@@ -5204,27 +5735,39 @@ function normaliseTikTok(type, data) {
     };
   }
 
-  // if (lowerType.includes("share")) {
-  //   return {
-  //     kind: "alert",
-  //     platform: "TikTok",
-  //     title: "TikTok share",
-  //     text: user,
-  //     raw: data
-  //   };
-  // }
+  if (lowerType.includes("share")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.shares");
+  }
 
-  // if (lowerType.includes("join")) {
-  //   return {
-  //     kind: "alert",
-  //     platform: "TikTok",
-  //     title: "TikTok join",
-  //     text: user,
-  //     raw: data
-  //   };
-  // }
+  if (lowerType.includes("member") || lowerType.includes("join")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.joins");
+  }
 
-  return null;
+  if (lowerType.includes("question")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.questions");
+  }
+
+  if (lowerType.includes("goal")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.goals");
+  }
+
+  if (lowerType.includes("poll")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.polls");
+  }
+
+  if (lowerType.includes("battle") || lowerType.includes("linkmic")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.battles");
+  }
+
+  if (lowerType.includes("roomuser") || lowerType.includes("viewer")) {
+    return null;
+  }
+
+  if (lowerType.includes("streamend") || lowerType.includes("liveintro") || lowerType.includes("roommessage")) {
+    return createGenericPlatformAlert("TikTok", type, data, "tiktok.stream");
+  }
+
+  return createGenericPlatformAlert("TikTok", type, data, "tiktok.system");
 }
 
 function addMessage(item) {
@@ -5233,7 +5776,9 @@ function addMessage(item) {
   const text = item.text || "";
 
   const blockedPrefixes =
-    window.CHAT_CONFIG?.filters?.blockedPrefixes || [];
+    Array.isArray(cfg.filters?.blockedPrefixes)
+      ? cfg.filters.blockedPrefixes
+      : [];
 
   if (
     blockedPrefixes.some(prefix =>
@@ -5315,8 +5860,10 @@ function addMessage(item) {
         <span class="bubble-glow title-glow-layer" aria-hidden="true"></span>
         ${renderTimestamp(item)}
         <span class="badges">${renderBadges(item.badges)}</span>
-        <span class="name">${escapeHtml(item.user)}</span>
-        ${item.sharedChannel ? `<span class="shared-chat-label">via ${escapeHtml(item.sharedChannel)}</span>` : ""}
+        <span class="name-stack">
+          <span class="name">${escapeHtml(item.user)}</span>
+          ${item.sharedChannel ? `<span class="shared-chat-label">via ${escapeHtml(item.sharedChannel)}</span>` : ""}
+        </span>
         ${platformIconHtml}
       </div>
     </div>
@@ -5341,16 +5888,8 @@ function addMessage(item) {
 
   indexMessage(item, bubble);
 
-  if (item.platform === "TikTok" && item.raw?.userId) {
-    const userId = String(item.raw.userId);
-
-    if (!tiktokUserMessageIndex.has(userId)) {
-      tiktokUserMessageIndex.set(userId, new Set());
-    }
-
-    if (item.messageId) {
-      tiktokUserMessageIndex.get(userId).add(String(item.messageId));
-    }
+  if (item.platform === "TikTok") {
+    indexTikTokMessage(item);
   }
 
   trimMessages();
@@ -5598,6 +6137,10 @@ function addAlert(item) {
     el.classList.add(`special-${item.special}`);
   }
 
+  if (item.sharedChannel) {
+    el.classList.add("shared-chat");
+  }
+
   if (cfg.behaviour.compactAlerts) {
     el.classList.add("compact-alert");
   }
@@ -5621,6 +6164,7 @@ function addAlert(item) {
         <span class="bubble-glow title-glow-layer" aria-hidden="true"></span>
         ${renderTimestamp(item)}
         <span class="name">${escapeHtml(item.title)}</span>
+        ${item.sharedChannel ? `<span class="shared-chat-label">via ${escapeHtml(item.sharedChannel)}</span>` : ""}
         ${platformIconHtml}
       </div>
 
@@ -5820,7 +6364,8 @@ function handleModerationEvent(source, type, data) {
   if (
     lowerType.includes("messagedeleted") ||
     lowerType.includes("message_deleted") ||
-    lowerType.includes("deletemessage")
+    lowerType.includes("deletemessage") ||
+    lowerType.includes("chatmessagedeleted")
   ) {
     const messageId =
       data.messageId ||
@@ -5837,6 +6382,7 @@ function handleModerationEvent(source, type, data) {
 
   if (
     lowerType.includes("userbanned") ||
+    lowerType.includes("usertimedout") ||
     lowerType.includes("usertimedout") ||
     lowerType.includes("timeout") ||
     lowerType.includes("ban")
@@ -5878,6 +6424,75 @@ function deleteMessageById(messageId) {
   }
 
   messageIndex.delete(String(messageId));
+}
+
+function indexTikTokMessage(item) {
+  const messageId = String(item.messageId || "");
+  if (!messageId) return;
+
+  getTikTokUserKeys(item.raw || {})
+    .concat([item.user])
+    .map(key => String(key || "").trim())
+    .filter(Boolean)
+    .forEach(key => {
+      if (!tiktokUserMessageIndex.has(key)) {
+        tiktokUserMessageIndex.set(key, new Set());
+      }
+
+      tiktokUserMessageIndex.get(key).add(messageId);
+    });
+}
+
+function getTikTokUserKeys(data = {}) {
+  const user = data.user || data.author || data.sender || {};
+
+  return [
+    data.userId,
+    data.userID,
+    data.user_id,
+    data.uniqueId,
+    data.uniqueID,
+    data.unique_id,
+    data.secUid,
+    data.secUID,
+    data.sec_uid,
+    data.nickname,
+    data.userName,
+    data.username,
+    data.displayName,
+    user.userId,
+    user.userID,
+    user.id,
+    user.uniqueId,
+    user.uniqueID,
+    user.unique_id,
+    user.secUid,
+    user.secUID,
+    user.nickname,
+    user.displayName,
+    user.userName,
+    user.username
+  ]
+    .map(value => String(value || "").trim())
+    .filter(Boolean);
+}
+
+function deleteTikTokMessagesByUserKey(userKey) {
+  const key = String(userKey || "").trim();
+  if (!key) return;
+
+  const ids = tiktokUserMessageIndex.get(key);
+
+  if (!ids) {
+    deleteMessagesByUser(key);
+    return;
+  }
+
+  ids.forEach(id => {
+    deleteMessageById(String(id));
+  });
+
+  tiktokUserMessageIndex.delete(key);
 }
 
 function deleteMessagesByUser(user) {
@@ -6966,6 +7581,11 @@ function getUser(data) {
     // Streamer.bot common
     data.user?.displayName ||
     data.user?.display ||
+    data.user?.nickname ||
+    data.user?.uniqueId ||
+    data.user?.uniqueID ||
+    data.user?.userName ||
+    data.user?.username ||
     data.user?.name ||
     data.user?.login ||
 
@@ -8008,6 +8628,19 @@ function buildDefaultTypeStyles(styleConfig = {}) {
             "subs",
             "giftSubs",
             "raids",
+            "watchStreaks",
+            "upgrades",
+            "hype",
+            "hypeTrain",
+            "charity",
+            "goals",
+            "polls",
+            "predictions",
+            "sharedChat",
+            "shoutouts",
+            "stream",
+            "moderation",
+            "system",
             "cheers"
           ].includes(type)
         ) {
@@ -8070,6 +8703,8 @@ function getUrlConfigOverrides() {
     highlight: "highlight.enabled",
     icons: "behaviour.showPlatformIcons",
     images: "behaviour.showImageEmbeds",
+    ignoredUsers: "behaviour.ignoredUsers",
+    blockedPrefixes: "filters.blockedPrefixes",
     twitchImages: "behaviour.imageEmbeds.twitch.enabled",
     twitchImagesEveryone: "behaviour.imageEmbeds.twitch.everyone",
     twitchImagesBroadcaster: "behaviour.imageEmbeds.twitch.broadcaster",
@@ -8099,15 +8734,46 @@ function getUrlConfigOverrides() {
     twitchSubs: "behaviour.alerts.twitch.subs",
     twitchGiftSubs: "behaviour.alerts.twitch.giftSubs",
     twitchRaids: "behaviour.alerts.twitch.raids",
+    twitchWatchStreaks: "behaviour.alerts.twitch.watchStreaks",
+    twitchUpgrades: "behaviour.alerts.twitch.upgrades",
+    twitchHype: "behaviour.alerts.twitch.hype",
+    twitchHypeTrain: "behaviour.alerts.twitch.hypeTrain",
+    twitchCharity: "behaviour.alerts.twitch.charity",
+    twitchGoals: "behaviour.alerts.twitch.goals",
+    twitchPolls: "behaviour.alerts.twitch.polls",
+    twitchPredictions: "behaviour.alerts.twitch.predictions",
+    twitchSharedChat: "behaviour.alerts.twitch.sharedChat",
+    twitchShoutouts: "behaviour.alerts.twitch.shoutouts",
+    twitchStream: "behaviour.alerts.twitch.stream",
+    twitchModeration: "behaviour.alerts.twitch.moderation",
+    twitchSystem: "behaviour.alerts.twitch.system",
+    twitchWatchStreakRoute: "behaviour.alertRoutes.twitch.watchStreaks",
     youtubeAlerts: "behaviour.alerts.youtube.enabled",
     youtubeSuperChats: "behaviour.alerts.youtube.superChats",
     youtubeStickers: "behaviour.alerts.youtube.superStickers",
     youtubeMembers: "behaviour.alerts.youtube.members",
+    youtubeGifts: "behaviour.alerts.youtube.gifts",
+    youtubePolls: "behaviour.alerts.youtube.polls",
+    youtubeStream: "behaviour.alerts.youtube.stream",
+    youtubeModeration: "behaviour.alerts.youtube.moderation",
+    youtubeSystem: "behaviour.alerts.youtube.system",
     tiktokAlerts: "behaviour.alerts.tiktok.enabled",
     tiktokFollows: "behaviour.alerts.tiktok.follows",
     tiktokSubscribers: "behaviour.alerts.tiktok.subscribers",
     tiktokGifts: "behaviour.alerts.tiktok.gifts",
     tiktokLikes: "behaviour.alerts.tiktok.likes",
+    tiktokTreasure: "behaviour.alerts.tiktok.treasureBoxes",
+    tiktokShares: "behaviour.alerts.tiktok.shares",
+    tiktokJoins: "behaviour.alerts.tiktok.joins",
+    tiktokQuestions: "behaviour.alerts.tiktok.questions",
+    tiktokGoals: "behaviour.alerts.tiktok.goals",
+    tiktokPolls: "behaviour.alerts.tiktok.polls",
+    tiktokBattles: "behaviour.alerts.tiktok.battles",
+    tiktokStream: "behaviour.alerts.tiktok.stream",
+    tiktokSystem: "behaviour.alerts.tiktok.system",
+    kickStream: "behaviour.alerts.kick.stream",
+    kickModeration: "behaviour.alerts.kick.moderation",
+    kickSystem: "behaviour.alerts.kick.system",
     streamlabs: "behaviour.alerts.donations.streamlabs",
     streamelements: "behaviour.alerts.donations.streamelements",
     kofi: "behaviour.alerts.donations.kofi",
@@ -8140,6 +8806,22 @@ function getUrlConfigOverrides() {
     accentColor: "style.accentColor",
     titleColor: "style.titleTextColor",
     messageColor: "style.messageTextColor",
+    pageBgColor: "style.colors.surfaces.pageBackground",
+    bubbleBase: "style.colors.surfaces.bubbleBase",
+    mediaBgColor: "style.colors.surfaces.mediaBackground",
+    badgeBg: "style.colors.surfaces.badgeBackground",
+    avatarBorder: "style.colors.surfaces.avatarBorder",
+    emoteSparkle: "style.colors.effects.emoteSparkle",
+    gigantifiedSparkle: "style.colors.effects.gigantifiedSparkle",
+    highlightGlow: "style.colors.effects.highlightGlow",
+    highlightWarmGlow: "style.colors.effects.highlightWarmGlow",
+    rainbow1: "style.colors.rainbow.one",
+    rainbow2: "style.colors.rainbow.two",
+    rainbow3: "style.colors.rainbow.three",
+    rainbow4: "style.colors.rainbow.four",
+    rainbow5: "style.colors.rainbow.five",
+    rainbow6: "style.colors.rainbow.six",
+    rainbow7: "style.colors.rainbow.seven",
     twitchChatColor: "style.colors.twitch.chat",
     twitchAnnouncementsColor: "style.colors.twitch.announcements",
     twitchPointsColor: "style.colors.twitch.channelPointRedemptions",
@@ -8148,22 +8830,51 @@ function getUrlConfigOverrides() {
     twitchSubsColor: "style.colors.twitch.subs",
     twitchGiftSubsColor: "style.colors.twitch.giftSubs",
     twitchRaidsColor: "style.colors.twitch.raids",
+    twitchWatchStreaksColor: "style.colors.twitch.watchStreaks",
+    twitchUpgradesColor: "style.colors.twitch.upgrades",
+    twitchHypeColor: "style.colors.twitch.hype",
+    twitchHypeTrainColor: "style.colors.twitch.hypeTrain",
+    twitchCharityColor: "style.colors.twitch.charity",
+    twitchGoalsColor: "style.colors.twitch.goals",
+    twitchPollsColor: "style.colors.twitch.polls",
+    twitchPredictionsColor: "style.colors.twitch.predictions",
+    twitchSharedChatColor: "style.colors.twitch.sharedChat",
+    twitchShoutoutsColor: "style.colors.twitch.shoutouts",
+    twitchStreamColor: "style.colors.twitch.stream",
+    twitchModerationColor: "style.colors.twitch.moderation",
+    twitchSystemColor: "style.colors.twitch.system",
     youtubeChatColor: "style.colors.youtube.chat",
     youtubeSuperChatsColor: "style.colors.youtube.superChats",
     youtubeStickersColor: "style.colors.youtube.superStickers",
     youtubeMembersColor: "style.colors.youtube.members",
+    youtubeGiftsColor: "style.colors.youtube.gifts",
+    youtubePollsColor: "style.colors.youtube.polls",
+    youtubeStreamColor: "style.colors.youtube.stream",
+    youtubeModerationColor: "style.colors.youtube.moderation",
+    youtubeSystemColor: "style.colors.youtube.system",
     tiktokChatColor: "style.colors.tiktok.chat",
     tiktokFollowsColor: "style.colors.tiktok.follows",
     tiktokSubscribersColor: "style.colors.tiktok.subscribers",
     tiktokGiftsColor: "style.colors.tiktok.gifts",
     tiktokLikesColor: "style.colors.tiktok.likes",
     tiktokTreasureColor: "style.colors.tiktok.treasureBoxes",
+    tiktokSharesColor: "style.colors.tiktok.shares",
+    tiktokJoinsColor: "style.colors.tiktok.joins",
+    tiktokQuestionsColor: "style.colors.tiktok.questions",
+    tiktokGoalsColor: "style.colors.tiktok.goals",
+    tiktokPollsColor: "style.colors.tiktok.polls",
+    tiktokBattlesColor: "style.colors.tiktok.battles",
+    tiktokStreamColor: "style.colors.tiktok.stream",
+    tiktokSystemColor: "style.colors.tiktok.system",
     kickNameColor: "style.colors.text.kickName",
     kickChatColor: "style.colors.kick.chat",
     kickFollowsColor: "style.colors.kick.follows",
     kickSubsColor: "style.colors.kick.subs",
     kickGiftSubsColor: "style.colors.kick.giftSubs",
     kickRewardsColor: "style.colors.kick.rewardRedemptions",
+    kickStreamColor: "style.colors.kick.stream",
+    kickModerationColor: "style.colors.kick.moderation",
+    kickSystemColor: "style.colors.kick.system",
     streamlabsColor: "style.colors.donations.streamlabs",
     streamelementsColor: "style.colors.donations.streamelements",
     kofiColor: "style.colors.donations.kofi",
@@ -8178,8 +8889,15 @@ function getUrlConfigOverrides() {
     titleSize: "style.titleFontSize",
     titleLineHeight: "style.titleLineHeight",
     messageLineHeight: "style.messageLineHeight",
+    bubbleLayout: "style.bubbleLayout",
     bubbleShape: "style.bubbleShape",
     nameRadius: "style.nameBubbleRadius",
+    nameTagX: "style.nameTagOffsetX",
+    nameTagOverlap: "style.nameTagOverlapY",
+    overlapTopPadding: "style.overlappedMessageTopPadding",
+    overlapShadow: "style.overlappedCardShadow",
+    overlapTilt: "style.overlappedRandomTilt",
+    overlapTiltAmount: "style.overlappedTiltAmount",
     iconSide: "style.nameIconPosition",
     nameIconOverlap: "style.nameIconEdgeOverlap",
     nameIconRadius: "style.nameIconEdgeRadius",
@@ -8209,6 +8927,9 @@ function getUrlConfigOverrides() {
     kickSubs: "behaviour.alerts.kick.subs",
     kickGiftSubs: "behaviour.alerts.kick.giftSubs",
     kickRewards: "behaviour.alerts.kick.rewardRedemptions",
+    kickStream: "behaviour.alerts.kick.stream",
+    kickModeration: "behaviour.alerts.kick.moderation",
+    kickSystem: "behaviour.alerts.kick.system",
     twitchChat: "behaviour.chat.twitch",
     youtubeChat: "behaviour.chat.youtube",
     tiktokChat: "behaviour.chat.tiktok",
@@ -8240,7 +8961,9 @@ function getUrlConfigOverrides() {
     tikfinityEnabled: "tikfinity.enabled",
     tikfinityHost: "tikfinity.host",
     tikfinityPort: "tikfinity.port",
-    tikfinityReconnect: "tikfinity.reconnectMs"
+    tikfinityReconnect: "tikfinity.reconnectMs",
+    ignoredUsers: "behaviour.ignoredUsers",
+    blockedPrefixes: "filters.blockedPrefixes"
   };
 
   let requestedStylePreset = "";
@@ -8252,18 +8975,21 @@ function getUrlConfigOverrides() {
     if (!isAllowedUrlConfigPath(path)) return;
 
     const parsedValue = parseUrlConfigValue(value);
+    const nextValue = isListConfigPath(path)
+      ? normalizeListConfigValue(parsedValue)
+      : parsedValue;
 
-    if (path === "style.stealthMode" && parsedValue) {
+    if (path === "style.stealthMode" && nextValue) {
       requestedStylePreset = "stealth";
       return;
     }
 
-    if (path === "style.minimalStyle" && parsedValue) {
+    if (path === "style.minimalStyle" && nextValue) {
       requestedStylePreset = "minimal";
       return;
     }
 
-    entries.push([path, parsedValue]);
+    entries.push([path, nextValue]);
   });
 
   if (requestedStylePreset === "stealth") {
@@ -8287,7 +9013,7 @@ function resolveUrlConfigPath(key, aliases = {}) {
 
 function friendlyTypeStyleParamToPath(key) {
   const value = String(key || "");
-  const typeStyles = DEFAULT_STYLE_PRESET.typeStyles || {};
+  const typeStyles = buildDefaultTypeStyles(DEFAULT_CONFIG.style || {});
   const group = Object.keys(typeStyles)
     .sort((a, b) => b.length - a.length)
     .find(candidate => value.startsWith(candidate));
@@ -8368,8 +9094,25 @@ function isAllowedUrlConfigPath(path) {
     "gigantified.",
     "thirdPartyEmotes.",
     "streamerbot.",
-    "tikfinity."
+    "tikfinity.",
+    "filters."
   ].some(prefix => path.startsWith(prefix));
+}
+
+function isListConfigPath(path) {
+  return [
+    "behaviour.ignoredUsers",
+    "filters.blockedPrefixes"
+  ].includes(String(path || ""));
+}
+
+function normalizeListConfigValue(value) {
+  if (Array.isArray(value)) return value.map(item => String(item).trim()).filter(Boolean);
+
+  return String(value || "")
+    .split(/[\n,]+/)
+    .map(item => item.trim())
+    .filter(Boolean);
 }
 
 function setDeepValue(target, path, value) {

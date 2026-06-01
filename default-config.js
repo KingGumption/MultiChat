@@ -1,14 +1,12 @@
-// URL overrides are supported for quick OBS/browser-source variants.
-// Examples:
-// index.html?tiktok=false&alerts=false
-// index.html?images=false&previews=false&max=25&fitToScreen=true
-// index.html?borderGlow=false&animations=false
-// index.html?behaviour.alerts.twitch.raids=false&layout.fitToScreen=true
-window.CHAT_CONFIG = {
+window.CHAT_DEFAULT_CONFIG = {
   streamerbot: {
     host: "127.0.0.1",
     port: 8080,
     reconnectMs: 2000
+  },
+
+  donations: {
+    defaultCurrency: "USD"
   },
 
   tikfinity: {
@@ -18,23 +16,28 @@ window.CHAT_CONFIG = {
     reconnectMs: 2000
   },
 
+  scrollTest: {
+    enabled: false,
+    intervalMs: 1300,
+    autoScroll: false
+  },
+
   layout: {
     maxMessages: 50,
-    chatWidth: "clamp(320px, 92vw, 820px)",
-    left: "clamp(12px, 4vw, 32px)",
-    bottom: "clamp(12px, 4vw, 32px)",
-    rowGap: 18,
-    groupedMessageGap: 0,
+    chatWidth: 820,
+    left: 32,
+    bottom: 32,
+    rowGap: 14,
+    groupedMessageGap: 6,
     avatarGap: 10,
     avatarSize: 52,
     avatarSizeGigantified: 64,
-    maxMessageWidth: "var(--chat-content-width)",
+    maxMessageWidth: 680,
     fitToScreen: false
   },
 
   style: {
     fontFamily: "'Sora', sans-serif",
-
     accentFontFamily: "'Sora', sans-serif",
     messageFontFamily: "'Sora', sans-serif",
     titleFontSize: 12,
@@ -66,7 +69,9 @@ window.CHAT_CONFIG = {
         moderation: "#9146ff",
         system: "#9146ff"
       },
-
+      special: {
+        rainbow: "#ff00d4"
+      },
       youtube: {
         chat: "#ff0033",
         superChats: "#ff0033",
@@ -78,7 +83,6 @@ window.CHAT_CONFIG = {
         moderation: "#ff0033",
         system: "#ff0033"
       },
-
       tiktok: {
         chat: "#25f4ee",
         follows: "#25f4ee",
@@ -105,7 +109,6 @@ window.CHAT_CONFIG = {
         moderation: "#53fc18",
         system: "#53fc18"
       },
-
       donations: {
         streamlabs: "#80f5d2",
         streamelements: "#00d9ff",
@@ -115,11 +118,6 @@ window.CHAT_CONFIG = {
         patreon: "#ff424d",
         donordrive: "#4da3ff"
       },
-
-      special: {
-        rainbow: "#ff00d4"
-      },
-
       text: {
         twitchName: "#ffe45f",
         youtubeName: "#ffd6dc",
@@ -129,7 +127,6 @@ window.CHAT_CONFIG = {
         dark: "#061114",
         stealth: "#ffffff"
       },
-
       surfaces: {
         pageBackground: "#000000",
         bubbleBase: "#050510",
@@ -141,7 +138,6 @@ window.CHAT_CONFIG = {
         avatarBorder: "#ffffff",
         avatarFill: "#ffffff"
       },
-
       effects: {
         shadow: "#000000",
         emoteSparkle: "#ffffff",
@@ -151,7 +147,6 @@ window.CHAT_CONFIG = {
         tiktokRed: "#fe2c55",
         tiktokBlue: "#25f4ee"
       },
-
       rainbow: {
         one: "#ff004c",
         two: "#ff8a00",
@@ -163,6 +158,13 @@ window.CHAT_CONFIG = {
       }
     },
     bubbleShape: "rounded",
+    bubbleLayout: "stacked",
+    nameTagOffsetX: 10,
+    nameTagOverlapY: 8,
+    overlappedMessageTopPadding: 17,
+    overlappedCardShadow: true,
+    overlappedRandomTilt: false,
+    overlappedTiltAmount: 3,
     bubbleSlant: 26,
     bubbleNotch: 23,
     nameIconPosition: "right",
@@ -208,7 +210,6 @@ window.CHAT_CONFIG = {
     messageLineHeight: 1.28,
     emoteOnlyFontSize: 30,
     gigantifiedFontSize: 44,
-
     bubbleRadius: 21,
     nameBubbleRadius: 20,
     minimalStyle: false
@@ -237,50 +238,44 @@ window.CHAT_CONFIG = {
         everyone: false,
         broadcaster: true,
         moderators: true,
-        vips: false,
-        subscribers: false
+        vips: true,
+        subscribers: true
       },
-
       youtube: {
         enabled: true,
         everyone: false,
         owner: true,
         moderators: true,
-        members: false
+        members: true
       },
-
       tiktok: {
         enabled: true,
         everyone: false
       },
-
       kick: {
         enabled: true,
         everyone: false,
         broadcaster: true,
         moderators: true,
-        vips: false,
-        subscribers: false
+        vips: true,
+        subscribers: true
       }
     },
     showBadges: true,
     showAvatars: true,
     twitchAvatarsViaDecApi: true,
-
     sources: {
       twitch: true,
       youtube: true,
       tiktok: true,
       kick: true
     },
-
     chat: {
       twitch: true,
       youtube: true,
       tiktok: true,
       kick: true
     },
-
     alerts: {
       twitch: {
         enabled: true,
@@ -305,7 +300,6 @@ window.CHAT_CONFIG = {
         moderation: false,
         system: false
       },
-
       youtube: {
         enabled: true,
         superChats: true,
@@ -317,7 +311,6 @@ window.CHAT_CONFIG = {
         moderation: false,
         system: false
       },
-
       tiktok: {
         enabled: true,
         follows: true,
@@ -344,7 +337,6 @@ window.CHAT_CONFIG = {
         moderation: false,
         system: false
       },
-
       donations: {
         enabled: true,
         streamlabs: true,
@@ -362,18 +354,7 @@ window.CHAT_CONFIG = {
         watchStreaks: "watchStreaks"
       }
     },
-
-    ignoredUsers: [
-      "StreamElements",
-      "Streamlabs",
-      "Nightbot",
-      "Moobot",
-      "Fossabot",
-      "Piggynator",
-      "Piggynator-l1k",
-      "PokemonCommunityGame",
-      "piggernatorbot"
-    ]
+    ignoredUsers: []
   },
 
   animation: {
@@ -396,7 +377,6 @@ window.CHAT_CONFIG = {
       color: "#25f4ee",
       glow: "rgba(37, 244, 238, 0.48)"
     },
-
     kick: {
       color: "#53fc18",
       glow: "rgba(83, 252, 24, 0.48)"
@@ -432,5 +412,5 @@ window.CHAT_CONFIG = {
 
   filters: {
     blockedPrefixes: ["!"]
-  },
+  }
 };

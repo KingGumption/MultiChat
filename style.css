@@ -50,6 +50,11 @@
 
   --bubble-radius: 22px;
   --name-bubble-radius: 22px;
+  --name-tag-offset-x: 10px;
+  --name-tag-overlap-y: 8px;
+  --overlapped-message-top-padding: 17px;
+  --overlapped-tilt-amount: 3deg;
+  --overlapped-tilt-amount-negative: -3deg;
   --message-text-color: #ffffff;
   --title-text-color: #ffffff;
   --custom-accent-color: #9146ff;
@@ -444,7 +449,10 @@ body.name-icon-left.hide-platform-icons .name-bubble {
 
 body.name-icon-left.hide-platform-icons .name-bubble .name,
 body.hide-platform-icons .name-bubble .badges:not(:empty) + .name,
-.msg.no-platform-icon .name-bubble .badges:not(:empty) + .name {
+.msg.no-platform-icon .name-bubble .badges:not(:empty) + .name,
+body.name-icon-left.hide-platform-icons .name-bubble .name-stack,
+body.hide-platform-icons .name-bubble .badges:not(:empty) + .name-stack,
+.msg.no-platform-icon .name-bubble .badges:not(:empty) + .name-stack {
   grid-column: 2;
   padding-left: 0;
   padding-right: 0;
@@ -452,7 +460,10 @@ body.hide-platform-icons .name-bubble .badges:not(:empty) + .name,
 
 body.hide-platform-icons .name-bubble .badges:empty + .name,
 .msg.no-platform-icon .name-bubble .badges:empty + .name,
-body.name-icon-left.hide-platform-icons .name-bubble .badges:empty + .name {
+body.name-icon-left.hide-platform-icons .name-bubble .badges:empty + .name,
+body.hide-platform-icons .name-bubble .badges:empty + .name-stack,
+.msg.no-platform-icon .name-bubble .badges:empty + .name-stack,
+body.name-icon-left.hide-platform-icons .name-bubble .badges:empty + .name-stack {
   grid-column: 1 / 3;
   padding-left: 0;
   padding-right: 0;
@@ -869,13 +880,24 @@ body.bubble-shape-square .media-embed-tenor {
   z-index: 1;
 }
 
-.name-bubble .name {
+.name-bubble .name,
+.name-bubble .name-stack {
   grid-column: 2;
   padding-right: 16px;
 }
 
-.name-bubble .badges:not(:empty) + .name {
+.name-bubble .badges:not(:empty) + .name,
+.name-bubble .badges:not(:empty) + .name-stack {
   padding-right: 16px;
+}
+
+.name-stack {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex-direction: column;
+  align-self: center;
+  gap: 1px;
 }
 
 .name-bubble .badges {
@@ -886,7 +908,8 @@ body.bubble-shape-square .media-embed-tenor {
   grid-column: 3;
 }
 
-.name-bubble .badges:empty + .name {
+.name-bubble .badges:empty + .name,
+.name-bubble .badges:empty + .name-stack {
   grid-column: 1 / 3;
 }
 
@@ -972,19 +995,22 @@ body.name-icon-left .badges:not(:empty) {
   padding-left: 16px;
 }
 
-body.name-icon-left .name {
+body.name-icon-left .name,
+body.name-icon-left .name-stack {
   grid-column: 3;
   grid-row: 1;
   padding-right: 0;
   padding-left: 0;
 }
 
-body.name-icon-left .name-bubble .badges:not(:empty) + .name {
+body.name-icon-left .name-bubble .badges:not(:empty) + .name,
+body.name-icon-left .name-bubble .badges:not(:empty) + .name-stack {
   padding-right: 0;
   padding-left: 0;
 }
 
-body.name-icon-left .name-bubble .badges:empty + .name {
+body.name-icon-left .name-bubble .badges:empty + .name,
+body.name-icon-left .name-bubble .badges:empty + .name-stack {
   grid-column: 2 / 4;
   padding-left: 16px;
 }
@@ -1154,11 +1180,19 @@ body.show-timestamps .name-bubble .name {
   grid-column: 3;
 }
 
+body.show-timestamps .name-bubble .name-stack {
+  grid-column: 3;
+}
+
 body.show-timestamps .name-bubble .platform-icon {
   grid-column: 4;
 }
 
 body.show-timestamps .name-bubble .badges:empty + .name {
+  grid-column: 3;
+}
+
+body.show-timestamps .name-bubble .badges:empty + .name-stack {
   grid-column: 3;
 }
 
@@ -1186,11 +1220,20 @@ body.show-timestamps.name-icon-left .name-bubble .name {
   grid-column: 4;
 }
 
+body.show-timestamps.name-icon-left .name-bubble .name-stack {
+  grid-column: 4;
+}
+
 body.show-timestamps.name-icon-left .name-bubble .platform-icon {
   grid-column: 1;
 }
 
 body.show-timestamps.name-icon-left .name-bubble .badges:empty + .name {
+  grid-column: 3;
+  padding-left: 0;
+}
+
+body.show-timestamps.name-icon-left .name-bubble .badges:empty + .name-stack {
   grid-column: 3;
   padding-left: 0;
 }
@@ -1206,18 +1249,26 @@ body.show-timestamps .msg.no-platform-icon .name-bubble .badges {
 }
 
 body.show-timestamps.hide-platform-icons .name-bubble .name,
-body.show-timestamps .msg.no-platform-icon .name-bubble .name {
+body.show-timestamps .msg.no-platform-icon .name-bubble .name,
+body.show-timestamps.hide-platform-icons .name-bubble .name-stack,
+body.show-timestamps .msg.no-platform-icon .name-bubble .name-stack {
   grid-column: 3;
 }
 
 body.show-timestamps.hide-platform-icons .name-bubble .badges:empty + .name,
-body.show-timestamps .msg.no-platform-icon .name-bubble .badges:empty + .name {
+body.show-timestamps .msg.no-platform-icon .name-bubble .badges:empty + .name,
+body.show-timestamps.hide-platform-icons .name-bubble .badges:empty + .name-stack,
+body.show-timestamps .msg.no-platform-icon .name-bubble .badges:empty + .name-stack {
   grid-column: 3;
 }
 
 .shared-chat-label {
-  grid-column: 2;
-  padding-right: 12px;
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  padding-right: 0;
+  text-overflow: ellipsis;
 }
 
 .shared-chat .message-bubble {
@@ -1295,6 +1346,44 @@ body.inline-chat.hide-message-backgrounds .text {
   text-shadow:
     0 2px 3px rgba(0,0,0,0.92),
     0 0 8px rgba(0,0,0,0.72);
+}
+
+body.bubble-layout-overlapped .msg:not(.alert):not(.tiktok-gift) .bubble-stack {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  width: fit-content;
+  max-width: var(--chat-content-width);
+}
+
+body.bubble-layout-overlapped.overlapped-card-shadow .msg:not(.alert):not(.tiktok-gift) .bubble-stack {
+  filter: drop-shadow(6px 7px 0 rgba(20, 16, 45, 0.22));
+}
+
+body.bubble-layout-overlapped .msg:not(.alert):not(.tiktok-gift) .name-bubble {
+  z-index: 5;
+  width: fit-content;
+  max-width: min(var(--max-message-width), var(--chat-content-width));
+  margin-left: var(--name-tag-offset-x);
+  margin-bottom: calc(0px - var(--name-tag-overlap-y));
+}
+
+body.bubble-layout-overlapped .msg:not(.alert):not(.tiktok-gift) .name-bubble + .message-bubble {
+  margin-top: 0;
+}
+
+body.bubble-layout-overlapped .msg:not(.alert):not(.tiktok-gift) .message-bubble {
+  z-index: 1;
+  padding-top: var(--overlapped-message-top-padding);
+}
+
+body.bubble-layout-overlapped.overlapped-random-tilt .msg:nth-child(odd):not(.alert):not(.tiktok-gift) .bubble-stack {
+  transform: rotate(var(--overlapped-tilt-amount));
+}
+
+body.bubble-layout-overlapped.overlapped-random-tilt .msg:nth-child(even):not(.alert):not(.tiktok-gift) .bubble-stack {
+  transform: rotate(var(--overlapped-tilt-amount-negative));
 }
 
 /* Badges */
