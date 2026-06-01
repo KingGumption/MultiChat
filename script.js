@@ -9,21 +9,10 @@ const YOUTUBE_BADGE_ICONS = {
 
 const DEFAULT_CONFIG = window.CHAT_DEFAULT_CONFIG || {};
 
-const baseConfig = mergeConfig(DEFAULT_CONFIG, CONFIG);
-
-if (baseConfig.style?.stealthMode) {
-  applyStealthPresetTo(baseConfig);
-}
-
-if (baseConfig.style?.minimalStyle) {
-  applyMinimalPresetTo(baseConfig);
-}
-
-const cfg = mergeConfig(baseConfig, getUrlConfigOverrides());
-
-const SB_WS = `ws://${cfg.streamerbot.host}:${cfg.streamerbot.port}`;
-const TIKFINITY_WS = `ws://${cfg.tikfinity.host}:${cfg.tikfinity.port}`;
-let maxMessages = cfg.layout.maxMessages;
+let cfg;
+let SB_WS;
+let TIKFINITY_WS;
+let maxMessages;
 
 const chat = document.getElementById("chat");
 const connectionToasts = new Map();
@@ -390,9 +379,6 @@ Object.assign(DEFAULT_TYPE_STYLE, {
   messageBgColor4Alpha: 1,
   messageBgOpacity: 1
 });
-
-ensureTypeStyles(cfg);
-repairRainbowTypeStyle(cfg);
 
 const DEFAULT_STYLE_PRESET = {
   fontFamily: "'Sora', sans-serif",
@@ -1302,6 +1288,7 @@ const VIDEO_EMBED_RE =
   /\.(?:mp4|webm|mov)(?:[?#]|$)|[?&]format=(?:mp4|webm|mov)\b/i;
 const URL_RE = /https?:\/\/[^\s<>"']+/gi;
 
+initializeConfig();
 
 let ws;
 let tkWs;
@@ -1309,6 +1296,26 @@ let currentGroup = null;
 
 applyConfigToDocument();
 loadThirdPartyEmotes();
+
+function initializeConfig() {
+  const baseConfig = mergeConfig(DEFAULT_CONFIG, CONFIG);
+
+  if (baseConfig.style?.stealthMode) {
+    applyStealthPresetTo(baseConfig);
+  }
+
+  if (baseConfig.style?.minimalStyle) {
+    applyMinimalPresetTo(baseConfig);
+  }
+
+  cfg = mergeConfig(baseConfig, getUrlConfigOverrides());
+  ensureTypeStyles(cfg);
+  repairRainbowTypeStyle(cfg);
+
+  SB_WS = `ws://${cfg.streamerbot.host}:${cfg.streamerbot.port}`;
+  TIKFINITY_WS = `ws://${cfg.tikfinity.host}:${cfg.tikfinity.port}`;
+  maxMessages = cfg.layout.maxMessages;
+}
 
 function showConnectionToast(id, text, color = "#ff3355", autoHideMs = 0) {
   let toast = connectionToasts.get(id);
