@@ -3458,8 +3458,7 @@ function updateUrlOutput() {
   });
 
   const url = getOverlayUrl();
-  url.search = overlayParams.toString();
-  url.hash = "";
+  applyGeneratedParamsToUrl(url, overlayParams);
   document.querySelectorAll("[data-url-output]").forEach(output => {
     output.value = serializeOverlayUrl(url);
   });
@@ -3468,6 +3467,19 @@ function updateUrlOutput() {
   document.querySelectorAll("[data-obs-dock-url-output]").forEach(output => {
     output.value = serializeOverlayUrl(dockUrl);
   });
+}
+
+function applyGeneratedParamsToUrl(url, params) {
+  const raw = params.toString();
+
+  if (raw.length < 1800) {
+    url.search = raw;
+    url.hash = "";
+    return;
+  }
+
+  url.search = "";
+  url.hash = raw;
 }
 
 function flattenConfig(value, prefix = "", output = []) {
@@ -3525,8 +3537,7 @@ function getObsDockUrl(baseParams) {
   params.set("tiktokSystem", "true");
 
   const url = getOverlayUrl();
-  url.search = params.toString();
-  url.hash = "";
+  applyGeneratedParamsToUrl(url, params);
 
   return url;
 }

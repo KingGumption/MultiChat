@@ -8773,6 +8773,7 @@ function cloneConfigValue(value) {
 
 function getUrlConfigOverrides() {
   const params = new URLSearchParams(window.location.search);
+  const hashParams = getHashConfigParams();
   const overrides = {};
   const aliases = {
     alerts: "behaviour.showAlerts",
@@ -9061,6 +9062,10 @@ function getUrlConfigOverrides() {
   let requestedStylePreset = "";
   const entries = [];
 
+  hashParams.forEach((value, key) => {
+    params.append(key, value);
+  });
+
   params.forEach((value, key) => {
     if (key === "preset" || key === "stylePreset") {
       requestedStylePreset = String(value || "");
@@ -9144,6 +9149,19 @@ function friendlyTypeStyleParamToPath(key) {
   if (!field) return "";
 
   return `style.typeStyles.${group}.${type.raw}.${field.raw}`;
+}
+
+function getHashConfigParams() {
+  const hash = String(window.location.hash || "").replace(/^#/, "");
+
+  if (!hash || !hash.includes("=")) return new URLSearchParams();
+
+  try {
+    return new URLSearchParams(hash);
+  } catch (err) {
+    console.warn("Could not read URL hash config:", err);
+    return new URLSearchParams();
+  }
 }
 
 function getFriendlyTypeStyleSchema() {
