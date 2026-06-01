@@ -3436,26 +3436,35 @@ function updateUrlOutput() {
     changedValues.set(path, current);
   });
 
-  const params = new URLSearchParams();
+  const overlayParams = new URLSearchParams();
+  const dockParams = new URLSearchParams();
 
   if (activePreset && activePreset !== "default") {
-    params.set("preset", activePreset);
+    overlayParams.set("preset", activePreset);
+    dockParams.set("preset", activePreset);
   }
 
   changedValues.forEach((current, path) => {
     if (shouldOmitGeneratedUrlParam(path, changedValues)) return;
 
-    params.set(getUrlParamName(path), formatGeneratedUrlValue(current));
+    const paramName = getUrlParamName(path);
+    const paramValue = formatGeneratedUrlValue(current);
+
+    if (!isScrollTestConfigPath(path)) {
+      overlayParams.set(paramName, paramValue);
+    }
+
+    dockParams.set(paramName, paramValue);
   });
 
   const url = getOverlayUrl();
-  url.search = params.toString();
+  url.search = overlayParams.toString();
   url.hash = "";
   document.querySelectorAll("[data-url-output]").forEach(output => {
     output.value = serializeOverlayUrl(url);
   });
 
-  const dockUrl = getObsDockUrl(params);
+  const dockUrl = getObsDockUrl(dockParams);
   document.querySelectorAll("[data-obs-dock-url-output]").forEach(output => {
     output.value = serializeOverlayUrl(dockUrl);
   });
@@ -3488,6 +3497,10 @@ function shouldSkipGeneratedConfigPath(path) {
     "streamerbot.connected",
     "tikfinity.connected"
   ].includes(String(path || ""));
+}
+
+function isScrollTestConfigPath(path) {
+  return String(path || "").startsWith("scrollTest.");
 }
 
 function getObsDockUrl(baseParams) {
