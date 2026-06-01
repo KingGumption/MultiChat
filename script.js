@@ -9101,7 +9101,7 @@ function resolveUrlConfigPath(key, aliases = {}) {
 
 function friendlyTypeStyleParamToPath(key) {
   const value = String(key || "");
-  const typeStyles = buildDefaultTypeStyles(DEFAULT_CONFIG.style || {});
+  const typeStyles = getFriendlyTypeStyleSchema();
   const group = Object.keys(typeStyles)
     .sort((a, b) => b.length - a.length)
     .find(candidate => value.startsWith(candidate));
@@ -9123,8 +9123,8 @@ function friendlyTypeStyleParamToPath(key) {
   const fieldParam = afterGroup.slice(type.param.length);
   if (!fieldParam) return "";
 
-  const style = types[type.raw] || {};
-  const field = Object.keys(style)
+  const fields = getFriendlyTypeStyleFields();
+  const field = fields
     .map(candidate => ({
       raw: candidate,
       param: toUrlPascalPart(candidate.endsWith("Enabled")
@@ -9137,6 +9137,91 @@ function friendlyTypeStyleParamToPath(key) {
   if (!field) return "";
 
   return `style.typeStyles.${group}.${type.raw}.${field.raw}`;
+}
+
+function getFriendlyTypeStyleSchema() {
+  return {
+    twitch: [
+      "chat",
+      "announcements",
+      "announcementsDefault",
+      "announcementsBlue",
+      "announcementsGreen",
+      "announcementsOrange",
+      "announcementsPurple",
+      "announcementsPrimary",
+      "channelPointRedemptions",
+      "cheers",
+      "follows",
+      "subs",
+      "giftSubs",
+      "raids",
+      "watchStreaks",
+      "upgrades",
+      "hype",
+      "hypeTrain",
+      "charity",
+      "goals",
+      "polls",
+      "predictions",
+      "sharedChat",
+      "shoutouts",
+      "stream",
+      "moderation",
+      "system"
+    ],
+    youtube: ["chat", "superChats", "superStickers", "members", "gifts", "polls", "stream", "moderation", "system"],
+    tiktok: ["chat", "follows", "subscribers", "gifts", "likes", "treasureBoxes", "shares", "joins", "questions", "goals", "polls", "battles", "stream", "system"],
+    kick: ["chat", "follows", "subs", "giftSubs", "rewardRedemptions", "stream", "moderation", "system"],
+    special: ["rainbow"],
+    donations: ["streamlabs", "streamelements", "kofi", "tipeeestream", "fourthwall", "patreon", "donordrive"]
+  };
+}
+
+function getFriendlyTypeStyleFields() {
+  const suffixes = ["", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const gradientPrefixes = [
+    "avatarGlow",
+    "avatarBorder",
+    "titleGlow",
+    "titleBorder",
+    "titleBg",
+    "titleIconBg",
+    "messageGlow",
+    "messageBorder",
+    "messageBg",
+    "alertGlow",
+    "alertBorder",
+    "alertBg",
+    "giftGlow",
+    "giftBorder",
+    "giftBg"
+  ];
+  const fields = [
+    "avatarGlowEnabled",
+    "avatarBorderEnabled",
+    "titleGlowEnabled",
+    "titleBorderEnabled",
+    "messageGlowEnabled",
+    "messageBorderEnabled",
+    "alertGlowEnabled",
+    "alertBorderEnabled",
+    "giftGlowEnabled",
+    "giftBorderEnabled"
+  ];
+
+  gradientPrefixes.forEach(prefix => {
+    fields.push(`${prefix}Mode`, `${prefix}Angle`, `${prefix}Opacity`);
+    suffixes.forEach(suffix => {
+      fields.push(
+        `${prefix}Color${suffix}`,
+        `${prefix}Color${suffix}Stop`,
+        `${prefix}Color${suffix}Alpha`
+      );
+    });
+  });
+
+  return fields;
 }
 
 function toUrlPascalPart(value) {
