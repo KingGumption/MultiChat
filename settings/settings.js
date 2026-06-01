@@ -1530,11 +1530,7 @@ function setActiveStylePresetMode(preset) {
 }
 
 function applyStylePreset(preset) {
-  if (preset === "default" || preset === "stealth" || preset === "minimal") {
-    activeStylePresetMode = preset;
-  } else {
-    activeStylePresetMode = "none";
-  }
+  activeStylePresetMode = preset || "none";
 
   window.applyChatStylePreset?.(preset);
   syncControls();
@@ -3421,16 +3417,30 @@ function buildPanel() {
 
 function updateUrlOutput() {
   const changedValues = new Map();
+  const activePreset = getActiveStylePreset();
+  const currentConfig = window.getChatConfigSnapshot?.() || {};
+  const baselineConfig =
+    activePreset && activePreset !== "default"
+      ? window.getChatPresetConfigSnapshot?.(activePreset)
+      : window.getChatDefaultConfigSnapshot?.();
+  const baseline = baselineConfig || {};
 
-  initialValues.forEach((initial, path) => {
-    const current = readConfig(path);
+  flattenConfig(currentConfig).forEach(([path, current]) => {
+    if (!isAllowedImportedUrlConfigPath(path)) return;
+    if (shouldSkipGeneratedConfigPath(path)) return;
 
-    if (String(current) === String(initial)) return;
+    const baselineValue = getValueAtPath(baseline, path);
+
+    if (String(current) === String(baselineValue)) return;
 
     changedValues.set(path, current);
   });
 
   const params = new URLSearchParams();
+
+  if (activePreset && activePreset !== "default") {
+    params.set("preset", activePreset);
+  }
 
   changedValues.forEach((current, path) => {
     if (shouldOmitGeneratedUrlParam(path, changedValues)) return;
@@ -3449,6 +3459,35 @@ function updateUrlOutput() {
   document.querySelectorAll("[data-obs-dock-url-output]").forEach(output => {
     output.value = serializeOverlayUrl(dockUrl);
   });
+}
+
+function flattenConfig(value, prefix = "", output = []) {
+  if (value === undefined || typeof value === "function") return output;
+
+  if (value === null || typeof value !== "object" || Array.isArray(value)) {
+    if (prefix) output.push([prefix, value]);
+    return output;
+  }
+
+  Object.entries(value).forEach(([key, child]) => {
+    flattenConfig(child, prefix ? `${prefix}.${key}` : key, output);
+  });
+
+  return output;
+}
+
+function getValueAtPath(target, path) {
+  return String(path || "")
+    .split(".")
+    .filter(Boolean)
+    .reduce((value, key) => value?.[key], target);
+}
+
+function shouldSkipGeneratedConfigPath(path) {
+  return [
+    "streamerbot.connected",
+    "tikfinity.connected"
+  ].includes(String(path || ""));
 }
 
 function getObsDockUrl(baseParams) {
@@ -3558,6 +3597,11 @@ function importConfigFromUrl(value, statusEl = null) {
   let ignored = 0;
 
   url.searchParams.forEach((rawValue, rawKey) => {
+    if (rawKey === "preset" || rawKey === "stylePreset") {
+      requestedStylePreset = String(rawValue || "");
+      return;
+    }
+
     const path = resolveImportedUrlConfigPath(rawKey);
 
     if (!isAllowedImportedUrlConfigPath(path)) {
@@ -3588,6 +3632,7 @@ function importConfigFromUrl(value, statusEl = null) {
 
   if (requestedStylePreset) {
     window.applyChatStylePreset?.(requestedStylePreset);
+    setActiveStylePresetMode(requestedStylePreset);
   }
 
   entries.forEach(([path, parsedValue]) => {

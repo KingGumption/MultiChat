@@ -1881,6 +1881,10 @@ window.getChatConfigValue = function (path) {
   return getDeepValue(cfg, path);
 };
 
+window.getChatConfigSnapshot = function () {
+  return cloneConfigValue(cfg);
+};
+
 window.getChatDefaultConfigValue = function (path) {
   if (String(path || "").startsWith("style.typeStyles.special.rainbow.")) {
     const currentTypeDefaults = buildDefaultTypeStyles(cfg.style || DEFAULT_CONFIG.style);
@@ -2136,6 +2140,11 @@ function applyDefaultStylePreset() {
 }
 
 function applyMessageThemePreset(presetName) {
+  applyMessageThemePresetTo(cfg, presetName);
+  applyConfigToDocument();
+}
+
+function applyMessageThemePresetTo(target, presetName) {
   const preset = MESSAGE_THEME_PRESETS[presetName];
 
   if (!preset) return;
@@ -2160,37 +2169,38 @@ function applyMessageThemePreset(presetName) {
   applyMessageThemeTypeStyle(nextStyle.typeStyles, preset.typeStyle || {});
 
   Object.entries(nextStyle).forEach(([key, value]) => {
-    setDeepValue(cfg, `style.${key}`, cloneConfigValue(value));
+    setDeepValue(target, `style.${key}`, cloneConfigValue(value));
   });
 
-  setDeepValue(cfg, "animation.enabled", true);
-  setDeepValue(cfg, "animation.preset", preset.animation || "normal");
-  setDeepValue(cfg, "behaviour.showPlatformIcons", preset.platformIcons ?? true);
-  setDeepValue(cfg, "behaviour.showBadges", preset.badges ?? true);
-  setDeepValue(cfg, "layout.avatarSize", preset.avatarSize ?? DEFAULT_CONFIG.layout.avatarSize);
-  setDeepValue(cfg, "layout.avatarGap", preset.avatarGap ?? DEFAULT_CONFIG.layout.avatarGap);
-
-  applyConfigToDocument();
+  setDeepValue(target, "animation.enabled", true);
+  setDeepValue(target, "animation.preset", preset.animation || "normal");
+  setDeepValue(target, "behaviour.showPlatformIcons", preset.platformIcons ?? true);
+  setDeepValue(target, "behaviour.showBadges", preset.badges ?? true);
+  setDeepValue(target, "layout.avatarSize", preset.avatarSize ?? DEFAULT_CONFIG.layout.avatarSize);
+  setDeepValue(target, "layout.avatarGap", preset.avatarGap ?? DEFAULT_CONFIG.layout.avatarGap);
 }
 
 function applyCompositionPreset(presetName) {
+  applyCompositionPresetTo(cfg, presetName);
+  applyConfigToDocument();
+}
+
+function applyCompositionPresetTo(target, presetName) {
   const preset = COMPOSITION_PRESETS[presetName];
 
   if (!preset) return;
 
   Object.entries(preset.style || {}).forEach(([key, value]) => {
-    setDeepValue(cfg, `style.${key}`, cloneConfigValue(value));
+    setDeepValue(target, `style.${key}`, cloneConfigValue(value));
   });
 
   Object.entries(preset.layout || {}).forEach(([key, value]) => {
-    setDeepValue(cfg, `layout.${key}`, cloneConfigValue(value));
+    setDeepValue(target, `layout.${key}`, cloneConfigValue(value));
   });
 
   Object.entries(preset.behaviour || {}).forEach(([key, value]) => {
-    setDeepValue(cfg, `behaviour.${key}`, cloneConfigValue(value));
+    setDeepValue(target, `behaviour.${key}`, cloneConfigValue(value));
   });
-
-  applyConfigToDocument();
 }
 
 function applyMessageThemeTypeStyle(typeStyles, options) {
@@ -2290,6 +2300,58 @@ window.applyChatStylePreset = function (preset) {
   if (preset === "stealth") applyStealthPreset();
   if (preset === "default") applyDefaultStylePreset();
   if (preset === "minimal") applyMinimalStylePreset();
+};
+
+window.getChatDefaultConfigSnapshot = function () {
+  const baseline = cloneConfigValue(DEFAULT_CONFIG);
+  baseline.style = mergeConfig(DEFAULT_STYLE_PRESET, baseline.style || {});
+  baseline.style.typeStyles = buildDefaultTypeStyles(baseline.style);
+
+  return baseline;
+};
+
+function applyUrlPresetToTarget(target, preset) {
+  if (MESSAGE_THEME_PRESETS[preset]) {
+    applyMessageThemePresetTo(target, preset);
+    return true;
+  }
+
+  if (COMPOSITION_PRESETS[preset]) {
+    applyCompositionPresetTo(target, preset);
+    return true;
+  }
+
+  if (preset === "stealth") {
+    applyStealthPresetTo(target);
+    return true;
+  }
+
+  if (preset === "minimal") {
+    applyMinimalPresetTo(target);
+    return true;
+  }
+
+  return false;
+}
+
+window.getChatPresetConfigValue = function (preset, path) {
+  const baseline = window.getChatDefaultConfigSnapshot();
+
+  if (!applyUrlPresetToTarget(baseline, preset)) {
+    return undefined;
+  }
+
+  return cloneConfigValue(getDeepValue(baseline, path));
+};
+
+window.getChatPresetConfigSnapshot = function (preset) {
+  const baseline = window.getChatDefaultConfigSnapshot();
+
+  if (!applyUrlPresetToTarget(baseline, preset)) {
+    return undefined;
+  }
+
+  return baseline;
 };
 
 function isRainbowTypeStylePath(path) {
@@ -8983,6 +9045,11 @@ function getUrlConfigOverrides() {
   const entries = [];
 
   params.forEach((value, key) => {
+    if (key === "preset" || key === "stylePreset") {
+      requestedStylePreset = String(value || "");
+      return;
+    }
+
     const path = resolveUrlConfigPath(key, aliases);
 
     if (!isAllowedUrlConfigPath(path)) return;
@@ -9005,10 +9072,8 @@ function getUrlConfigOverrides() {
     entries.push([path, nextValue]);
   });
 
-  if (requestedStylePreset === "stealth") {
-    applyStealthPresetTo(overrides);
-  } else if (requestedStylePreset === "minimal") {
-    applyMinimalPresetTo(overrides);
+  if (requestedStylePreset) {
+    applyUrlPresetToTarget(overrides, requestedStylePreset);
   }
 
   entries.forEach(([path, parsedValue]) => {
