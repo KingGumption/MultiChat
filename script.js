@@ -19,6 +19,8 @@ const connectionToasts = new Map();
 const avatarCache = new Map();
 const thirdPartyEmotes = new Map();
 const messageIndex = new Map();
+const recentMessageFingerprints = new Map();
+const MESSAGE_FINGERPRINT_TTL_MS = 1500;
 
 const tiktokUserMessageIndex = new Map();
 
@@ -5871,6 +5873,7 @@ function addMessage(item) {
   }
 
   if (!item.text && (!item.parts || item.parts.length === 0)) return;
+  if (shouldSkipDuplicateMessage(item)) return;
 
   const group = findGroupForItem(item);
   const bubble = createMessageBubble(item);
@@ -6487,6 +6490,7 @@ function handleModerationEvent(source, type, data) {
   if (lowerType.includes("clearchat")) {
     chat.innerHTML = "";
     messageIndex.clear();
+    recentMessageFingerprints.clear();
     currentGroup = null;
     return true;
   }
@@ -6622,6 +6626,66 @@ function removeLastPlainTwitchEmoteMessage(user) {
   }
 
   currentGroup = null;
+}
+
+function shouldSkipDuplicateMessage(item) {
+  const messageId = String(item.messageId || "");
+
+  if (messageId && messageIndex.has(messageId)) {
+    return true;
+  }
+
+  const fingerprint = getMessageFingerprint(item);
+
+  if (!fingerprint) return false;
+
+  pruneRecentMessageFingerprints();
+
+  const now = Date.now();
+  const lastSeenAt = recentMessageFingerprints.get(fingerprint) || 0;
+
+  if (now - lastSeenAt < MESSAGE_FINGERPRINT_TTL_MS) {
+    return true;
+  }
+
+  recentMessageFingerprints.set(fingerprint, now);
+  return false;
+}
+
+function getMessageFingerprint(item) {
+  const text = String(item.text || "").trim();
+  const parts = Array.isArray(item.parts)
+    ? item.parts.map(part => (
+      typeof part === "string"
+        ? part
+        : part?.text || part?.url || part?.name || part?.id || ""
+    )).join("|")
+    : "";
+
+  const content = text || parts;
+
+  if (!content) return "";
+
+  return [
+    item.platform || "",
+    item.user || "",
+    item.login || "",
+    item.kind || "chat",
+    item.special || "",
+    content
+  ]
+    .map(value => String(value || "").toLowerCase().trim())
+    .join("|");
+}
+
+function pruneRecentMessageFingerprints() {
+  const cutoff = Date.now() - MESSAGE_FINGERPRINT_TTL_MS;
+
+  recentMessageFingerprints.forEach((lastSeenAt, key) => {
+    if (lastSeenAt < cutoff) {
+      recentMessageFingerprints.delete(key);
+    }
+  });
 }
 
 function indexMessage(item, bubble) {
