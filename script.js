@@ -9116,8 +9116,8 @@ function friendlyTypeStyleParamToPath(key) {
   if (!group) return "";
 
   const afterGroup = value.slice(group.length);
-  const types = typeStyles[group] || {};
-  const type = Object.keys(types)
+  const types = typeStyles[group] || [];
+  const type = types
     .map(candidate => ({
       raw: candidate,
       param: toUrlPascalPart(candidate)
