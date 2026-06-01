@@ -3592,7 +3592,26 @@ function parseImportUrl(value) {
     return base;
   }
 
+  if (text.startsWith("#")) {
+    base.search = "";
+    base.hash = text;
+    return base;
+  }
+
   return new URL(text, base);
+}
+
+function getImportUrlParams(url) {
+  const params = new URLSearchParams(url.search);
+  const hash = String(url.hash || "").replace(/^#/, "");
+
+  if (hash && hash.includes("=")) {
+    new URLSearchParams(hash).forEach((value, key) => {
+      params.append(key, value);
+    });
+  }
+
+  return params;
 }
 
 function importConfigFromUrl(value, statusEl = null) {
@@ -3611,7 +3630,9 @@ function importConfigFromUrl(value, statusEl = null) {
     return;
   }
 
-  if (!url || !url.searchParams.size) {
+  const importParams = url ? getImportUrlParams(url) : new URLSearchParams();
+
+  if (!importParams.size) {
     setStatus("No config parameters found in that URL.", true);
     return;
   }
@@ -3620,7 +3641,7 @@ function importConfigFromUrl(value, statusEl = null) {
   let requestedStylePreset = "";
   let ignored = 0;
 
-  url.searchParams.forEach((rawValue, rawKey) => {
+  importParams.forEach((rawValue, rawKey) => {
     if (rawKey === "preset" || rawKey === "stylePreset") {
       requestedStylePreset = String(rawValue || "");
       return;
