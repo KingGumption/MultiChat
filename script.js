@@ -6915,6 +6915,13 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   const hasGiftBgOverrides = hasTypeStyleKeyOverrides(typeStyle, defaultTypeStyle, [
     ...getTypeGradientStyleKeys("giftBg")
   ]);
+  const isTikTokGiftCard = el.classList.contains("tiktok-gift");
+  const giftBgPrefix = hasGiftBgOverrides || !hasAlertBgOverrides
+    ? "giftBg"
+    : "alertBg";
+  const giftBgOpacity = hasGiftBgOverrides || !hasAlertBgOverrides
+    ? style.giftBgOpacity
+    : style.alertBgOpacity;
 
   el.classList.toggle("type-style-custom", hasOverrides);
   el.classList.toggle("type-style-avatar-glow", hasAvatarGlowOverrides);
@@ -6928,9 +6935,9 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   el.classList.toggle("type-style-alert-glow", hasAlertGlowOverrides && el.classList.contains("alert"));
   el.classList.toggle("type-style-alert-border", hasAlertBorderOverrides && el.classList.contains("alert"));
   el.classList.toggle("type-style-alert-bg", hasAlertBgOverrides && el.classList.contains("alert"));
-  el.classList.toggle("type-style-gift-glow", hasGiftGlowOverrides && el.classList.contains("tiktok-gift"));
-  el.classList.toggle("type-style-gift-border", hasGiftBorderOverrides && el.classList.contains("tiktok-gift"));
-  el.classList.toggle("type-style-gift-bg", hasGiftBgOverrides && el.classList.contains("tiktok-gift"));
+  el.classList.toggle("type-style-gift-glow", hasGiftGlowOverrides && isTikTokGiftCard);
+  el.classList.toggle("type-style-gift-border", hasGiftBorderOverrides && isTikTokGiftCard);
+  el.classList.toggle("type-style-gift-bg", (hasGiftBgOverrides || hasAlertBgOverrides) && isTikTokGiftCard);
   applyGlowVars(el, style, "avatarGlow", "--avatar-glow-color", "--avatar-glow-gradient", base, style.avatarGlowOpacity, avatarGlowEnabled);
   if (avatarBorderEnabled) {
     el.style.setProperty("--avatar-border-width", "3px");
@@ -6990,8 +6997,8 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     el.style.setProperty("--gift-border-color", "transparent");
     el.style.setProperty("--gift-border-gradient", "linear-gradient(90deg, transparent 0%, transparent 100%)");
   }
-  setRgbaCssVar(el, "--gift-bg-color", style.giftBgColor || base, style.giftBgOpacity);
-  applyTypeGradientVar(el, style, "giftBg", "--gift-bg-gradient", base, style.giftBgOpacity);
+  setRgbaCssVar(el, "--gift-bg-color", style[`${giftBgPrefix}Color`] || base, giftBgOpacity);
+  applyTypeGradientVar(el, style, giftBgPrefix, "--gift-bg-gradient", base, giftBgOpacity);
 }
 
 function applyRainbowAnimationVariables(el, style, fallbackColor) {
@@ -8766,6 +8773,9 @@ function getUrlConfigOverrides() {
     animations: "animation.enabled",
     avatars: "behaviour.showAvatars",
     badges: "behaviour.showBadges",
+    test: "scrollTest.enabled",
+    testAutoScroll: "scrollTest.autoScroll",
+    testInterval: "scrollTest.intervalMs",
     borderGlow: "style.borderGlow",
     bounce: "gigantified.bounceEmotes",
     compactAlerts: "behaviour.compactAlerts",
