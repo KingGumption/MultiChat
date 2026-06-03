@@ -4061,7 +4061,7 @@ window.testAll = function () {
       uniqueId: "tier2pig",
       profilePictureUrl: "",
       giftName: "Super GG",
-      repeatCount: 1,
+      repeat_count: 7,
       diamondCount: 100,
       giftType: 2
     }
@@ -5752,8 +5752,13 @@ function normaliseTikTok(type, data) {
   }
 
   if (lowerType.includes("gift") || data.giftName) {
-    const count = data.repeatCount || data.repeat || 1;
-    const giftName = data.giftName || data.gift?.name || "gift";
+    const count = getTikTokGiftCount(data);
+    const giftName =
+      data.giftName ||
+      data.gift?.name ||
+      data.giftDetails?.giftName ||
+      data.giftDetails?.name ||
+      "gift";
 
     return {
       kind: "tiktokGift",
@@ -6297,20 +6302,12 @@ function addTikTokGift(item) {
   const existing =
     renderedTikTokGiftCards.get(key);
 
-  const giftType = Number(
-    item.raw?.giftType ??
-    item.raw?.gift?.gift_type ??
-    0
-  );
+  const giftType = getTikTokGiftType(item.raw);
 
   const isStreakableGift =
     giftType === 1;
 
-  const isRepeatEnd =
-    item.raw?.repeatEnd === true ||
-    item.raw?.repeat_end === true ||
-    item.raw?.gift?.repeat_end === true ||
-    item.raw?.gift?.repeat_end === 1;
+  const isRepeatEnd = isTikTokRepeatEnd(item.raw);
 
   // STREAK GIFTS
   // wait until repeatEnd
@@ -6323,8 +6320,22 @@ function addTikTokGift(item) {
   let finalItem = item;
 
   if (isStreakableGift) {
-    finalItem =
-      pendingTikTokCombos.get(key) || item;
+    const pendingItem = pendingTikTokCombos.get(key);
+
+    if (pendingItem) {
+      const raw = {
+        ...(pendingItem.raw || {}),
+        ...(item.raw || {})
+      };
+
+      finalItem = {
+        ...pendingItem,
+        ...item,
+        raw,
+        giftImage: item.giftImage || pendingItem.giftImage,
+        count: getTikTokGiftCount(raw, item.count || pendingItem.count)
+      };
+    }
 
     pendingTikTokCombos.delete(key);
   }
@@ -6335,7 +6346,7 @@ function addTikTokGift(item) {
 
     if (existing.countEl) {
       existing.countEl.textContent =
-        `x${escapeHtml(finalItem.count || 1)}`;
+        `x${escapeHtml(getTikTokGiftCount(finalItem.raw, finalItem.count))}`;
     }
 
     return;
@@ -6360,12 +6371,7 @@ function renderTikTokGift(item, key) {
     0
   );
 
-  const repeatCount = Number(
-    item.raw?.repeatCount ||
-    item.raw?.repeat_count ||
-    item.count ||
-    1
-  );
+  const repeatCount = getTikTokGiftCount(item.raw, item.count);
 
   const giftCoins = baseCoins * repeatCount;
 
@@ -6866,6 +6872,65 @@ function getMessageTypeStyle(item, platformKey = "") {
   }
 
   return null;
+}
+
+function firstPositiveTikTokNumber(...values) {
+  for (const value of values) {
+    if (value === "" || value === null || value === undefined) continue;
+
+    const number = Number(value);
+    if (Number.isFinite(number) && number > 0) return number;
+  }
+
+  return 0;
+}
+
+function getTikTokGiftCount(data = {}, fallback = 1) {
+  return firstPositiveTikTokNumber(
+    data.repeatCount,
+    data.repeat_count,
+    data.repeat,
+    data.count,
+    data.gift?.repeatCount,
+    data.gift?.repeat_count,
+    data.gift?.repeat,
+    data.gift?.count,
+    data.giftDetails?.repeatCount,
+    data.giftDetails?.repeat_count,
+    data.giftDetails?.repeat,
+    data.giftDetails?.count,
+    fallback
+  ) || 1;
+}
+
+function getTikTokGiftType(data = {}) {
+  return firstPositiveTikTokNumber(
+    data.giftType,
+    data.gift_type,
+    data.gift?.giftType,
+    data.gift?.gift_type,
+    data.giftDetails?.giftType,
+    data.giftDetails?.gift_type,
+    data.extendedGiftInfo?.giftType,
+    data.extendedGiftInfo?.gift_type
+  );
+}
+
+function isTikTokRepeatEnd(data = {}) {
+  return (
+    data.repeatEnd === true ||
+    data.repeatEnd === 1 ||
+    data.repeatEnd === "1" ||
+    data.repeat_end === true ||
+    data.repeat_end === 1 ||
+    data.repeat_end === "1" ||
+    data.gift?.repeatEnd === true ||
+    data.gift?.repeatEnd === 1 ||
+    data.gift?.repeatEnd === "1" ||
+    data.gift?.repeat_end === true ||
+    data.gift?.repeat_end === 1 ||
+    data.gift?.repeat_end === "1"
+  );
 }
 
 function getDefaultMessageTypeStyle(item, platformKey = "") {
