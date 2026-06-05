@@ -3903,7 +3903,7 @@ window.testAll = function () {
         {
           emoteId: "7551778175766055683",
           emoteImageUrl:
-            "icons/icons/tiktok.png"
+            "icons/platforms/tiktok.png"
         }
       ]
     }
@@ -6792,7 +6792,7 @@ function getMessageTypeColor(item, platformKey = "") {
   }
 
   if (item.kind === "tiktokGift") {
-    return colors.tiktok?.gifts || "";
+    return colors.tiktok?.[getTikTokGiftStyleType(item)] || "";
   }
 
   return "";
@@ -6868,10 +6868,20 @@ function getMessageTypeStyle(item, platformKey = "") {
   }
 
   if (item.kind === "tiktokGift") {
-    return typeStyles.tiktok?.gifts || null;
+    return typeStyles.tiktok?.[getTikTokGiftStyleType(item)] || null;
   }
 
   return null;
+}
+
+function getTikTokGiftStyleType(item = {}) {
+  const alertParts = String(item.alertType || "").split(".").filter(Boolean);
+
+  if (alertParts[0] === "tiktok" && alertParts[1]) {
+    return alertParts[1];
+  }
+
+  return "gifts";
 }
 
 function firstPositiveTikTokNumber(...values) {
@@ -6968,7 +6978,7 @@ function getDefaultMessageTypeStyle(item, platformKey = "") {
   }
 
   if (item.kind === "tiktokGift") {
-    return defaults.tiktok?.gifts || null;
+    return defaults.tiktok?.[getTikTokGiftStyleType(item)] || null;
   }
 
   return null;
@@ -7052,6 +7062,24 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
     ...getTypeGradientStyleKeys("giftBg")
   ]);
   const isTikTokGiftCard = el.classList.contains("tiktok-gift");
+  const giftGlowPrefix = hasGiftGlowOverrides || !hasAlertGlowOverrides
+    ? "giftGlow"
+    : "alertGlow";
+  const giftGlowOpacity = hasGiftGlowOverrides || !hasAlertGlowOverrides
+    ? style.giftGlowOpacity
+    : style.alertGlowOpacity;
+  const giftGlowIsEnabled = hasGiftGlowOverrides || !hasAlertGlowOverrides
+    ? giftGlowEnabled
+    : alertGlowEnabled;
+  const giftBorderPrefix = hasGiftBorderOverrides || !hasAlertBorderOverrides
+    ? "giftBorder"
+    : "alertBorder";
+  const giftBorderOpacity = hasGiftBorderOverrides || !hasAlertBorderOverrides
+    ? style.giftBorderOpacity
+    : style.alertBorderOpacity;
+  const giftBorderIsEnabled = hasGiftBorderOverrides || !hasAlertBorderOverrides
+    ? giftBorderEnabled
+    : alertBorderEnabled;
   const giftBgPrefix = hasGiftBgOverrides || !hasAlertBgOverrides
     ? "giftBg"
     : "alertBg";
@@ -7071,8 +7099,8 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   el.classList.toggle("type-style-alert-glow", hasAlertGlowOverrides && el.classList.contains("alert"));
   el.classList.toggle("type-style-alert-border", hasAlertBorderOverrides && el.classList.contains("alert"));
   el.classList.toggle("type-style-alert-bg", hasAlertBgOverrides && el.classList.contains("alert"));
-  el.classList.toggle("type-style-gift-glow", hasGiftGlowOverrides && isTikTokGiftCard);
-  el.classList.toggle("type-style-gift-border", hasGiftBorderOverrides && isTikTokGiftCard);
+  el.classList.toggle("type-style-gift-glow", (hasGiftGlowOverrides || hasAlertGlowOverrides) && isTikTokGiftCard);
+  el.classList.toggle("type-style-gift-border", (hasGiftBorderOverrides || hasAlertBorderOverrides) && isTikTokGiftCard);
   el.classList.toggle("type-style-gift-bg", (hasGiftBgOverrides || hasAlertBgOverrides) && isTikTokGiftCard);
   applyGlowVars(el, style, "avatarGlow", "--avatar-glow-color", "--avatar-glow-gradient", base, style.avatarGlowOpacity, avatarGlowEnabled);
   if (avatarBorderEnabled) {
@@ -7123,11 +7151,11 @@ function applyTypeStyleVariables(el, typeStyle, fallbackColor, defaultTypeStyle 
   }
   setRgbaCssVar(el, "--alert-bg-color", style.alertBgColor || base, style.alertBgOpacity);
   applyTypeGradientVar(el, style, "alertBg", "--alert-bg-gradient", base, style.alertBgOpacity);
-  applyGlowVars(el, style, "giftGlow", "--gift-glow-color", "--gift-glow-gradient", base, style.giftGlowOpacity, giftGlowEnabled);
-  if (giftBorderEnabled) {
+  applyGlowVars(el, style, giftGlowPrefix, "--gift-glow-color", "--gift-glow-gradient", base, giftGlowOpacity, giftGlowIsEnabled);
+  if (giftBorderIsEnabled) {
     el.style.setProperty("--gift-border-width", "2px");
-    applyTypeSolidColorVar(el, style, "giftBorder", "--gift-border-color", base, style.giftBorderOpacity);
-    applyTypeGradientVar(el, style, "giftBorder", "--gift-border-gradient", base, style.giftBorderOpacity);
+    applyTypeSolidColorVar(el, style, giftBorderPrefix, "--gift-border-color", base, giftBorderOpacity);
+    applyTypeGradientVar(el, style, giftBorderPrefix, "--gift-border-gradient", base, giftBorderOpacity);
   } else {
     el.style.setProperty("--gift-border-width", "0px");
     el.style.setProperty("--gift-border-color", "transparent");

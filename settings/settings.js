@@ -204,7 +204,7 @@ function getTypeStyleControls(group, type) {
     ];
   }
 
-  if (group === "tiktok" && type === "gifts") {
+  if (group === "tiktok" && (type === "gifts" || type === "treasureBoxes")) {
     return [
       ...avatarTypeControls,
       ...giftTypeControls
@@ -2903,14 +2903,14 @@ function getTypeStylePreviewItem(group, type, label) {
     };
   }
 
-  if (group === "tiktok" && type === "gifts") {
+  if (group === "tiktok" && (type === "gifts" || type === "treasureBoxes")) {
     return {
       kind: "tiktokGift",
       platform: "TikTok",
-      alertType: "tiktok.gifts",
-      user: "GiftPig",
-      giftName: "Rose",
-      count: 7
+      alertType: `tiktok.${type}`,
+      user: type === "treasureBoxes" ? "Treasure Pig" : "GiftPig",
+      giftName: type === "treasureBoxes" ? "a Treasure Box with 20 coins" : "Rose",
+      count: type === "treasureBoxes" ? 1 : 7
     };
   }
 

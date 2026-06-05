@@ -101,7 +101,7 @@
       function add(kind,text){
         const el=document.createElement('div');
         el.className='msg '+(kind==='msg'? 'msg' : kind);
-        el.innerHTML = `<strong>${kind.toUpperCase()}</strong><div style="font-size:13px;opacity:.9">${text}</div>`;
+        el.innerHTML = '<strong>' + kind.toUpperCase() + '</strong><div style="font-size:13px;opacity:.9">' + text + '</div>';
         if((kind==='msg' && cfg.messages) || (kind==='alert' && cfg.alerts) || (kind==='gift' && cfg.gifts)){
           const map={default:'anim-pop',slide:'anim-slide',dissolve:'anim-dissolve',bounce:'anim-bounce'};
           el.classList.add(map[cfg.type]||'anim-pop');
